@@ -1,5 +1,5 @@
 import { escape } from 'lodash-es'
-
+import { v4 as uuidv4 } from 'uuid'
 export const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
@@ -38,4 +38,8 @@ export const getPurifyHref = (href: string) => {
     return ''
 
   return escape(href)
+}
+
+export const getShortId = () => {
+  return uuidv4().substr(0, 8) // 生成一个8位长度的短唯一ID串
 }
