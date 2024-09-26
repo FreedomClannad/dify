@@ -6,6 +6,7 @@ import Topbar from './components/base/topbar'
 import { getLocaleOnServer } from '@/i18n/server'
 import './styles/globals.css'
 import './styles/markdown.scss'
+import { Providers } from '@/app/providers'
 
 export const metadata = {
   title: 'Dify',
@@ -46,11 +47,13 @@ const LocaleLayout = ({
         data-public-text-generation-timeout-ms={process.env.NEXT_PUBLIC_TEXT_GENERATION_TIMEOUT_MS}
       >
         <Topbar />
-        <BrowserInitor>
-          <SentryInitor>
-            <I18nServer>{children}</I18nServer>
-          </SentryInitor>
-        </BrowserInitor>
+        <Providers>
+          <BrowserInitor>
+            <SentryInitor>
+              <I18nServer>{children}</I18nServer>
+            </SentryInitor>
+          </BrowserInitor>
+        </Providers>
       </body>
     </html>
   )

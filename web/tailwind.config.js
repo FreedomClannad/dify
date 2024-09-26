@@ -1,10 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+import { nextui } from '@nextui-org/theme'
 import tailwindThemeVarDefine from './themes/tailwind-theme-var-define'
+const colors = require('tailwindcss/colors')
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
     './context/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     typography: require('./typography'),
@@ -25,6 +28,7 @@ module.exports = {
           900: '#101828',
         },
         primary: {
+          DEFAULT: '#2D31A6',
           25: '#f5f8ff',
           50: '#eff4ff',
           100: '#d1e0ff',
@@ -90,10 +94,23 @@ module.exports = {
       fontSize: {
         '2xs': '0.625rem',
       },
+
     },
   },
+  darkMode: 'class',
   plugins: [
     require('@tailwindcss/typography'),
+    nextui(),
+    // function ({ addUtilities }) {
+    //   addUtilities({
+    //     '.bg-primary': {
+    //       backgroundColor: '#2970ff',
+    //     },
+    //     '.text-primary': {
+    //       color: '#2970ff',
+    //     },
+    //   })
+    // },
   ],
   // https://github.com/tailwindlabs/tailwindcss/discussions/5969
   corePlugins: {
