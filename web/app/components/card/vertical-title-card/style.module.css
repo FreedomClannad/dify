@@ -1,0 +1,9 @@
+.title:after{
+    content: "";
+    display: block;
+    height: 16px;
+    width:3px;
+    position: absolute;
+    left: 0;
+    top: 4px;
+}
