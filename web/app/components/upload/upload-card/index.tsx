@@ -11,6 +11,7 @@ type Props = {
   fileList: FileItem[]
   prepareFileList: (files: FileItem[]) => void
   multiple?: boolean
+  description?: string
 }
 
 const FILES_NUMBER_LIMIT = 20
@@ -18,7 +19,7 @@ const fileUploadConfig = {
   file_size_limit: 15,
   batch_count_limit: 5,
 }
-const UploadCard = memo(({ accept, fileList, prepareFileList, multiple = false }: Props) => {
+const UploadCard = memo(({ accept, fileList, prepareFileList, multiple = false, description = 'Select or drag and drop ligand file here' }: Props) => {
   const { t } = useTranslation()
   const fileUploader = useRef<HTMLInputElement>(null)
   const dropRef = useRef<HTMLDivElement>(null)
@@ -136,7 +137,7 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, multiple = false }
               <div className='w-4 h-4  text-xs'>
                 <CloudArrowUpIcon/>
               </div>
-              <span className="ml-3 text-xs">Select or drag and drop ligand file here</span>
+              <span className="ml-3 text-xs">{description}</span>
             </div>
           </>
           : <>

@@ -1,7 +1,19 @@
+import { useState } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
+import UploadCard from '@/app/components/upload/upload-card'
+import type { FileItem } from '@/models/datasets'
 
 const LigandFile = () => {
-  return <VerticalTitleCard title="Ligand file" tooltip="Ligand filetootltip"> <div>Ligand file内容</div> </VerticalTitleCard>
+  const [fileList, setFileList] = useState<FileItem[]>([])
+  return <>
+    <VerticalTitleCard title="Ligand file" tooltip="Ligand filetootltip">
+      <div>
+        <UploadCard accept=".pdf, .txt" fileList={fileList} prepareFileList={(files) => {
+          setFileList(files)
+        }}/>
+      </div>
+    </VerticalTitleCard>
+  </>
 }
 
 export default LigandFile

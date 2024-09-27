@@ -16,9 +16,9 @@ const Constraints = () => {
       <div className="mt-3 w-full">
         <div><span>Size</span></div>
         <div className="flex justify-between gap-3 w-full mt-2">
-          <div className="flex flex-1"><span>x:</span><input className="w-full ml-1 rounded"></input></div>
-          <div className="flex flex-1"><span>y:</span><input className="w-full ml-1 rounded"></input></div>
-          <div className="flex flex-1"><span>z:</span><input className="w-full ml-1 rounded"></input></div>
+          <div className="flex flex-1"><span>x:</span><input className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input></div>
+          <div className="flex flex-1"><span>y:</span><input className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input></div>
+          <div className="flex flex-1"><span>z:</span><input className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input></div>
         </div>
       </div>
     </div>
