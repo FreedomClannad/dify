@@ -1,8 +1,17 @@
+import { useState } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-
+import UploadCard from '@/app/components/upload/upload-card'
+import type { FileItem } from '@/models/datasets'
 const ReceptorFile = () => {
-  return <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
-    <div>受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB内容</div>
-  </VerticalTitleCard>
+  const [fileList, setFileList] = useState<FileItem[]>([])
+  return <>
+    <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
+      <div>
+        <UploadCard accept=".pdf, .txt" fileList={fileList} prepareFileList={(files) => {
+          setFileList(files)
+        }}/>
+      </div>
+    </VerticalTitleCard>
+  </>
 }
 export default ReceptorFile

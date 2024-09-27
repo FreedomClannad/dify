@@ -6,7 +6,7 @@ import InputForm from '@/app/(commonLayout)/tools/docking/Input/InputForm'
 const Container = () => {
   const [mode, setMode] = useState<DockingModeEnum>(DockingModeEnum.input)
   return (<>
-    <div className="flex h-full bg-gray-100 border-t border-gray-200 overflow-hidden">
+    <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">
       <div className="flex flex-col w-fit sm:w-[400px] shrink-0 border-gray-550 border-r h-full">
         <div className="border-gray-550 border-b">
           <div className="flex items-center justify-center">

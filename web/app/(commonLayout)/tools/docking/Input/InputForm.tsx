@@ -14,7 +14,7 @@ const InputForm = () => {
       <div>
         {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
       </div>
-      <div className="flex justify-center w-[80%]">
+      <div className="flex justify-center w-[80%] mt-3">
         <Button color="primary" radius="sm" fullWidth>Run</Button>
       </div>
     </div>
