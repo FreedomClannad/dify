@@ -6,7 +6,10 @@ import Constraints from '@/app/(commonLayout)/tools/docking/Input/Constraints'
 import LigandFile from '@/app/(commonLayout)/tools/docking/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/tools/docking/Input/OutPose'
 
-const InputForm = () => {
+type Props = {
+  onSubmit: () => void
+}
+const InputForm = ({ onSubmit }: Props) => {
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />]
   return <>
@@ -15,7 +18,7 @@ const InputForm = () => {
         {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
       </div>
       <div className="flex justify-center w-[80%] mt-3">
-        <Button color="primary" radius="sm" fullWidth>Run</Button>
+        <Button color="primary" radius="sm" fullWidth onClick={onSubmit}>Run</Button>
       </div>
     </div>
   </>

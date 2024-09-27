@@ -29,6 +29,7 @@ module.exports = {
           1001: '#E5E5E6',
           1002: '#fafafa',
           1003: '#999999',
+          1004: '#F6F7F8',
         },
         primary: {
           DEFAULT: '#1566A3',

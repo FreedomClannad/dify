@@ -1,5 +1,7 @@
 .msp-plugin {
-    width: 400px;
-    height: 400px;
-    margin-top: 40px;
+
+}
+
+.msp-plugin .msp-layout-standard {
+    border: none;
 }
