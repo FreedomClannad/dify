@@ -1,21 +1,26 @@
-import { Button, Radio, RadioGroup } from '@nextui-org/react'
+import { Radio, RadioGroup } from '@nextui-org/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 const Constraints = () => {
   return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
-    <div>
-      <RadioGroup
-        label="Select your favorite city"
-      >
-        <Radio value="buenos-aires">Buenos Aires</Radio>
-        <Radio value="sydney">Sydney</Radio>
-        <Radio value="san-francisco">San Francisco</Radio>
-        <Radio value="london">London</Radio>
-        <Radio value="tokyo">Tokyo</Radio>
-      </RadioGroup>
-      <Button color="primary">
-        Button
-      </Button>
-
+    <div className="ml-3">
+      <div>
+        <RadioGroup
+          label="Center"
+          defaultValue="1"
+        >
+          <Radio value="1">Centroid of ligand</Radio>
+          <Radio value="2">Centroid of selected residue</Radio>
+          <Radio value="3">Supplied X,Y,Z coordinates</Radio>
+        </RadioGroup>
+      </div>
+      <div className="mt-3 w-full">
+        <div><span>Size</span></div>
+        <div className="flex justify-between gap-3 w-full mt-2">
+          <div className="flex flex-1"><span>x:</span><input className="w-full ml-1 rounded"></input></div>
+          <div className="flex flex-1"><span>y:</span><input className="w-full ml-1 rounded"></input></div>
+          <div className="flex flex-1"><span>z:</span><input className="w-full ml-1 rounded"></input></div>
+        </div>
+      </div>
     </div>
   </VerticalTitleCard>
 }
