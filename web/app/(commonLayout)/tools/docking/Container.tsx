@@ -20,6 +20,12 @@ const Container = () => {
       )
     }
   }
+  const getCenter = () => {
+    if (MolstarCompRef.current) {
+      const center = MolstarCompRef.current.getCenter()
+      console.log(`获取中心点坐标:${center}`)
+    }
+  }
   return (<>
     <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">
       <div className="flex flex-col w-fit sm:w-[400px] shrink-0 border-gray-550 border-r h-full">
@@ -38,7 +44,7 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {DockingModeEnum.input === mode && <InputForm onSubmit={handleClick}/>}
+          {DockingModeEnum.input === mode && <InputForm onSubmit={handleClick} getCenter={getCenter} />}
         </div>
       </div>
       <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarCompRef}/></div>

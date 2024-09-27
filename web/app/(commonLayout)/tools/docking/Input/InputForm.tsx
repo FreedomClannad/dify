@@ -8,8 +8,9 @@ import OutPose from '@/app/(commonLayout)/tools/docking/Input/OutPose'
 
 type Props = {
   onSubmit: () => void
+  getCenter: () => void
 }
-const InputForm = ({ onSubmit }: Props) => {
+const InputForm = ({ onSubmit, getCenter }: Props) => {
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />]
   return <>
@@ -18,6 +19,7 @@ const InputForm = ({ onSubmit }: Props) => {
         {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
       </div>
       <div className="flex justify-center w-[80%] mt-3">
+        <Button onClick={getCenter}>获取中心坐标</Button>
         <Button color="primary" radius="sm" fullWidth onClick={onSubmit}>Run</Button>
       </div>
     </div>

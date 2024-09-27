@@ -13,6 +13,7 @@ type Props = {
 
 export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
+  getCenter: () => string[]
 }
 // let ViewerStart = null;
 const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId() }, ref) => {
@@ -40,7 +41,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId() }, ref
       molstart.current = res
       // ViewerStart = res;
     })
-  }, [])
+  }, [id])
   // 加载模型
   const loadStructureFromUrl = (url: string, formate: BuiltInTrajectoryFormat) => {
     if (molstart && molstart.current)
@@ -50,9 +51,15 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId() }, ref
     //     ViewerStart.loadStructureFromUrl(url, formate);
     // }
   }
+
+  const getCenter = () => {
+    if (molstart && molstart.current)
+      return molstart.current.getFocusedResidueCenter()
+  }
   useImperativeHandle(ref, () => {
     return {
       loadStructureFromUrl,
+      getCenter,
     }
   }, [])
   return <div style={{ width: '100%', height: '100%' }} id={id}></div>

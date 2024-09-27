@@ -580,6 +580,39 @@ export class Viewer {
     }
   }
 
+  // 获取聚集分子点坐标
+  getFocusedResidueCenter() {
+    const plugin = this.plugin
+
+    // Get the structural element
+    const structure = plugin.managers.structure.hierarchy.current.structures[0]
+
+    for (let index = 0; index < structure.components.length; index++) {
+      if (structure.components[index].key === 'structure-focus-target-sel') {
+        const structure_element = structure.components[index].cell.obj?.data.units[0]
+        if (!structure_element)
+          return null
+
+        const structure_elements = structure_element.elements
+        const x = structure_element.conformation.coordinates.x
+        const y = structure_element.conformation.coordinates.y
+        const z = structure_element.conformation.coordinates.z
+
+        const count = structure_elements.length
+
+        const elementArray = Array.from(structure_elements)
+        const sumCoordinates = elementArray.reduce((sum, element: number) => {
+          sum.x += (x[element] as number) || 0
+          sum.y += (y[element] as number) || 0
+          sum.z += (z[element] as number) || 0
+          return sum
+        }, { x: 0, y: 0, z: 0 })
+        return [sumCoordinates.x / count, sumCoordinates.y / count, sumCoordinates.z / count]
+      }
+    }
+    return null
+  }
+
   handleResize() {
     this.plugin.layout.events.updated.next(undefined)
   }
