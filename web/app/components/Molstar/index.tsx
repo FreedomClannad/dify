@@ -9,15 +9,21 @@ import './styles.css'
 
 type Props = {
   id?: string
+  onFocusCenter?: (center: number[] | null | undefined) => void
 }
 
 export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
-  getCenter: () => string[]
+  getCenter: () => Promise<number[] | null | undefined>
 }
 // let ViewerStart = null;
-const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId() }, ref) => {
+const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFocusCenter }, ref) => {
   const molstart = useRef<Viewer | null>(null)
+
+  const getCenter = async () => {
+    if (molstart && molstart.current)
+      return molstart.current.getFocusedResidueCenter()
+  }
 
   useEffect(() => {
     Viewer.create(id, {
@@ -35,6 +41,13 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId() }, ref
       viewportShowSettings: false,
       viewportShowTrajectoryControls: false,
       volumeStreamingServer: 'https://maps.rcsb.org',
+    }, {
+      focusClicked: async () => {
+        setTimeout(async () => {
+          const center = await getCenter()
+          onFocusCenter?.(center)
+        }, 500)
+      },
     },
     ).then((res) => {
       console.log(res)
@@ -52,10 +65,6 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId() }, ref
     // }
   }
 
-  const getCenter = () => {
-    if (molstart && molstart.current)
-      return molstart.current.getFocusedResidueCenter()
-  }
   useImperativeHandle(ref, () => {
     return {
       loadStructureFromUrl,
@@ -65,7 +74,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId() }, ref
   return <div style={{ width: '100%', height: '100%' }} id={id}></div>
 })
 MolstarComp.displayName = 'MolstarComp'
-const MolstarWrapper = ({ wrapperRef, ...props }: { wrapperRef: LegacyRef<MolstarHandle> }) => {
+const MolstarWrapper = ({ wrapperRef, ...props }: { wrapperRef: LegacyRef<MolstarHandle> } & Props) => {
   return <MolstarComp ref={wrapperRef} {...props}/>
 }
 

@@ -52,6 +52,7 @@ import { Asset } from 'molstar/lib/mol-util/assets'
 import { Color } from 'molstar/lib/mol-util/color'
 import 'molstar/lib/mol-util/polyfill'
 import { ObjectKeys } from 'molstar/lib/mol-util/type-helpers'
+import { MesoFocusLoci } from './behavior/camera'
 
 export { PLUGIN_VERSION as version } from 'molstar/lib/mol-plugin/version'
 export { consoleStats, setDebugMode, setProductionMode, setTimingMode } from 'molstar/lib/mol-util/debug'
@@ -151,11 +152,16 @@ export const ViewerAutoPreset = StructureRepresentationPresetProvider({
       return await PresetStructureRepresentations.auto.apply(ref, params, plugin)
   },
 })
+
+type CallbackOptions = {
+  focusClicked?: () => void
+}
+
 export class Viewer {
   constructor(public plugin: PluginUIContext) {
   }
 
-  static async create(elementOrId: string | HTMLElement, options: Partial<ViewerOptions> = {}) {
+  static async create(elementOrId: string | HTMLElement, options: Partial<ViewerOptions> = {}, callbackOptions: CallbackOptions = {}) {
     const definedOptions = {} as any
     // filter for defined properies only so the default values
     // are property applied
@@ -163,6 +169,8 @@ export class Viewer {
       if (options[p] !== undefined)
         definedOptions[p] = options[p]
     }
+
+    const { focusClicked } = callbackOptions
 
     const o: ViewerOptions = { ...DefaultViewerOptions, ...definedOptions }
     const defaultSpec = DefaultPluginUISpec()
@@ -173,6 +181,12 @@ export class Viewer {
       actions: defaultSpec.actions,
       behaviors: [
         ...defaultSpec.behaviors,
+        PluginSpec.Behavior(MesoFocusLoci({
+          focusClicked: () => {
+            if (focusClicked)
+              focusClicked()
+          },
+        })),
         ...o.extensions.filter(e => !disabledExtension.has(e)).map(e => ExtensionMap[e]),
       ],
       animations: [...defaultSpec.animations || []],

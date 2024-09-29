@@ -1,22 +1,35 @@
 import { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
+import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
+import { useContext as useContext1 } from 'use-context-selector'
 import style from './Container.module.css'
 import { DockingModeEnum } from '@/types/docking'
 import cn from '@/utils/classnames'
 import InputForm from '@/app/(commonLayout)/tools/docking/Input/InputForm'
 import type { MolstarHandle } from '@/app/components/Molstar'
-
+import { InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
+import { ToastContext } from '@/app/components/base/toast'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
 const Container = () => {
   const [mode, setMode] = useState<DockingModeEnum>(DockingModeEnum.input)
+  const { notify } = useContext1(ToastContext)
   const MolstarCompRef = useRef<MolstarHandle>(null)
   const handleClick = () => {
     if (MolstarCompRef.current) {
       MolstarCompRef.current.loadStructureFromUrl(
         'http://127.0.0.1:5500/ligand-dock.sdf',
         'sdf',
+      )
+    }
+  }
+  const loadUrl = (url: string, formats: BuiltInTrajectoryFormat) => {
+    if (MolstarCompRef.current) {
+      console.log(url)
+      MolstarCompRef.current.loadStructureFromUrl(
+        url,
+        formats as BuiltInTrajectoryFormat,
       )
     }
   }
@@ -44,10 +57,15 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {DockingModeEnum.input === mode && <InputForm onSubmit={handleClick} getCenter={getCenter} />}
+          <InputContext.Provider value={{ loadUrl }}>
+            {DockingModeEnum.input === mode && <InputForm onSubmit={handleClick} />}
+          </InputContext.Provider>
         </div>
       </div>
-      <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarCompRef}/></div>
+      <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarCompRef} onFocusCenter={(center) => {
+        console.log(center)
+        notify({ type: 'success', message: `中心点: ${center}` })
+      }}/></div>
     </div>
   </>)
 }
