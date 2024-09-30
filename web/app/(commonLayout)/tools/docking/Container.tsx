@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import { useContext as useContext1 } from 'use-context-selector'
+import type { FieldValues } from 'react-hook-form'
 import style from './Container.module.css'
 import type { CenterPosition } from '@/types/docking'
 import { DockingModeEnum } from '@/types/docking'
@@ -10,6 +11,7 @@ import InputForm from '@/app/(commonLayout)/tools/docking/Input/InputForm'
 import type { MolstarHandle } from '@/app/components/Molstar'
 import { InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 import { ToastContext } from '@/app/components/base/toast'
+import { submitDockingTask } from '@/service/docking'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -34,6 +36,10 @@ const Container = () => {
         formats as BuiltInTrajectoryFormat,
       )
     }
+  }
+  const handleSubmit = async (data: FieldValues) => {
+    console.log(data)
+    await submitDockingTask(data)
   }
   const getCenter = () => {
     if (MolstarCompRef.current) {
@@ -60,7 +66,7 @@ const Container = () => {
         </div>
         <div className="flex-1 overflow-y-auto">
           <InputContext.Provider value={{ loadUrl, centerPosition, setCenterPosition }}>
-            {DockingModeEnum.input === mode && <InputForm onSubmit={handleClick} />}
+            {DockingModeEnum.input === mode && <InputForm onSubmit={handleSubmit} />}
           </InputContext.Provider>
         </div>
       </div>

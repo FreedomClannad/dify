@@ -3,11 +3,12 @@ import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/forma
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
-import { InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
+import { FormContext, InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 import { getCenterPosition } from '@/service/docking'
 const ReceptorFile = () => {
   const [fileList, setFileList] = useState<FileItem[]>([])
   const { loadUrl, setCenterPosition } = useContext(InputContext)
+  const { setValue } = useContext(FormContext)
   return <>
     <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
       <div>
@@ -16,7 +17,9 @@ const ReceptorFile = () => {
             if (item.fileID === fileItem.fileID) {
               const file = item.file
               const { id, mime_type, extension } = file
+
               if (id && mime_type) {
+                setValue('pdb_file_id', id)
                 loadUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
                 getCenterPosition(id).then((res) => {
                   const { center_x, center_y, center_z } = res

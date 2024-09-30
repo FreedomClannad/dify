@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Button } from '@nextui-org/react'
+import type { FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import JobTitle from '@/app/(commonLayout)/tools/docking/Input/JobTitle'
 import ReceptorFile from '@/app/(commonLayout)/tools/docking/Input/ReceptorFile'
@@ -7,20 +8,18 @@ import Constraints from '@/app/(commonLayout)/tools/docking/Input/Constraints'
 import LigandFile from '@/app/(commonLayout)/tools/docking/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/tools/docking/Input/OutPose'
 import { FormContext } from '@/app/(commonLayout)/tools/docking/Input/context'
-import TestMol from '@/app/(commonLayout)/tools/docking/Input/TestMol'
 type Props = {
-  onSubmit: () => void
+  onSubmit: (data: FieldValues) => void
 }
 const InputForm = ({ onSubmit }: Props) => {
   const { register, handleSubmit, setValue } = useForm()
   // eslint-disable-next-line react/jsx-key
-  const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />, <TestMol />]
+  const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />]
 
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3">
       <form onSubmit={handleSubmit((data) => {
-        console.log(data)
-        onSubmit()
+        onSubmit(data)
       })}>
         <div>
           <FormContext.Provider value={{ register, setValue }}>
