@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import { useContext as useContext1 } from 'use-context-selector'
 import style from './Container.module.css'
+import type { CenterPosition } from '@/types/docking'
 import { DockingModeEnum } from '@/types/docking'
 import cn from '@/utils/classnames'
 import InputForm from '@/app/(commonLayout)/tools/docking/Input/InputForm'
@@ -16,6 +17,7 @@ const Container = () => {
   const [mode, setMode] = useState<DockingModeEnum>(DockingModeEnum.input)
   const { notify } = useContext1(ToastContext)
   const MolstarCompRef = useRef<MolstarHandle>(null)
+  const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleClick = () => {
     if (MolstarCompRef.current) {
       MolstarCompRef.current.loadStructureFromUrl(
@@ -57,7 +59,7 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <InputContext.Provider value={{ loadUrl }}>
+          <InputContext.Provider value={{ loadUrl, centerPosition }}>
             {DockingModeEnum.input === mode && <InputForm onSubmit={handleClick} />}
           </InputContext.Provider>
         </div>
@@ -65,6 +67,10 @@ const Container = () => {
       <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarCompRef} onFocusCenter={(center) => {
         console.log(center)
         notify({ type: 'success', message: `中心点: ${center}` })
+        if (center) {
+          const [x, y, z] = center
+          setCenterPosition({ x, y, z })
+        }
       }}/></div>
     </div>
   </>)

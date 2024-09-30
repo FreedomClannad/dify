@@ -4,6 +4,7 @@ import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { FormContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 const Constraints = () => {
   const { register } = useContext(FormContext)
+
   return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
     <div className="ml-3">
       <div>
