@@ -6,10 +6,12 @@ import type { CenterPosition } from '@/types/docking'
 type InputContextType = {
   loadUrl: (url: string, formats: BuiltInTrajectoryFormat) => void
   centerPosition: CenterPosition
+  setCenterPosition: (centerPosition: CenterPosition) => void
 }
 export const InputContext = createContext<InputContextType>({
   loadUrl: (url: string, formats: BuiltInTrajectoryFormat) => {},
   centerPosition: {},
+  setCenterPosition: () => {},
 })
 
 type FormContextType = {

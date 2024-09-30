@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { useContext, useEffect } from 'react'
 import { Button } from '@nextui-org/react'
 import { useForm } from 'react-hook-form'
 import JobTitle from '@/app/(commonLayout)/tools/docking/Input/JobTitle'
@@ -7,7 +6,7 @@ import ReceptorFile from '@/app/(commonLayout)/tools/docking/Input/ReceptorFile'
 import Constraints from '@/app/(commonLayout)/tools/docking/Input/Constraints'
 import LigandFile from '@/app/(commonLayout)/tools/docking/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/tools/docking/Input/OutPose'
-import { FormContext, InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
+import { FormContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 import TestMol from '@/app/(commonLayout)/tools/docking/Input/TestMol'
 type Props = {
   onSubmit: () => void
@@ -16,13 +15,7 @@ const InputForm = ({ onSubmit }: Props) => {
   const { register, handleSubmit, setValue } = useForm()
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />, <TestMol />]
-  const { centerPosition } = useContext(InputContext)
-  useEffect(() => {
-    const { x, y, z } = centerPosition
-    setValue('center_x', x)
-    setValue('center_y', y)
-    setValue('center_z', z)
-  }, [centerPosition])
+
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3">
       <form onSubmit={handleSubmit((data) => {

@@ -59,7 +59,7 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <InputContext.Provider value={{ loadUrl, centerPosition }}>
+          <InputContext.Provider value={{ loadUrl, centerPosition, setCenterPosition }}>
             {DockingModeEnum.input === mode && <InputForm onSubmit={handleClick} />}
           </InputContext.Provider>
         </div>

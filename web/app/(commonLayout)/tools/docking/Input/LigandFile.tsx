@@ -5,6 +5,7 @@ import type { FileItem } from '@/models/datasets'
 
 const LigandFile = () => {
   const [fileList, setFileList] = useState<FileItem[]>([])
+
   return <>
     <VerticalTitleCard title="Ligand file" tooltip="Ligand filetootltip">
       <div>

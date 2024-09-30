@@ -1,15 +1,28 @@
 import { Radio, RadioGroup } from '@nextui-org/react'
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-import { FormContext } from '@/app/(commonLayout)/tools/docking/Input/context'
+import { FormContext, InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
+import type { CenterPosition } from '@/types/docking'
 import { ConstraintsCenterEnum } from '@/types/docking'
-
+type CenterState = {
+  [ConstraintsCenterEnum.ligand]: CenterPosition
+  [ConstraintsCenterEnum.residue]: CenterPosition
+  [ConstraintsCenterEnum.coordinates]: CenterPosition
+}
 const Constraints = () => {
-  const { register } = useContext(FormContext)
+  const { register, setValue } = useContext(FormContext)
   const [radioValue, setRadioValue] = useState<ConstraintsCenterEnum>(ConstraintsCenterEnum.ligand)
+  const [CenterState, setCenterState] = useState<CenterState>({ [ConstraintsCenterEnum.ligand]: {}, [ConstraintsCenterEnum.residue]: {}, [ConstraintsCenterEnum.coordinates]: {} })
   const radioDisabled = useMemo(() => {
     return !(radioValue === ConstraintsCenterEnum.coordinates)
   }, [radioValue])
+  const { centerPosition } = useContext(InputContext)
+  useEffect(() => {
+    const { x, y, z } = centerPosition
+    setValue('center_x', x)
+    setValue('center_y', y)
+    setValue('center_z', z)
+  }, [centerPosition])
   return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
     <div className="ml-3">
       <div>

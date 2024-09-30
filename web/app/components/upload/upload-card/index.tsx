@@ -85,6 +85,8 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
     const formData = new FormData()
     formData.append('file', fileItem.file)
     const onProgress = (e: ProgressEvent) => {
+      console.log(e.lengthComputable)
+      console.log(e)
       if (e.lengthComputable) {
         const percent = Math.floor(e.loaded / e.total * 100)
         onFileUpdate(fileItem, percent, fileListRef.current)
