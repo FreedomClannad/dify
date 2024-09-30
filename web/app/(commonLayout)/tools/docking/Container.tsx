@@ -4,6 +4,7 @@ import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/forma
 import { useContext as useContext1 } from 'use-context-selector'
 import type { FieldValues } from 'react-hook-form'
 import style from './Container.module.css'
+import Result from './Result'
 import type { CenterPosition } from '@/types/docking'
 import { DockingModeEnum } from '@/types/docking'
 import cn from '@/utils/classnames'
@@ -12,11 +13,13 @@ import type { MolstarHandle } from '@/app/components/Molstar'
 import { InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 import { ToastContext } from '@/app/components/base/toast'
 import { submitDockingTask } from '@/service/docking'
+import { ResultContext } from '@/app/(commonLayout)/tools/docking/Result/context'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
 const Container = () => {
   const [mode, setMode] = useState<DockingModeEnum>(DockingModeEnum.input)
+  const [result, setResult] = useState<string>('')
   const { notify } = useContext1(ToastContext)
   const MolstarCompRef = useRef<MolstarHandle>(null)
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
@@ -39,7 +42,8 @@ const Container = () => {
   }
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
-    await submitDockingTask(data)
+    const res: any = await submitDockingTask(data)
+    setResult(res.result)
   }
   const getCenter = () => {
     if (MolstarCompRef.current) {
@@ -68,6 +72,9 @@ const Container = () => {
           <InputContext.Provider value={{ loadUrl, centerPosition, setCenterPosition }}>
             {DockingModeEnum.input === mode && <InputForm onSubmit={handleSubmit} />}
           </InputContext.Provider>
+          <ResultContext.Provider value={{ resultData: result }}>
+            {DockingModeEnum.result === mode && <Result />}
+          </ResultContext.Provider>
         </div>
       </div>
       <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarCompRef} onFocusCenter={(center) => {

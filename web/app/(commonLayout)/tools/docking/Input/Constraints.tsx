@@ -40,15 +40,15 @@ const Constraints = () => {
           <div className="flex items-center justify-between gap-3 w-full">
             <div className="flex flex-1">
               <span>x:</span>
-              <input type="number" disabled={radioDisabled} {...register('center_x')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+              <input disabled={radioDisabled} {...register('center_x')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>y:</span>
-              <input type="number" disabled={radioDisabled} {...register('center_y')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+              <input disabled={radioDisabled} {...register('center_y')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>z:</span>
-              <input type="number" disabled={radioDisabled} {...register('center_z')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+              <input disabled={radioDisabled} {...register('center_z')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
           </div>
         </div>
