@@ -8,3 +8,9 @@ export type CenterPosition = {
   y?: number
   z?: number
 }
+
+export enum ConstraintsCenterEnum {
+  ligand = 'ligand',
+  residue = 'residue',
+  coordinates = 'coordinates',
+}
