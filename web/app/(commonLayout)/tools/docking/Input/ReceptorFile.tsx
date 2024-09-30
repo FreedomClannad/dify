@@ -7,7 +7,9 @@ const ReceptorFile = () => {
   return <>
     <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
       <div>
-        <UploadCard accept=".pdf, .txt" fileList={fileList} prepareFileList={(files) => {
+        <UploadCard accept=".pdf, .txt" fileList={fileList} onFileUpdate={() => {
+          console.log('上传文件')
+        }} prepareFileList={(files) => {
           setFileList(files)
         }}/>
       </div>

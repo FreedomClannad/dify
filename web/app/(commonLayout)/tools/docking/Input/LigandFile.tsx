@@ -8,7 +8,9 @@ const LigandFile = () => {
   return <>
     <VerticalTitleCard title="Ligand file" tooltip="Ligand filetootltip">
       <div>
-        <UploadCard accept=".pdf, .txt" fileList={fileList} prepareFileList={(files) => {
+        <UploadCard accept=".pdf, .txt" fileList={fileList} onFileUpdate={() => {
+          console.log('上传文件')
+        }} prepareFileList={(files) => {
           setFileList(files)
         }}/>
       </div>
