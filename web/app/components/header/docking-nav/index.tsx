@@ -1,6 +1,5 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -12,18 +11,17 @@ type ToolsNavProps = {
   className?: string
 }
 
-const ToolsNav = ({
+const DockingNav = ({
   className,
 }: ToolsNavProps) => {
-  const { t } = useTranslation()
-
   const currentPath = usePathname()
+  console.log(currentPath) // '/tools/docking'
   const segments = currentPath.split('/')
   const currentSegment = segments[segments.length - 1]
-  const activated = currentSegment === 'tools'
+  const activated = currentSegment === 'docking'
 
   return (
-    <Link href="/tools" className={classNames(
+    <Link href="/tools/docking" className={classNames(
       className, 'group',
       activated && 'bg-white shadow-md',
       activated ? 'text-primary-600' : 'text-gray-500 hover:bg-gray-200',
@@ -33,9 +31,9 @@ const ToolsNav = ({
           ? <RiHammerFill className='mr-2 w-4 h-4' />
           : <RiHammerLine className='mr-2 w-4 h-4' />
       }
-      {t('common.menus.tools')}
+      Tool/Molecular Docking
     </Link>
   )
 }
 
-export default ToolsNav
+export default DockingNav
