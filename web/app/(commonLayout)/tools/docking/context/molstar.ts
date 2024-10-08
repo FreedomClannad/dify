@@ -3,6 +3,7 @@ import { createContext } from 'react'
 import type { DockingMolstar } from '@/types/docking'
 
 type MolstarContextType = {
+  dockingMolstarList: DockingMolstar[]
   addStructure: (dockingMolstar: DockingMolstar) => void
   loadStructureFromUrl: (url: string, formats: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
@@ -10,6 +11,7 @@ type MolstarContextType = {
 }
 
 export const MolstarContext = createContext<MolstarContextType>({
+  dockingMolstarList: [],
   addStructure: (dockingMolstar: DockingMolstar) => {},
   loadStructureFromUrl: (url: string, formats: BuiltInTrajectoryFormat) => {},
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => {},

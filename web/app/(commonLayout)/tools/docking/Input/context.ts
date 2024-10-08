@@ -1,12 +1,17 @@
 import { createContext } from 'react'
 import type { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import type { CenterPosition } from '@/types/docking'
+import type { FileItem } from '@/models/datasets'
 
 type InputContextType = {
+  receptorFileList: FileItem[]
+  setReceptorFileList: (receptorFileList: FileItem[]) => void
   centerPosition: CenterPosition
   setCenterPosition: (centerPosition: CenterPosition) => void
 }
 export const InputContext = createContext<InputContextType>({
+  receptorFileList: [],
+  setReceptorFileList: (receptorFileList: FileItem[]) => {},
   centerPosition: {},
   setCenterPosition: () => {},
 })

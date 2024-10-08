@@ -8,6 +8,7 @@ const useMolstar = () => {
   const [dockingMolstarList, setDockingMolstarList] = useState<DockingMolstar[]>([])
   // 添加分子/蛋白质
   const addStructure = (dockingMolstar: DockingMolstar) => {
+    console.log(dockingMolstar)
     setDockingMolstarList([...dockingMolstarList, dockingMolstar])
   }
   // 根据URL进行下载并渲染
@@ -66,6 +67,7 @@ const useMolstar = () => {
   }
   return {
     MolstarRef,
+    dockingMolstarList,
     addStructure,
     loadStructureFromUrl,
     loadStructureFromData,

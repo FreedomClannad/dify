@@ -1,3 +1,5 @@
+import type { FileItem } from '@/models/datasets'
+
 export enum DockingModeEnum {
   input = 'input',
   result = 'result',
@@ -17,5 +19,9 @@ export enum ConstraintsCenterEnum {
 
 export type DockingMolstar = {
   id: string
+  visible: boolean
+}
+
+export type DockingUploadFile = FileItem & {
   visible: boolean
 }

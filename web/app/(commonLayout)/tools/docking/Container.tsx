@@ -14,6 +14,7 @@ import { submitDockingTask } from '@/service/docking'
 import { ResultContext } from '@/app/(commonLayout)/tools/docking/Result/context'
 import useMolstar from '@/app/(commonLayout)/tools/docking/hooks/useMolstar'
 import { MolstarContext } from '@/app/(commonLayout)/tools/docking/context/molstar'
+import useReceptor from '@/app/(commonLayout)/tools/docking/hooks/useReceptor'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -22,7 +23,8 @@ const Container = () => {
   const [result, setResult] = useState<string>('')
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { notify } = useContext1(ToastContext)
-  const { MolstarRef, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility } = useMolstar()
+  const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility } = useMolstar()
+  const { receptorFileList, setReceptorFileList } = useReceptor()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -49,11 +51,11 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <MolstarContext.Provider value={{ addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
-            <InputContext.Provider value={{ centerPosition, setCenterPosition }}>
+          <MolstarContext.Provider value={{ addStructure, dockingMolstarList, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
+            <InputContext.Provider value={{ receptorFileList, setReceptorFileList, centerPosition, setCenterPosition }}>
               <InputForm onSubmit={handleSubmit} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
             </InputContext.Provider>
-            <ResultContext.Provider value={{ resultData: result }}>
+            <ResultContext.Provider value={{ receptorFileList, setReceptorFileList, resultData: result }}>
               {DockingModeEnum.result === mode && <Result />}
             </ResultContext.Provider>
           </MolstarContext.Provider>
