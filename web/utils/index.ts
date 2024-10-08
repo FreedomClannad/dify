@@ -43,3 +43,7 @@ export const getPurifyHref = (href: string) => {
 export const getShortId = () => {
   return uuidv4().substr(0, 8) // 生成一个8位长度的短唯一ID串
 }
+
+export const getUUID = () => {
+  return uuidv4()
+}

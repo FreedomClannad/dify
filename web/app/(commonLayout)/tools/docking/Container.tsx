@@ -22,7 +22,7 @@ const Container = () => {
   const [result, setResult] = useState<string>('')
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { notify } = useContext1(ToastContext)
-  const { MolstarRef, loadStructureFromUrl, loadStructureFromData } = useMolstar()
+  const { MolstarRef, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility } = useMolstar()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -49,7 +49,7 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <MolstarContext.Provider value={{ loadStructureFromUrl, loadStructureFromData }}>
+          <MolstarContext.Provider value={{ addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
             <InputContext.Provider value={{ centerPosition, setCenterPosition }}>
               <InputForm onSubmit={handleSubmit} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
             </InputContext.Provider>

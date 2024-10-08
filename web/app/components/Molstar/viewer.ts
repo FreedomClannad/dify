@@ -45,13 +45,15 @@ import { PluginConfig } from 'molstar/lib/mol-plugin/config'
 import type { PluginLayoutControlsDisplay } from 'molstar/lib/mol-plugin/layout'
 import { PluginSpec } from 'molstar/lib/mol-plugin/spec'
 import type { PluginState } from 'molstar/lib/mol-plugin/state'
-import type { StateObjectSelector } from 'molstar/lib/mol-state'
+import type { State, StateObjectSelector } from 'molstar/lib/mol-state'
 import { StateObjectRef } from 'molstar/lib/mol-state'
 import { Task } from 'molstar/lib/mol-task'
 import { Asset } from 'molstar/lib/mol-util/assets'
 import { Color } from 'molstar/lib/mol-util/color'
 import 'molstar/lib/mol-util/polyfill'
 import { ObjectKeys } from 'molstar/lib/mol-util/type-helpers'
+import type { StateTransform } from 'molstar/lib/commonjs/mol-state/transform'
+import { setSubtreeVisibility } from 'molstar/lib/mol-plugin/behavior/static/state'
 import { MesoFocusLoci } from './behavior/camera'
 
 export { PLUGIN_VERSION as version } from 'molstar/lib/mol-plugin/version'
@@ -629,6 +631,10 @@ export class Viewer {
 
   handleResize() {
     this.plugin.layout.events.updated.next(undefined)
+  }
+
+  setStructureVisibility(state: State, root: StateTransform.Ref, value: boolean) {
+    setSubtreeVisibility(state, root, value)
   }
 
   dispose() {

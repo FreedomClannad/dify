@@ -15,6 +15,7 @@ type Props = {
 export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
+  setStructureVisibility: (index: number, visible: boolean) => void
   getCenter: () => Promise<number[] | null | undefined>
 }
 // let ViewerStart = null;
@@ -65,11 +66,22 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     //     ViewerStart.loadStructureFromUrl(url, formate);
     // }
   }
-
+  // 根据传入的data来进行渲染数据
   const loadStructureFromData = (data: string | number[], format: BuiltInTrajectoryFormat) => {
     if (molstart && molstart.current) {
-      console.log('2233')
+      console.log(molstart)
       molstart.current.loadStructureFromData(data, format)
+    }
+  }
+  // 控制分子/蛋白质显隐
+  const setStructureVisibility = (index: number, visible: boolean) => {
+    if (molstart && molstart.current) {
+      console.log(molstart.current?.plugin.managers.structure.hierarchy.current.structures)
+      console.log(index)
+      console.log(visible)
+      const data = molstart.current?.plugin.state.data
+      const ref = molstart.current?.plugin.managers.structure.hierarchy.current.structures[Number(index)].cell.transform.ref
+      molstart.current.setStructureVisibility(data, ref, !visible)
     }
   }
 
@@ -77,6 +89,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     return {
       loadStructureFromUrl,
       loadStructureFromData,
+      setStructureVisibility,
       getCenter,
     }
   }, [])

@@ -14,3 +14,8 @@ export enum ConstraintsCenterEnum {
   residue = 'residue',
   coordinates = 'coordinates',
 }
+
+export type DockingMolstar = {
+  id: string
+  visible: boolean
+}
