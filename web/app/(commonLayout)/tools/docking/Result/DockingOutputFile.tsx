@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { data } from './data'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/tools/docking/Result/context'
+import { MolstarContext } from '@/app/(commonLayout)/tools/docking/context/molstar'
 export type TableType = {
   mode: number
   mol: string
@@ -28,7 +29,8 @@ const initTable = (data: any[]): TableType[] => {
 
 const DockingOutputFile = () => {
   const [table, setTable] = useState<TableType[]>([])
-  const { resultData, loadStructureFromData } = useContext(ResultContext)
+  const { resultData } = useContext(ResultContext)
+  const { loadStructureFromData } = useContext(MolstarContext)
   useEffect(() => {
     try {
       const t_data = JSON.parse(data)

@@ -3,11 +3,11 @@ import { Button, Input } from '@nextui-org/react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-import { InputContext } from '@/app/(commonLayout)/tools/docking/Input/context'
+import { MolstarContext } from '@/app/(commonLayout)/tools/docking/context/molstar'
 const TestMol = () => {
   const [input, setInput] = useState<string>('5v3x.pdb')
 
-  const { loadUrl } = useContext(InputContext)
+  const { loadStructureFromUrl } = useContext(MolstarContext)
   const url = 'http://127.0.0.1:5500/'
   return <VerticalTitleCard title="TestMol" >
     <div className="flex items-center justify-center flex-col">
@@ -22,7 +22,7 @@ const TestMol = () => {
         <Button color="primary" radius="sm" fullWidth onClick={() => {
           const t_url = `${url}${input}`
           const affix = input.split('.').pop() as BuiltInTrajectoryFormat || 'mmcif'
-          loadUrl(t_url, affix)
+          loadStructureFromUrl(t_url, affix)
         }}>Render</Button>
       </div>
 

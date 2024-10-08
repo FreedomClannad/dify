@@ -1,17 +1,12 @@
 import { createContext } from 'react'
-import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import type { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import type { CenterPosition } from '@/types/docking'
 
 type InputContextType = {
-  loadUrl: (url: string, formats: BuiltInTrajectoryFormat) => void
-  loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
   centerPosition: CenterPosition
   setCenterPosition: (centerPosition: CenterPosition) => void
 }
 export const InputContext = createContext<InputContextType>({
-  loadUrl: (url: string, formats: BuiltInTrajectoryFormat) => {},
-  loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => {},
   centerPosition: {},
   setCenterPosition: () => {},
 })
