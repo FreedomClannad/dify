@@ -41,6 +41,16 @@ const Container = () => {
       )
     }
   }
+  const loadStructureFromData = (data: string | number[], formats: BuiltInTrajectoryFormat) => {
+    console.log(data)
+    if (MolstarCompRef.current) {
+      console.log(data)
+      MolstarCompRef.current.loadStructureFromData(
+        data,
+        formats as BuiltInTrajectoryFormat,
+      )
+    }
+  }
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
     setSubmitLoading(true)
@@ -72,16 +82,15 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <InputContext.Provider value={{ loadUrl, centerPosition, setCenterPosition }}>
+          <InputContext.Provider value={{ loadUrl, centerPosition, setCenterPosition, loadStructureFromData }}>
             <InputForm onSubmit={handleSubmit} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
           </InputContext.Provider>
-          <ResultContext.Provider value={{ resultData: result }}>
+          <ResultContext.Provider value={{ resultData: result, loadStructureFromData }}>
             {DockingModeEnum.result === mode && <Result />}
           </ResultContext.Provider>
         </div>
       </div>
       <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarCompRef} onFocusCenter={(center) => {
-        console.log(center)
         notify({ type: 'success', message: `中心点: ${center}` })
         if (center) {
           const [x, y, z] = center

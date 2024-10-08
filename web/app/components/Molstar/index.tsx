@@ -14,6 +14,7 @@ type Props = {
 
 export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
+  loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
   getCenter: () => Promise<number[] | null | undefined>
 }
 // let ViewerStart = null;
@@ -65,9 +66,17 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     // }
   }
 
+  const loadStructureFromData = (data: string | number[], format: BuiltInTrajectoryFormat) => {
+    if (molstart && molstart.current) {
+      console.log('2233')
+      molstart.current.loadStructureFromData(data, format)
+    }
+  }
+
   useImperativeHandle(ref, () => {
     return {
       loadStructureFromUrl,
+      loadStructureFromData,
       getCenter,
     }
   }, [])

@@ -22,6 +22,7 @@ const Constraints = () => {
     setValue('center_x', x)
     setValue('center_y', y)
     setValue('center_z', z)
+    setCenterState({ ...CenterState, [radioValue]: { x, y, z } })
   }, [centerPosition])
   return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
     <div className="ml-3">
