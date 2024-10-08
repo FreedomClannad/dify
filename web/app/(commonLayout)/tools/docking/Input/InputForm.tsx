@@ -19,7 +19,7 @@ const InputForm = ({ onSubmit, submitLoading = false }: Props) => {
 
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3">
-      <form onSubmit={handleSubmit((data) => {
+      <form className="h-full flex justify-between flex-col" onSubmit={handleSubmit((data) => {
         onSubmit(data)
       })}>
         <div>
