@@ -25,7 +25,7 @@ const Card = ({ docking, onClick }: CardType) => {
 }
 
 const DockingInputFile = () => {
-  const { receptorFileList } = useContext(ResultContext)
+  const { receptorFileList, ligandFileList } = useContext(ResultContext)
   const { dockingMolstarList, setStructureVisibility } = useContext(MolstarContext)
   const receptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
@@ -43,6 +43,22 @@ const DockingInputFile = () => {
     })
     return n_list
   }, [dockingMolstarList, receptorFileList])
+  const ligandVisibleFileList: DockingUploadFile[] = useMemo(() => {
+    const n_list: DockingUploadFile[] = []
+    ligandFileList.map((item) => {
+      const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
+      if (docking) {
+        n_list.push({
+          ...item,
+          visible: docking.visible,
+        },
+        )
+      }
+
+      return item
+    })
+    return n_list
+  }, [dockingMolstarList, ligandFileList])
   const handleClick = (dockingFile: DockingUploadFile) => {
     console.log(dockingFile)
     setStructureVisibility({
@@ -54,7 +70,13 @@ const DockingInputFile = () => {
       receptorVisibleFileList.map((item, index) => {
         return <Card key={`receptro-${index}`} docking={item} onClick={handleClick} />
       })
-    }</div>
+    }
+    {
+      ligandVisibleFileList.map((item, index) => {
+        return <Card key={`receptro-${index}`} docking={item} onClick={handleClick} />
+      })
+    }
+    </div>
   </VerticalTitleCard>
 }
 

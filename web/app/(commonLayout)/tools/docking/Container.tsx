@@ -15,6 +15,7 @@ import { ResultContext } from '@/app/(commonLayout)/tools/docking/Result/context
 import useMolstar from '@/app/(commonLayout)/tools/docking/hooks/useMolstar'
 import { MolstarContext } from '@/app/(commonLayout)/tools/docking/context/molstar'
 import useReceptor from '@/app/(commonLayout)/tools/docking/hooks/useReceptor'
+import useLigand from '@/app/(commonLayout)/tools/docking/hooks/useLigand'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -25,6 +26,7 @@ const Container = () => {
   const { notify } = useContext1(ToastContext)
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility } = useMolstar()
   const { receptorFileList, setReceptorFileList } = useReceptor()
+  const { ligandFileList, setLigandFileList } = useLigand()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -52,10 +54,10 @@ const Container = () => {
         </div>
         <div className="flex-1 overflow-y-auto">
           <MolstarContext.Provider value={{ addStructure, dockingMolstarList, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
-            <InputContext.Provider value={{ receptorFileList, setReceptorFileList, centerPosition, setCenterPosition }}>
+            <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition }}>
               <InputForm onSubmit={handleSubmit} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
             </InputContext.Provider>
-            <ResultContext.Provider value={{ receptorFileList, setReceptorFileList, resultData: result }}>
+            <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, resultData: result }}>
               {DockingModeEnum.result === mode && <Result />}
             </ResultContext.Provider>
           </MolstarContext.Provider>
