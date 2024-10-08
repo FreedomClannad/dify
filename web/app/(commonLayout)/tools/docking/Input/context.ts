@@ -1,7 +1,8 @@
 import { createContext } from 'react'
-import type { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
+import type { FieldError, FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import type { CenterPosition } from '@/types/docking'
 import type { FileItem } from '@/models/datasets'
+import type { DockingFormValues } from '@/app/(commonLayout)/tools/docking/Input/InputForm'
 
 type InputContextType = {
   receptorFileList: FileItem[]
@@ -21,8 +22,11 @@ export const InputContext = createContext<InputContextType>({
 })
 
 type FormContextType = {
-  register: UseFormRegister<FieldValues>
-  setValue: UseFormSetValue<FieldValues>
+  register: UseFormRegister<DockingFormValues>
+  setValue: UseFormSetValue<DockingFormValues>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  errors: FieldError<DockingFormValues>
 }
 
 export const FormContext = createContext<FormContextType>(<FormContextType>{
@@ -30,4 +34,5 @@ export const FormContext = createContext<FormContextType>(<FormContextType>{
     return {} as FieldValues
   },
   setValue: (name, value, options) => {},
+  errors: {} as FieldError,
 })

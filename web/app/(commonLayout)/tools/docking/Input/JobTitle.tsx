@@ -4,7 +4,7 @@ import { FormContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 
 const JobTitle = () => {
   const [input, setInput] = useState<string>('')
-  const { register } = useContext(FormContext)
+  const { register, errors } = useContext(FormContext)
   return <VerticalTitleCard title="Job title" >
     <input
       {...register('task_name')}
@@ -14,6 +14,7 @@ const JobTitle = () => {
       onChange={(e) => {
         setInput(e.target.value)
       }}/>
+    {errors.task_name && <span className='text-red-500'>{errors.task_name.message}</span>}
   </VerticalTitleCard>
 }
 

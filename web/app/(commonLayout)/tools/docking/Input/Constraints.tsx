@@ -10,7 +10,7 @@ type CenterState = {
   [ConstraintsCenterEnum.coordinates]: CenterPosition
 }
 const Constraints = () => {
-  const { register, setValue } = useContext(FormContext)
+  const { register, setValue, errors } = useContext(FormContext)
   const [radioValue, setRadioValue] = useState<ConstraintsCenterEnum>(ConstraintsCenterEnum.ligand)
   const [CenterState, setCenterState] = useState<CenterState>({ [ConstraintsCenterEnum.ligand]: {}, [ConstraintsCenterEnum.residue]: {}, [ConstraintsCenterEnum.coordinates]: {} })
   const radioDisabled = useMemo(() => {
@@ -67,7 +67,8 @@ const Constraints = () => {
           </div>
           <div className="flex flex-1">
             <span>z:</span>
-            <input type="number" {...register('size_z')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input></div>
+            <input type="number" {...register('size_z')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+          </div>
         </div>
       </div>
     </div>
