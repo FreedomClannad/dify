@@ -10,8 +10,9 @@ import OutPose from '@/app/(commonLayout)/tools/docking/Input/OutPose'
 import { FormContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 type Props = {
   onSubmit: (data: FieldValues) => void
+  submitLoading?: boolean
 }
-const InputForm = ({ onSubmit }: Props) => {
+const InputForm = ({ onSubmit, submitLoading = false }: Props) => {
   const { register, handleSubmit, setValue } = useForm()
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />]
@@ -28,7 +29,7 @@ const InputForm = ({ onSubmit }: Props) => {
         </div>
         <div className="w-full flex justify-center">
           <div className="flex justify-center w-[80%] mt-3">
-            <Button type="submit" color="primary" radius="sm" fullWidth>Run</Button>
+            <Button type="submit" color="primary" radius="sm" fullWidth isLoading={submitLoading}>Run</Button>
           </div>
         </div>
 

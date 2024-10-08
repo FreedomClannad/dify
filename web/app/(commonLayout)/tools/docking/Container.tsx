@@ -20,6 +20,7 @@ const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.def
 const Container = () => {
   const [mode, setMode] = useState<DockingModeEnum>(DockingModeEnum.input)
   const [result, setResult] = useState<string>('')
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { notify } = useContext1(ToastContext)
   const MolstarCompRef = useRef<MolstarHandle>(null)
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
@@ -42,8 +43,10 @@ const Container = () => {
   }
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
+    setSubmitLoading(true)
     const res: any = await submitDockingTask(data)
     setResult(res.result)
+    setSubmitLoading(false)
   }
   const getCenter = () => {
     if (MolstarCompRef.current) {
@@ -70,7 +73,7 @@ const Container = () => {
         </div>
         <div className="flex-1 overflow-y-auto">
           <InputContext.Provider value={{ loadUrl, centerPosition, setCenterPosition }}>
-            {DockingModeEnum.input === mode && <InputForm onSubmit={handleSubmit} />}
+            {DockingModeEnum.input === mode && <InputForm onSubmit={handleSubmit} submitLoading={submitLoading} />}
           </InputContext.Provider>
           <ResultContext.Provider value={{ resultData: result }}>
             {DockingModeEnum.result === mode && <Result />}
