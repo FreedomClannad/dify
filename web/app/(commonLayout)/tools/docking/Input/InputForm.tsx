@@ -9,16 +9,17 @@ import LigandFile from '@/app/(commonLayout)/tools/docking/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/tools/docking/Input/OutPose'
 import { FormContext } from '@/app/(commonLayout)/tools/docking/Input/context'
 type Props = {
+  isDisabled?: boolean
   onSubmit: (data: FieldValues) => void
   submitLoading?: boolean
 }
-const InputForm = ({ onSubmit, submitLoading = false }: Props) => {
+const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Props) => {
   const { register, handleSubmit, setValue } = useForm()
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />]
 
   return <>
-    <div className="px-5 flex flex-col items-center justify-between h-full pb-3">
+    <div className="px-5 flex flex-col items-center justify-between h-full pb-3" style={{ display: isDisabled ? 'none' : 'flex' }}>
       <form className="h-full flex justify-between flex-col" onSubmit={handleSubmit((data) => {
         onSubmit(data)
       })}>

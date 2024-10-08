@@ -39,25 +39,30 @@ const DockingOutputFile = () => {
     }
   }, [resultData])
   return <VerticalTitleCard title="Docking input file">
-    <Table aria-label="Example static collection table">
-      <TableHeader>
-        <TableColumn>Mode</TableColumn>
-        <TableColumn>CNN pose score</TableColumn>
-        <TableColumn>affinity(kcal/mol)</TableColumn>
-        <TableColumn>CNN affinity</TableColumn>
-      </TableHeader>
-      <TableBody>
-        {table.map((item, index) => {
-          return <TableRow key={index}>
-            <TableCell>{item.mode}</TableCell>
-            <TableCell>{item.score}</TableCell>
-            <TableCell>{item.affinity}</TableCell>
-            <TableCell>{item.cnnAffinity}</TableCell>
-          </TableRow>
-        })}
+    {
+      table.length === 0
+        ? <div className="w-full flex justify-center align-center rounded h-[40px] leading-[40px] shadow-md"><span>No data</span></div>
+        : <Table aria-label="Example static collection table">
+          <TableHeader>
+            <TableColumn>Mode</TableColumn>
+            <TableColumn>CNN pose score</TableColumn>
+            <TableColumn>affinity(kcal/mol)</TableColumn>
+            <TableColumn>CNN affinity</TableColumn>
+          </TableHeader>
+          <TableBody>
+            {table.map((item, index) => {
+              return <TableRow key={index}>
+                <TableCell>{item.mode}</TableCell>
+                <TableCell>{item.score}</TableCell>
+                <TableCell>{item.affinity}</TableCell>
+                <TableCell>{item.cnnAffinity}</TableCell>
+              </TableRow>
+            })}
 
-      </TableBody>
-    </Table>
+          </TableBody>
+        </Table>
+    }
+
   </VerticalTitleCard>
 }
 export default DockingOutputFile
