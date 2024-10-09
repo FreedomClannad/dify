@@ -23,7 +23,7 @@ const VerticalTitleCard = ({ title, tooltip, children, onExample }: props) => {
             {tooltipDisabled
               ? <></>
               : <div className="flex mt-1 ml-2">
-                <div className='w-3 h-3 text-gray-500'>
+                <div className='w-4 h-4 text-gray-500'>
                   <QuestionMarkCircleIcon/>
                 </div>
               </div>}
