@@ -21,7 +21,7 @@ const DockingNav = ({
   const activated = currentSegment === 'docking'
 
   return (
-    <Link href="/tools/docking" className={classNames(
+    <Link href="/utility/docking" className={classNames(
       className, 'group',
       activated && 'bg-white shadow-md',
       activated ? 'text-primary-600' : 'text-gray-500 hover:bg-gray-200',
