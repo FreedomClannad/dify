@@ -6,6 +6,7 @@ import { Viewer } from './viewer'
 import { getShortId } from '@/utils'
 import 'molstar/build/viewer/molstar.css'
 import './styles.css'
+import { MolstarPubSub } from '@/pubsub'
 
 type Props = {
   id?: string
@@ -44,20 +45,26 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       viewportShowSettings: false,
       viewportShowTrajectoryControls: false,
       volumeStreamingServer: 'https://maps.rcsb.org',
-    }, {
-      focusClicked: async () => {
-        setTimeout(async () => {
-          const center = await getCenter()
-          onFocusCenter?.(center)
-        }, 500)
-      },
     },
     ).then((res) => {
       console.log(res)
       molstart.current = res
       // ViewerStart = res;
     })
-  }, [id])
+  }, [])
+  const focusClicked = async () => {
+    console.log('223344')
+    setTimeout(async () => {
+      const center = await getCenter()
+      onFocusCenter?.(center)
+    }, 500)
+  }
+  useEffect(() => {
+    MolstarPubSub.subscribe('molstar-focus-clicked', focusClicked)
+    return () => {
+      MolstarPubSub.unsubscribe('molstar-focus-clicked', focusClicked)
+    }
+  }, [])
   // 加载模型
   const loadStructureFromUrl = (url: string, formate: BuiltInTrajectoryFormat) => {
     if (molstart && molstart.current)

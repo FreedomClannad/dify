@@ -155,15 +155,11 @@ export const ViewerAutoPreset = StructureRepresentationPresetProvider({
   },
 })
 
-type CallbackOptions = {
-  focusClicked?: () => void
-}
-
 export class Viewer {
   constructor(public plugin: PluginUIContext) {
   }
 
-  static async create(elementOrId: string | HTMLElement, options: Partial<ViewerOptions> = {}, callbackOptions: CallbackOptions = {}) {
+  static async create(elementOrId: string | HTMLElement, options: Partial<ViewerOptions> = {}) {
     const definedOptions = {} as any
     // filter for defined properies only so the default values
     // are property applied
@@ -171,8 +167,6 @@ export class Viewer {
       if (options[p] !== undefined)
         definedOptions[p] = options[p]
     }
-
-    const { focusClicked } = callbackOptions
 
     const o: ViewerOptions = { ...DefaultViewerOptions, ...definedOptions }
     const defaultSpec = DefaultPluginUISpec()
@@ -183,12 +177,7 @@ export class Viewer {
       actions: defaultSpec.actions,
       behaviors: [
         ...defaultSpec.behaviors,
-        PluginSpec.Behavior(MesoFocusLoci({
-          focusClicked: () => {
-            if (focusClicked)
-              focusClicked()
-          },
-        })),
+        PluginSpec.Behavior(MesoFocusLoci),
         ...o.extensions.filter(e => !disabledExtension.has(e)).map(e => ExtensionMap[e]),
       ],
       animations: [...defaultSpec.animations || []],
