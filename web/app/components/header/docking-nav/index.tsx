@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  RiHammerFill,
-  RiHammerLine,
+  RiPuzzle2Fill,
+  RiPuzzle2Line,
 } from '@remixicon/react'
 import classNames from '@/utils/classnames'
 type ToolsNavProps = {
@@ -28,10 +28,10 @@ const DockingNav = ({
     )}>
       {
         activated
-          ? <RiHammerFill className='mr-2 w-4 h-4' />
-          : <RiHammerLine className='mr-2 w-4 h-4' />
+          ? <RiPuzzle2Fill className='mr-2 w-4 h-4' />
+          : <RiPuzzle2Line className='mr-2 w-4 h-4' />
       }
-      Tool/Molecular Docking
+      Molecular Docking
     </Link>
   )
 }
