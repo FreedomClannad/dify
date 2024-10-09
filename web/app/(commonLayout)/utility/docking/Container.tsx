@@ -64,7 +64,7 @@ const Container = () => {
               <InputForm onSubmit={handleSubmit} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
             </InputContext.Provider>
             <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result }}>
-              {DockingModeEnum.result === mode && <Result />}
+              <Result isDisabled={!(DockingModeEnum.result === mode)}/>
             </ResultContext.Provider>
           </MolstarContext.Provider>
         </div>

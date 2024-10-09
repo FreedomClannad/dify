@@ -18,8 +18,9 @@ const LigandFile = () => {
             if (item.fileID === fileItem.fileID) {
               const file = item.file
               const { id, mime_type, extension } = file
-              setValue('ligand_file_ids', id)
+
               if (id && mime_type) {
+                setValue('ligand_file_ids', id)
                 loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
                 addStructure({ id: fileItem.fileID, visible: true })
               }
