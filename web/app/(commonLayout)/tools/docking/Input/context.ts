@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { FieldError, FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
+import type { FieldError, FieldValues, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import type { CenterPosition } from '@/types/docking'
 import type { FileItem } from '@/models/datasets'
 import type { DockingFormValues } from '@/app/(commonLayout)/tools/docking/Input/InputForm'
@@ -23,6 +23,7 @@ export const InputContext = createContext<InputContextType>({
 
 type FormContextType = {
   register: UseFormRegister<DockingFormValues>
+  getValues: UseFormGetValues<DockingFormValues>
   setValue: UseFormSetValue<DockingFormValues>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -33,6 +34,7 @@ export const FormContext = createContext<FormContextType>(<FormContextType>{
   register: (name, options) => {
     return {} as FieldValues
   },
+  getValues: () => {},
   setValue: (name, value, options) => {},
   errors: {} as FieldError,
 })

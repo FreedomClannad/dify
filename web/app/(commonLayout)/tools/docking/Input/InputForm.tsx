@@ -32,7 +32,7 @@ const dockingFormSchema = z.object({
 })
 export type DockingFormValues = z.infer<typeof dockingFormSchema>
 const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Props) => {
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<DockingFormValues>({
+  const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<DockingFormValues>({
     resolver: zodResolver(dockingFormSchema),
     defaultValues: {
       size_x: 20,
@@ -50,7 +50,7 @@ const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Prop
         onSubmit(data)
       })}>
         <div>
-          <FormContext.Provider value={{ register, setValue, errors }}>
+          <FormContext.Provider value={{ register, getValues, setValue, errors }}>
             {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
           </FormContext.Provider>
         </div>

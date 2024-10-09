@@ -10,7 +10,7 @@ type CenterState = {
   [ConstraintsCenterEnum.coordinates]: CenterPosition
 }
 const Constraints = () => {
-  const { register, setValue, errors } = useContext(FormContext)
+  const { register, getValues, setValue, errors } = useContext(FormContext)
   const [radioValue, setRadioValue] = useState<ConstraintsCenterEnum>(ConstraintsCenterEnum.ligand)
   const [CenterState, setCenterState] = useState<CenterState>({ [ConstraintsCenterEnum.ligand]: {}, [ConstraintsCenterEnum.residue]: {}, [ConstraintsCenterEnum.coordinates]: {} })
   const radioDisabled = useMemo(() => {
@@ -22,8 +22,14 @@ const Constraints = () => {
     setValue('center_x', x)
     setValue('center_y', y)
     setValue('center_z', z)
-    setCenterState({ ...CenterState, [radioValue]: { x, y, z } })
   }, [centerPosition])
+  useEffect(() => {
+    const centerPosition = CenterState[radioValue]
+    const { x, y, z } = centerPosition
+    setValue('center_x', x)
+    setValue('center_y', y)
+    setValue('center_z', z)
+  }, [radioValue])
   return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
     <div className="ml-3">
       <div>
@@ -31,7 +37,10 @@ const Constraints = () => {
           label="Center"
           value={radioValue}
           defaultValue={ConstraintsCenterEnum.ligand}
-          onValueChange={(value) => { setRadioValue(value as ConstraintsCenterEnum) }}
+          onValueChange={(value) => {
+            setCenterState({ ...CenterState, [radioValue]: { x: Number(getValues('center_x')), y: Number(getValues('center_y')), z: Number(getValues('center_z')) } })
+            setRadioValue(value as ConstraintsCenterEnum)
+          }}
         >
           <Radio value={ConstraintsCenterEnum.ligand} >Centroid of ligand</Radio>
           <Radio value={ConstraintsCenterEnum.residue} >Centroid of selected residue</Radio>
