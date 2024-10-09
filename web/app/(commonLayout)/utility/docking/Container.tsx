@@ -25,9 +25,9 @@ const Container = () => {
   const [result, setResult] = useState<string>('')
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { notify } = useContext1(ToastContext)
-  const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility } = useMolstar()
-  const { receptorFileList, setReceptorFileList } = useReceptor()
-  const { ligandFileList, setLigandFileList } = useLigand()
+  const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
+  const { receptorFileList, setReceptorFileList, clearReceptorFileList } = useReceptor()
+  const { ligandFileList, setLigandFileList, clearLigandFileList } = useLigand()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -44,6 +44,12 @@ const Container = () => {
       setResult('')
       setSubmitLoading(false)
     }
+  }
+  const handleReset = () => {
+    clear()
+    clearReceptorFileList()
+    clearLigandFileList()
+    setResult('')
   }
   return (<>
     <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">
@@ -65,7 +71,7 @@ const Container = () => {
         <div className="flex-1 overflow-y-auto">
           <MolstarContext.Provider value={{ addStructure, dockingMolstarList, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
             <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition }}>
-              <InputForm onSubmit={handleSubmit} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
+              <InputForm onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
             </InputContext.Provider>
             <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result }}>
               <Result isDisabled={!(DockingModeEnum.result === mode)}/>

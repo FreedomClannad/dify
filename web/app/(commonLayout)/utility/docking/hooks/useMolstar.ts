@@ -8,7 +8,6 @@ const useMolstar = () => {
   const [dockingMolstarList, setDockingMolstarList] = useState<DockingMolstar[]>([])
   // 添加分子/蛋白质
   const addStructure = (dockingMolstar: DockingMolstar) => {
-    console.log(dockingMolstar)
     setDockingMolstarList([...dockingMolstarList, dockingMolstar])
   }
   // 根据URL进行下载并渲染
@@ -59,6 +58,13 @@ const useMolstar = () => {
       }
     }
   }
+  // 清除画布
+  const clear = () => {
+    if (MolstarRef.current) {
+      MolstarRef.current.clear()
+      setDockingMolstarList([])
+    }
+  }
   const getCenter = () => {
     if (MolstarRef.current) {
       const center = MolstarRef.current.getCenter()
@@ -72,6 +78,7 @@ const useMolstar = () => {
     loadStructureFromUrl,
     loadStructureFromData,
     setStructureVisibility,
+    clear,
   }
 }
 

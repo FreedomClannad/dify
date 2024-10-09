@@ -14,6 +14,7 @@ import './index.css'
 type Props = {
   isDisabled?: boolean
   onSubmit: (data: FieldValues) => void
+  onReset: () => void
   submitLoading?: boolean
 }
 const dockingFormSchema = z.object({
@@ -34,8 +35,8 @@ const dockingFormSchema = z.object({
   path: ['size_x', 'size_y', 'size_z'],
 })
 export type DockingFormValues = z.infer<typeof dockingFormSchema>
-const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Props) => {
-  const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<DockingFormValues>({
+const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = false }: Props) => {
+  const { register, handleSubmit, getValues, setValue, formState: { errors }, reset } = useForm<DockingFormValues>({
     resolver: zodResolver(dockingFormSchema),
     defaultValues: {
       pdb_file_id: '',
@@ -63,9 +64,15 @@ const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Prop
             {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
           </FormContext.Provider>
         </div>
-        <div className="w-full flex justify-center">
-          <div className="flex justify-center w-[80%] mt-3">
+        <div className="w-full flex justify-center gap-x-4">
+          <div className="flex justify-center w-full mt-3">
             <Button type="submit" color="primary" radius="sm" fullWidth isLoading={submitLoading}>Run</Button>
+          </div>
+          <div className="flex justify-center w-full mt-3">
+            <Button color="primary" radius="sm" fullWidth onClick={() => {
+              reset()
+              onReset()
+            }}>Reset</Button>
           </div>
         </div>
 
