@@ -65,17 +65,30 @@ const DockingInputFile = () => {
       dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
     })
   }
+
   return <VerticalTitleCard title="Docking input file">
-    <div className="w-full docking-input-file">{
-      receptorVisibleFileList.map((item, index) => {
-        return <Card key={`receptro-${index}`} docking={item} onClick={handleClick} />
-      })
-    }
-    {
-      ligandVisibleFileList.map((item, index) => {
-        return <Card key={`receptro-${index}`} docking={item} onClick={handleClick} />
-      })
-    }
+    <div className="w-full docking-input-file">
+      {
+        (receptorVisibleFileList.length === 0 && ligandVisibleFileList.length === 0)
+          ? <>
+            <div className="w-full flex justify-center items-center rounded h-[100px] leading-[40px] shadow-md">
+              <span>No data</span>
+            </div>
+          </>
+          : <>
+            {
+              receptorVisibleFileList.map((item, index) => {
+                return <Card key={`receptro-${index}`} docking={item} onClick={handleClick}/>
+              })
+            }
+            {
+              ligandVisibleFileList.map((item, index) => {
+                return <Card key={`receptro-${index}`} docking={item} onClick={handleClick}/>
+              })
+            }
+          </>
+      }
+
     </div>
   </VerticalTitleCard>
 }

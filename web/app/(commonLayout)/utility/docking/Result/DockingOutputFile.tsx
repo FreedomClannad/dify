@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useContext, useEffect, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
-import { data } from './data'
+// import { data } from './data'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Result/context'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
@@ -39,7 +39,7 @@ const DockingOutputFile = () => {
   const { addStructure, loadStructureFromData, setStructureVisibility } = useContext(MolstarContext)
   useEffect(() => {
     try {
-      const t_data = JSON.parse(data)
+      const t_data = JSON.parse(resultData)
       const table = initTable(t_data)
       setTable(table)
       table.forEach((item) => {
@@ -74,7 +74,7 @@ const DockingOutputFile = () => {
     <>
       {
         table.length === 0
-          ? <div className="w-full flex justify-center align-center rounded h-[40px] leading-[40px] shadow-md"><span>No data</span></div>
+          ? <div className="w-full flex justify-center items-center rounded h-[200px] leading-[40px] shadow-md"><span>No data</span></div>
           : <Table aria-label="Example static collection table">
             <TableHeader>
               <TableColumn>Mode</TableColumn>
