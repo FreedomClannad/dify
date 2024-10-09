@@ -31,9 +31,15 @@ const Container = () => {
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
     setSubmitLoading(true)
-    const res: any = await submitDockingTask(data)
-    setResult(res.result)
-    setSubmitLoading(false)
+    try {
+      const res: any = await submitDockingTask(data)
+      setResult(res.result)
+      setSubmitLoading(false)
+    }
+    catch (error) {
+      setResult('')
+      setSubmitLoading(false)
+    }
   }
   return (<>
     <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">

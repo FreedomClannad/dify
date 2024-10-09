@@ -31,7 +31,7 @@ const DockingNav = ({
           ? <RiPuzzle2Fill className='mr-2 w-4 h-4' />
           : <RiPuzzle2Line className='mr-2 w-4 h-4' />
       }
-      Molecular Docking
+      Utility / Molecular Docking
     </Link>
   )
 }
