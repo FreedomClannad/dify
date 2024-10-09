@@ -56,20 +56,31 @@ const Constraints = () => {
       </div>
       <div className="mt-3 w-full">
         <div><span>Size</span></div>
-        <div className="flex justify-between gap-3 w-full mt-2">
-          <div className="flex flex-1">
-            <span>x:</span>
-            <input type="number" {...register('size_x')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+        <div className="flex flex-col">
+          <div className="flex justify-between gap-3 w-full mt-2">
+            <div className="flex flex-1">
+              <span>x:</span>
+              <input type="number" {...register('size_x')}
+                className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+            </div>
+            <div className="flex flex-1">
+              <span>y:</span>
+              <input type="number" {...register('size_y')}
+                className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+            </div>
+            <div className="flex flex-1">
+              <span>z:</span>
+              <input type="number" {...register('size_z')}
+                className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+            </div>
           </div>
-          <div className="flex flex-1">
-            <span>y:</span>
-            <input type="number" {...register('size_y')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
-          </div>
-          <div className="flex flex-1">
-            <span>z:</span>
-            <input type="number" {...register('size_z')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+          <div>
+            {
+              (errors.size_x || errors.size_y || errors.size_z) ? <><span className='text-red-500 mt-2'>{errors.size_x?.message || errors.size_y?.message || errors.size_z?.message}</span></> : null
+            }
           </div>
         </div>
+
       </div>
     </div>
   </VerticalTitleCard>

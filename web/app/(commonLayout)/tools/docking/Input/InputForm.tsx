@@ -20,10 +20,15 @@ const dockingFormSchema = z.object({
   center_x: z.union([z.number(), z.undefined()]),
   center_y: z.union([z.number(), z.undefined()]),
   center_z: z.union([z.number(), z.undefined()]),
-  size_x: z.number().nonpositive('请填写大于0的数据'),
-  size_y: z.number().nonpositive(),
-  size_z: z.number().nonpositive(),
-  out_pose_num: z.number().nonpositive('请填写大于0的数据'),
+  size_x: z.preprocess(value => Number(value), z.number().positive()),
+  size_y: z.preprocess(value => Number(value), z.number().positive()),
+  size_z: z.preprocess(value => Number(value), z.number().positive()),
+  out_pose_num: z.preprocess(value => Number(value), z.number().positive('Please enter data greater than 0')),
+}).refine((data) => {
+  return data.size_x > 0 && data.size_y > 0 && data.size_z > 0
+}, {
+  message: 'Please enter data greater than 0 for all size fields',
+  path: ['size_x', 'size_y', 'size_z'],
 })
 export type DockingFormValues = z.infer<typeof dockingFormSchema>
 const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Props) => {
