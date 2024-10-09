@@ -1,0 +1,7 @@
+.constraints-input::-webkit-outer-spin-button, .constraints-input::-webkit-inner-spin-button {
+    -webkit-appearance:  none !important;
+    margin: 0 !important;
+}
+.constraints-input[type="number"] {
+    -moz-appearance: textfield !important;
+}

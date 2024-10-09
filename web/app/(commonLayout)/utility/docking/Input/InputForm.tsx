@@ -10,6 +10,7 @@ import Constraints from '@/app/(commonLayout)/utility/docking/Input/Constraints'
 import LigandFile from '@/app/(commonLayout)/utility/docking/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/utility/docking/Input/OutPose'
 import { FormContext } from '@/app/(commonLayout)/utility/docking/Input/context'
+import './index.css'
 type Props = {
   isDisabled?: boolean
   onSubmit: (data: FieldValues) => void
@@ -18,9 +19,9 @@ type Props = {
 const dockingFormSchema = z.object({
   task_name: z.string().min(1, { message: 'Please enter a task name' }),
   pdb_file_id: z.string().min(1, { message: 'Please upload a file' }),
-  center_x: z.union([z.number(), z.undefined()]),
-  center_y: z.union([z.number(), z.undefined()]),
-  center_z: z.union([z.number(), z.undefined()]),
+  center_x: z.union([z.string().min(1, { message: 'Please select the corresponding coordinates' }), z.number()]),
+  center_y: z.union([z.string().min(1, { message: 'Please select the corresponding coordinates' }), z.number()]),
+  center_z: z.union([z.string().min(1, { message: 'Please select the corresponding coordinates' }), z.number()]),
   size_x: z.preprocess(value => Number(value), z.number().positive()),
   size_y: z.preprocess(value => Number(value), z.number().positive()),
   size_z: z.preprocess(value => Number(value), z.number().positive()),
@@ -39,6 +40,9 @@ const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Prop
     defaultValues: {
       pdb_file_id: '',
       task_name: 'Molecular Docking',
+      center_x: '',
+      center_y: '',
+      center_z: '',
       size_x: 20,
       size_y: 20,
       size_z: 20,

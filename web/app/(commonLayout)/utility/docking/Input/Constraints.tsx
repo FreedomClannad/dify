@@ -20,17 +20,31 @@ const Constraints = () => {
   useEffect(() => {
     if (radioValue === ConstraintsCenterEnum.ligand || radioValue === ConstraintsCenterEnum.residue) {
       const { x, y, z } = centerPosition
-      setValue('center_x', x)
-      setValue('center_y', y)
-      setValue('center_z', z)
+      if (x && y && z) {
+        setValue('center_x', x)
+        setValue('center_y', y)
+        setValue('center_z', z)
+      }
+      else {
+        setValue('center_x', '')
+        setValue('center_y', '')
+        setValue('center_z', '')
+      }
     }
   }, [centerPosition])
   useEffect(() => {
     const centerPosition = CenterState[radioValue]
     const { x, y, z } = centerPosition
-    setValue('center_x', x)
-    setValue('center_y', y)
-    setValue('center_z', z)
+    if (x && y && z) {
+      setValue('center_x', x)
+      setValue('center_y', y)
+      setValue('center_z', z)
+    }
+    else {
+      setValue('center_x', '')
+      setValue('center_y', '')
+      setValue('center_z', '')
+    }
   }, [radioValue])
   return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
     <div className="ml-3">
@@ -40,29 +54,49 @@ const Constraints = () => {
           value={radioValue}
           defaultValue={ConstraintsCenterEnum.ligand}
           onValueChange={(value) => {
-            setCenterState({ ...CenterState, [radioValue]: { x: Number(getValues('center_x')) || '', y: Number(getValues('center_y')) || '', z: Number(getValues('center_z')) || '' } })
+            setCenterState({
+              ...CenterState,
+              [radioValue]: {
+                x: Number(getValues('center_x')) || '',
+                y: Number(getValues('center_y')) || '',
+                z: Number(getValues('center_z')) || '',
+              },
+            })
             setRadioValue(value as ConstraintsCenterEnum)
           }}
         >
-          <Radio size="sm" value={ConstraintsCenterEnum.ligand} >Centroid of ligand</Radio>
-          <Radio size="sm" value={ConstraintsCenterEnum.residue} >Centroid of selected residue</Radio>
-          <Radio size="sm" value={ConstraintsCenterEnum.coordinates} >Supplied X,Y,Z coordinates</Radio>
+          <Radio size="sm" value={ConstraintsCenterEnum.ligand}>Centroid of ligand</Radio>
+          <Radio size="sm" value={ConstraintsCenterEnum.residue}>Centroid of selected residue</Radio>
+          <Radio size="sm" value={ConstraintsCenterEnum.coordinates}>Supplied X,Y,Z coordinates</Radio>
         </RadioGroup>
         <div className="ml-4 bg-gray-1004 px-3 py-2 mt-3">
           <div className="flex items-center justify-between gap-3 w-full">
             <div className="flex flex-1">
               <span>x:</span>
-              <input disabled={radioDisabled} {...register('center_x')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+              <input type="number" disabled={radioDisabled} {...register('center_x')}
+                className="constraints-input w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>y:</span>
-              <input disabled={radioDisabled} {...register('center_y')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+              <input type="number" disabled={radioDisabled} {...register('center_y')}
+                className="constraints-input w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>z:</span>
-              <input disabled={radioDisabled} {...register('center_z')} className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+              <input type="number" disabled={radioDisabled} {...register('center_z')}
+                className="constraints-input w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
           </div>
+        </div>
+        <div>
+          {
+            (errors.center_x || errors.center_y || errors.center_z)
+              ? <>
+                <span
+                  className='text-red-500 mt-2'>{errors.center_x?.message || errors.center_y?.message || errors.center_z?.message}</span>
+              </>
+              : null
+          }
         </div>
       </div>
       <div className="mt-3 w-full">
