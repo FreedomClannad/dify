@@ -9,7 +9,7 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 const ReceptorFile = () => {
   const { receptorFileList, setReceptorFileList, setCenterPosition } = useContext(InputContext)
   const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
-  const { setValue } = useContext(FormContext)
+  const { setValue, errors } = useContext(FormContext)
   return <>
     <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
       <div>
@@ -38,8 +38,11 @@ const ReceptorFile = () => {
           setReceptorFileList(n_list)
         }} prepareFileList={(files) => {
           setReceptorFileList(files)
+          if (files.length === 0)
+            setValue('pdb_file_id', '')
         }}/>
       </div>
+      {errors.pdb_file_id && <div className="mt-1"><span className='text-red-500 '>{errors.pdb_file_id.message}</span></div>}
     </VerticalTitleCard>
   </>
 }

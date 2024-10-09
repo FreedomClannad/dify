@@ -17,14 +17,14 @@ type Props = {
 }
 const dockingFormSchema = z.object({
   task_name: z.string().min(1, { message: 'Please enter a task name' }),
-  pdb_file_id: z.string(),
+  pdb_file_id: z.string().min(1, { message: 'Please upload a file' }),
   center_x: z.union([z.number(), z.undefined()]),
   center_y: z.union([z.number(), z.undefined()]),
   center_z: z.union([z.number(), z.undefined()]),
   size_x: z.preprocess(value => Number(value), z.number().positive()),
   size_y: z.preprocess(value => Number(value), z.number().positive()),
   size_z: z.preprocess(value => Number(value), z.number().positive()),
-  ligand_file_ids: z.string(),
+  ligand_file_ids: z.string().min(1, { message: 'Please upload a file' }),
   out_pose_num: z.preprocess(value => Number(value), z.number().positive('Please enter data greater than 0')),
 }).refine((data) => {
   return data.size_x > 0 && data.size_y > 0 && data.size_z > 0
@@ -37,9 +37,11 @@ const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Prop
   const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<DockingFormValues>({
     resolver: zodResolver(dockingFormSchema),
     defaultValues: {
+      pdb_file_id: '',
       size_x: 20,
       size_y: 20,
       size_z: 20,
+      ligand_file_ids: '',
       out_pose_num: 10,
     },
   })

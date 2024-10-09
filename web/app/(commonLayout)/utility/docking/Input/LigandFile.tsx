@@ -9,7 +9,7 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 const LigandFile = () => {
   const { ligandFileList, setLigandFileList } = useContext(InputContext)
   const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
-  const { setValue } = useContext(FormContext)
+  const { setValue, errors } = useContext(FormContext)
   return <>
     <VerticalTitleCard title="Ligand file" tooltip="Ligand filetootltip">
       <div>
@@ -36,6 +36,7 @@ const LigandFile = () => {
           setLigandFileList(files)
         }}/>
       </div>
+      {errors.ligand_file_ids && <div className="mt-1"><span className='text-red-500 '>{errors.ligand_file_ids.message}</span></div>}
     </VerticalTitleCard>
   </>
 }
