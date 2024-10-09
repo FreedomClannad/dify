@@ -42,11 +42,11 @@ const Constraints = () => {
             setRadioValue(value as ConstraintsCenterEnum)
           }}
         >
-          <Radio value={ConstraintsCenterEnum.ligand} >Centroid of ligand</Radio>
-          <Radio value={ConstraintsCenterEnum.residue} >Centroid of selected residue</Radio>
-          <Radio value={ConstraintsCenterEnum.coordinates} >Supplied X,Y,Z coordinates</Radio>
+          <Radio size="sm" value={ConstraintsCenterEnum.ligand} >Centroid of ligand</Radio>
+          <Radio size="sm" value={ConstraintsCenterEnum.residue} >Centroid of selected residue</Radio>
+          <Radio size="sm" value={ConstraintsCenterEnum.coordinates} >Supplied X,Y,Z coordinates</Radio>
         </RadioGroup>
-        <div className="ml-6 bg-gray-1004 px-3 py-2 mt-3">
+        <div className="ml-4 bg-gray-1004 px-3 py-2 mt-3">
           <div className="flex items-center justify-between gap-3 w-full">
             <div className="flex flex-1">
               <span>x:</span>
