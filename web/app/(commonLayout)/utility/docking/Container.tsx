@@ -16,6 +16,7 @@ import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import useReceptor from '@/app/(commonLayout)/utility/docking/hooks/useReceptor'
 import useLigand from '@/app/(commonLayout)/utility/docking/hooks/useLigand'
+
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -35,6 +36,9 @@ const Container = () => {
       const res: any = await submitDockingTask(data)
       setResult(res.result)
       setSubmitLoading(false)
+      notify({ type: 'success', message: 'Task parsing successful' })
+      if (res.result)
+        setMode(DockingModeEnum.result)
     }
     catch (error) {
       setResult('')
@@ -70,7 +74,7 @@ const Container = () => {
         </div>
       </div>
       <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarRef} onFocusCenter={(center) => {
-        notify({ type: 'success', message: `中心点: ${center}` })
+        // notify({ type: 'success', message: `中心点: ${center}` })
         if (center) {
           const [x, y, z] = center
           setCenterPosition({ x, y, z })

@@ -38,6 +38,7 @@ const InputForm = ({ isDisabled = false, onSubmit, submitLoading = false }: Prop
     resolver: zodResolver(dockingFormSchema),
     defaultValues: {
       pdb_file_id: '',
+      task_name: 'Molecular Docking',
       size_x: 20,
       size_y: 20,
       size_z: 20,
