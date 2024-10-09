@@ -18,10 +18,12 @@ const Constraints = () => {
   }, [radioValue])
   const { centerPosition } = useContext(InputContext)
   useEffect(() => {
-    const { x, y, z } = centerPosition
-    setValue('center_x', x)
-    setValue('center_y', y)
-    setValue('center_z', z)
+    if (radioValue === ConstraintsCenterEnum.ligand || radioValue === ConstraintsCenterEnum.residue) {
+      const { x, y, z } = centerPosition
+      setValue('center_x', x)
+      setValue('center_y', y)
+      setValue('center_z', z)
+    }
   }, [centerPosition])
   useEffect(() => {
     const centerPosition = CenterState[radioValue]
@@ -38,7 +40,7 @@ const Constraints = () => {
           value={radioValue}
           defaultValue={ConstraintsCenterEnum.ligand}
           onValueChange={(value) => {
-            setCenterState({ ...CenterState, [radioValue]: { x: Number(getValues('center_x')), y: Number(getValues('center_y')), z: Number(getValues('center_z')) } })
+            setCenterState({ ...CenterState, [radioValue]: { x: Number(getValues('center_x')) || '', y: Number(getValues('center_y')) || '', z: Number(getValues('center_z')) || '' } })
             setRadioValue(value as ConstraintsCenterEnum)
           }}
         >
