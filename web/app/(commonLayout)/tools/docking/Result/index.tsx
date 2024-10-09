@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-
+import './index.css'
 import DockingInputFile from '@/app/(commonLayout)/tools/docking/Result/DockingInputFile'
 import DockingOutputFile from '@/app/(commonLayout)/tools/docking/Result/DockingOutputFile'
 const Result = () => {

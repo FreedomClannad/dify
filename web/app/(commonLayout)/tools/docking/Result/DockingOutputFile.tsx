@@ -90,7 +90,7 @@ const DockingOutputFile = () => {
                   <TableCell>{item.score}</TableCell>
                   <TableCell>{item.affinity}</TableCell>
                   <TableCell>{item.cnnAffinity}</TableCell>
-                  <TableCell><div className="cursor-pointer" onClick={() => { handleVisible(item) }}>{item.visible ? <RiEyeLine/> : <RiEyeOffLine/>}</div></TableCell>
+                  <TableCell><div className="cursor-pointer text-xs flex items-center" onClick={() => { handleVisible(item) }}>{item.visible ? <RiEyeLine className="w-4 h-4"/> : <RiEyeOffLine className="w-4 h-4"/>}</div></TableCell>
                 </TableRow>
               })}
 

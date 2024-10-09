@@ -12,14 +12,14 @@ type CardType = {
 }
 const Card = ({ docking, onClick }: CardType) => {
   return <>
-    <div className="flex w-full justify-between">
-      <div className="flex">
-        <div className='w-5 h-5  text-xs'><DocumentTextIcon/></div>
-        <span>{docking.file.name}</span>
+    <div className="flex w-full h-[32px] justify-between text-gray-1006">
+      <div className="flex items-center">
+        <div className='w-5 h-5  text-xs text-gray-1005'><DocumentTextIcon/></div>
+        <span className='ml-2'>{docking.file.name}</span>
       </div>
-      <div className="cursor-pointer" onClick={() => {
+      <div className="cursor-pointer text-xs flex items-center" onClick={() => {
         onClick(docking)
-      }}>{docking.visible ? <RiEyeLine/> : <RiEyeOffLine/>}</div>
+      }}>{docking.visible ? <RiEyeLine className="w-4 h-4"/> : <RiEyeOffLine className="w-4 h-4"/>}</div>
     </div>
   </>
 }
@@ -66,7 +66,7 @@ const DockingInputFile = () => {
     })
   }
   return <VerticalTitleCard title="Docking input file">
-    <div className="w-full">{
+    <div className="w-full docking-input-file">{
       receptorVisibleFileList.map((item, index) => {
         return <Card key={`receptro-${index}`} docking={item} onClick={handleClick} />
       })
