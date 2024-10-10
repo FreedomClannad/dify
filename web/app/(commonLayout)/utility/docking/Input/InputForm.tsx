@@ -28,6 +28,8 @@ const dockingFormSchema = z.object({
   size_z: z.preprocess(value => Number(value), z.number().positive()),
   ligand_file_ids: z.string().min(1, { message: 'Please upload a file' }),
   out_pose_num: z.preprocess(value => Number(value), z.number().positive('Please enter data greater than 0')),
+  residue_number: z.string(),
+  chain: z.string(),
 }).refine((data) => {
   return data.size_x > 0 && data.size_y > 0 && data.size_z > 0
 }, {
@@ -49,6 +51,8 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
       size_z: 20,
       ligand_file_ids: '',
       out_pose_num: 10,
+      residue_number: '',
+      chain: '',
     },
   })
   // eslint-disable-next-line react/jsx-key
@@ -75,7 +79,6 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
             }}>Reset</Button>
           </div>
         </div>
-
       </form>
     </div>
   </>

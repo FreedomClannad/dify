@@ -24,8 +24,8 @@ const ReceptorFile = () => {
                 loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
                 addStructure({ id: fileItem.fileID, visible: true })
                 getCenterPosition(id).then((res) => {
-                  const { center_x, center_y, center_z } = res
-                  setCenterPosition({ x: center_x, y: center_y, z: center_z })
+                  const { center_x, center_y, center_z, residue_number, chain } = res
+                  setCenterPosition({ x: center_x, y: center_y, z: center_z, num: residue_number.toString(), chain })
                 })
               }
               return {

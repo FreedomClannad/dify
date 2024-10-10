@@ -589,9 +589,31 @@ export class Viewer {
   getFocusedResidueCenter() {
     const plugin = this.plugin
 
+    // 获取Ligand的Label
+    const lignadLabel = plugin.managers.structure.focus.current?.label
+    let num = ''
+    let chain = ''
+
+    if (lignadLabel) {
+      // 匹配情况 I28 1801 | A
+      const regex1 = /(\d+)\s\|\s(\S+)/
+      const math1 = lignadLabel.match(regex1)
+      if (math1) {
+        num = math1[1] // 提取出 "1801"
+        chain = math1[2].split('_')[0] // 提取出 "A"
+      }
+      // 匹配情况 I28 1801 | A_1 [auth A]
+      const regex2 = /(\d+)\s\|\s.*?\[(.*?)\s(\w+)\]/
+      const math2 = lignadLabel.match(regex2)
+      if (math2) {
+        num = math2[1] // 提取出 "1801"
+        chain = math2[3].split('_')[0] // 提取出 "A" 或者最后的字母
+      }
+    }
+    console.log('num', num)
+    console.log('chain', chain)
     // Get the structural element
     const structure = plugin.managers.structure.hierarchy.current.structures[0]
-
     for (let index = 0; index < structure.components.length; index++) {
       if (structure.components[index].key === 'structure-focus-target-sel') {
         const structure_element = structure.components[index].cell.obj?.data.units[0]
@@ -612,7 +634,8 @@ export class Viewer {
           sum.z += (z[element] as number) || 0
           return sum
         }, { x: 0, y: 0, z: 0 })
-        return [sumCoordinates.x / count, sumCoordinates.y / count, sumCoordinates.z / count]
+        // return [sumCoordinates.x / count, sumCoordinates.y / count, sumCoordinates.z / count]
+        return { x: sumCoordinates.x / count, y: sumCoordinates.y / count, z: sumCoordinates.z / count, num, chain }
       }
     }
     return null

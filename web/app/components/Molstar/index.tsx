@@ -10,14 +10,14 @@ import { MolstarPubSub } from '@/pubsub'
 
 type Props = {
   id?: string
-  onFocusCenter?: (center: number[] | null | undefined) => void
+  onFocusCenter?: (center: { x: number; y: number; z: number; num: string; chain: string }) => void
 }
 
 export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
   setStructureVisibility: (index: number, visible: boolean) => void
-  getCenter: () => Promise<number[] | null | undefined>
+  getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string } | null | undefined>
   clear: () => void
 }
 // let ViewerStart = null;
@@ -53,10 +53,9 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     })
   }, [])
   const focusClicked = async () => {
-    console.log('223344')
     setTimeout(async () => {
       const center = await getCenter()
-      onFocusCenter?.(center)
+      onFocusCenter?.(center as { x: number; y: number; z: number; num: string; chain: string })
     }, 500)
   }
   useEffect(() => {

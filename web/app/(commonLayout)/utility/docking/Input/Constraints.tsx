@@ -19,31 +19,39 @@ const Constraints = () => {
   const { centerPosition } = useContext(InputContext)
   useEffect(() => {
     if (radioValue === ConstraintsCenterEnum.ligand || radioValue === ConstraintsCenterEnum.residue) {
-      const { x, y, z } = centerPosition
+      const { x, y, z, num, chain } = centerPosition
       if (x && y && z) {
         setValue('center_x', x)
         setValue('center_y', y)
         setValue('center_z', z)
+        setValue('residue_number', num || '')
+        setValue('chain', chain || '')
       }
       else {
         setValue('center_x', '')
         setValue('center_y', '')
         setValue('center_z', '')
+        setValue('residue_number', '')
+        setValue('chain', '')
       }
     }
   }, [centerPosition])
   useEffect(() => {
     const centerPosition = CenterState[radioValue]
-    const { x, y, z } = centerPosition
+    const { x, y, z, num, chain } = centerPosition
     if (x && y && z) {
       setValue('center_x', x)
       setValue('center_y', y)
       setValue('center_z', z)
+      setValue('residue_number', num || '')
+      setValue('chain', chain || '')
     }
     else {
       setValue('center_x', '')
       setValue('center_y', '')
       setValue('center_z', '')
+      setValue('residue_number', '')
+      setValue('chain', '')
     }
   }, [radioValue])
   return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
@@ -60,6 +68,8 @@ const Constraints = () => {
                 x: Number(getValues('center_x')) || '',
                 y: Number(getValues('center_y')) || '',
                 z: Number(getValues('center_z')) || '',
+                num: getValues('residue_number') || '',
+                chain: getValues('chain') || '',
               },
             })
             setRadioValue(value as ConstraintsCenterEnum)

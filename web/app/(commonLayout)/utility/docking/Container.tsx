@@ -82,8 +82,8 @@ const Container = () => {
       <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarRef} onFocusCenter={(center) => {
         // notify({ type: 'success', message: `中心点: ${center}` })
         if (center) {
-          const [x, y, z] = center
-          setCenterPosition({ x, y, z })
+          const { x, y, z, num, chain } = center
+          setCenterPosition({ x, y, z, num, chain })
         }
       }}/></div>
     </div>
