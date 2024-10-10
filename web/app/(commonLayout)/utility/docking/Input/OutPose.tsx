@@ -4,7 +4,7 @@ import { FormContext } from '@/app/(commonLayout)/utility/docking/Input/context'
 
 const OutPose = () => {
   const { register, errors } = useContext(FormContext)
-  return <VerticalTitleCard title="OutPose" tooltip="OutPose tooltip">
+  return <VerticalTitleCard title="Out pose" tooltip="每个配体与蛋白对接后输出的构象数目，默认为10">
     <input
       type="number"
       {...register('out_pose_num')}

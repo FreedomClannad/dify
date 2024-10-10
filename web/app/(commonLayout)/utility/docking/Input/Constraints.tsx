@@ -54,7 +54,8 @@ const Constraints = () => {
       setValue('chain', '')
     }
   }, [radioValue])
-  return <VerticalTitleCard title="Constraints" tooltip="Constraints 条件">
+  return <VerticalTitleCard title="Constraints" tooltip="Box Center: 配体结合口袋中心xyz坐标。
+     Box Size: 配体结合口袋大小。">
     <div className="ml-3">
       <div>
         <RadioGroup
@@ -110,7 +111,7 @@ const Constraints = () => {
         </div>
       </div>
       <div className="mt-3 w-full">
-        <div><span>Size</span></div>
+        <div className="text-foreground-500"><span>Size</span></div>
         <div className="flex flex-col">
           <div className="flex justify-between gap-3 w-full mt-2">
             <div className="flex flex-1">

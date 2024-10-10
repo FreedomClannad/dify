@@ -27,3 +27,9 @@ export type DockingMolstar = {
 export type DockingUploadFile = FileItem & {
   visible: boolean
 }
+
+export type CenterState = {
+  [ConstraintsCenterEnum.ligand]: CenterPosition
+  [ConstraintsCenterEnum.residue]: CenterPosition
+  [ConstraintsCenterEnum.coordinates]: CenterPosition
+}
