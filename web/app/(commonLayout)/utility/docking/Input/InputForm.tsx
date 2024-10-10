@@ -69,10 +69,10 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
           </FormContext.Provider>
         </div>
         <div className="w-full flex justify-center gap-x-4">
-          <div className="flex justify-center w-full mt-3">
+          <div className="flex justify-center w-full mt-6">
             <Button type="submit" color="primary" radius="sm" fullWidth isLoading={submitLoading}>Run</Button>
           </div>
-          <div className="flex justify-center w-full mt-3">
+          <div className="flex justify-center w-full mt-6">
             <Button color="primary" radius="sm" fullWidth onClick={() => {
               reset()
               onReset()
