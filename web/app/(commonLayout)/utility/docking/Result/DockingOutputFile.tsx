@@ -79,10 +79,10 @@ const DockingOutputFile = () => {
           : <Table aria-label="Example static collection table">
             <TableHeader>
               <TableColumn>Mode</TableColumn>
-              <TableColumn>CNN pose score</TableColumn>
-              <TableColumn>affinity(kcal/mol)</TableColumn>
+              <TableColumn>Score</TableColumn>
+              <TableColumn>affinity</TableColumn>
               <TableColumn>CNN affinity</TableColumn>
-              <TableColumn> <></></TableColumn>
+              <TableColumn><></></TableColumn>
             </TableHeader>
             <TableBody>
               {table.map((item, index) => {
