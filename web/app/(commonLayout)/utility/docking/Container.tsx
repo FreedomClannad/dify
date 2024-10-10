@@ -16,7 +16,6 @@ import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import useReceptor from '@/app/(commonLayout)/utility/docking/hooks/useReceptor'
 import useLigand from '@/app/(commonLayout)/utility/docking/hooks/useLigand'
-
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
