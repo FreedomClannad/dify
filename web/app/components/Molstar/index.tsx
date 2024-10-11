@@ -32,11 +32,12 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   useEffect(() => {
     Viewer.create(id, {
       layoutIsExpanded: false,
-      layoutShowControls: false,
+      layoutShowControls: true,
       layoutShowRemoteState: false,
       layoutShowSequence: true,
       layoutShowLog: false,
       layoutShowLeftPanel: false,
+      layoutShowRightPanel: false,
 
       viewportShowExpand: false,
       viewportShowSelectionMode: false,
