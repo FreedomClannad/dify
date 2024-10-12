@@ -23,5 +23,5 @@ export NEXT_TELEMETRY_DISABLED=${NEXT_TELEMETRY_DISABLED}
 
 export NEXT_PUBLIC_TEXT_GENERATION_TIMEOUT_MS=${TEXT_GENERATION_TIMEOUT_MS}
 
-npx pm2 start ./pm2.json --no-daemon --trace --env production
-#npx pm2 start ./pm2.json --env production
+#npx pm2 start ./pm2.json --no-daemon --trace --env production
+npx pm2 start ./pm2.json --env production
