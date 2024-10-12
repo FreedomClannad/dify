@@ -25,8 +25,10 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   const molstart = useRef<Viewer | null>(null)
 
   const getCenter = async () => {
-    if (molstart && molstart.current)
+    if (molstart && molstart.current) {
+      // molstart.current?.getFocusedPolymer()
       return molstart.current.getFocusedResidueCenter()
+    }
   }
 
   useEffect(() => {

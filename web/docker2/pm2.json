@@ -1,0 +1,17 @@
+{
+  "apps": [
+    {
+      "name": "dify-web",
+      "script": "npm",
+      "args": "run start --port=3001 --host=0.0.0.0",
+      "cwd": "../",
+      "exec_mode": "cluster",
+      "instances": 1,
+      "env_production": {
+        "PORT": 3001,
+        "HOSTNAME": "0.0.0.0",
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}

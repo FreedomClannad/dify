@@ -612,8 +612,7 @@ export class Viewer {
         chain = math2[3].split('_')[0] // 提取出 "A" 或者最后的字母
       }
     }
-    console.log('num', num)
-    console.log('chain', chain)
+    console.log(`num: ${num} ---- chain: ${chain}`)
     // Get the structural element
     const structure = plugin.managers.structure.hierarchy.current.structures[0]
     for (let index = 0; index < structure.components.length; index++) {
@@ -649,6 +648,55 @@ export class Viewer {
 
   setStructureVisibility(state: State, root: StateTransform.Ref, value: boolean) {
     setSubtreeVisibility(state, root, value)
+  }
+
+  getFocusedPolymer() {
+    const plugin = this.plugin
+
+    // Get the structural element
+    const structure = plugin.managers.structure.hierarchy.current.structures[0]
+    if (!structure) {
+      console.error('structure is undefined.')
+      return null
+    }
+
+    const components = structure.components
+    if (!components) {
+      console.error('components is undefined.')
+      return null
+    }
+    console.log(components)
+
+    const structure_element = components[0].cell.obj?.data.units[0]
+    if (!structure_element) {
+      console.error('structure_element is undefined.')
+      return null
+    }
+    console.log(structure_element.model)
+    const offsets = structure_element.model.atomicHierarchy.residueAtomSegments.offsets
+    console.log(offsets)
+    const atomCount = offsets[offsets.length - 1]
+    const index: number[] = new Array(atomCount).fill(0).map((_, i) => Math.floor(i / 10)) // 根据实际原子数量填充索引
+    const residues = structure_element.model.atomicHierarchy.residues
+    console.log(residues)
+    console.log(residues.group_PDB.toArray())
+    // const residueLabels = residues.group_PDB.__array as number[]
+    const residueLabels = residues.group_PDB.toArray()
+
+    if (residueLabels && residueLabels.length === offsets.length - 1) {
+      for (let i = 0; i < offsets.length - 1; i++) {
+        const start = offsets[i] // 当前残基的起始位置
+        const end = offsets[i + 1] // 下一个残基的起始位置
+
+        // 提取当前残基的原子索引范围
+        const residueLabel = residueLabels[i]
+        const residueAtoms = index.slice(start, end) // 提取index数组中[start, end)范围的元素
+        console.log(`Residue ${residueLabel} atoms: ${residueAtoms.join(', ')}`)
+      }
+    }
+    else {
+      console.error('residueLabels is undefined or its length does not match offsets length.')
+    }
   }
 
   dispose() {
