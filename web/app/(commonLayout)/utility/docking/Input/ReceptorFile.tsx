@@ -52,7 +52,12 @@ const ReceptorFile = () => {
           setReceptorFileList(files)
           if (files.length === 0)
             setValue('pdb_file_id', '')
-        }}/>
+        }}
+        onUploadError={(file) => {
+          const n_list = receptorFileList.filter(item => item.fileID !== file.fileID)
+          setReceptorFileList(n_list)
+        }}
+        />
       </div>
       {errors.pdb_file_id && <div className="mt-1"><span className='text-red-500 '>{errors.pdb_file_id.message}</span></div>}
     </VerticalTitleCard>

@@ -34,6 +34,10 @@ const LigandFile = () => {
           setLigandFileList(n_list)
         }} prepareFileList={(files) => {
           setLigandFileList(files)
+        }}
+        onUploadError={(file) => {
+          const n_list = ligandFileList.filter(item => item.fileID !== file.fileID)
+          setLigandFileList(n_list)
         }}/>
       </div>
       {errors.ligand_file_ids && <div className="mt-1"><span className='text-red-500 '>{errors.ligand_file_ids.message}</span></div>}

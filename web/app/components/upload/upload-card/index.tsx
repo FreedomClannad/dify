@@ -13,6 +13,7 @@ type Props = {
   fileList: FileItem[]
   prepareFileList: (files: FileItem[]) => void
   onFileUpdate: (fileItem: FileItem, progress: number, list: FileItem[]) => void
+  onUploadError?: (fileItem: FileItem) => void
   multiple?: boolean
   description?: string
 }
@@ -22,7 +23,7 @@ const fileUploadConfig = {
   file_size_limit: 15,
   batch_count_limit: 5,
 }
-const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, multiple = false, description = 'Select or drag and drop ligand file here' }: Props) => {
+const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, multiple = false, description = 'Select or drag and drop ligand file here', onUploadError }: Props) => {
   const { t } = useTranslation()
   const fileUploader = useRef<HTMLInputElement>(null)
   const dropRef = useRef<HTMLDivElement>(null)
@@ -112,6 +113,7 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
       .catch((e) => {
         notify({ type: 'error', message: e?.response?.code === 'forbidden' ? e?.response?.message : t('datasetCreation.stepOne.uploader.failed') })
         onFileUpdate(fileItem, -2, fileListRef.current)
+        onUploadError?.(fileItem)
         return Promise.resolve({ ...fileItem })
       })
       .finally()
@@ -203,7 +205,7 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
             </div>
           </>
           : <>
-            { firstFile.progress < 100
+            { (firstFile.progress < 100 && firstFile.progress >= 0)
               ? <>
                 <div className="px-3 w-full flex items-center">
                   <Progress
@@ -217,18 +219,20 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
                 </div>
               </>
               : <>
-                <div className="flex flex-1 items-center px-3 justify-between">
-                  <div className="flex flex-1 items-center">
-                    <div className='w-5 h-5  text-xs'><DocumentTextIcon/></div>
-                    <span
-                      className="text-sm ml-3 flex-1 overflow-x-hidden whitespace-nowrap text-ellipsis max-w-[270px]">{firstFile.file.name}</span>
-                  </div>
+                {
+                  firstFile.progress === 100 && <div className="flex flex-1 items-center px-3 justify-between">
+                    <div className="flex flex-1 items-center">
+                      <div className='w-5 h-5  text-xs'><DocumentTextIcon/></div>
+                      <span
+                        className="text-sm ml-3 flex-1 overflow-x-hidden whitespace-nowrap text-ellipsis max-w-[270px]">{firstFile.file.name}</span>
+                    </div>
 
-                  <div className='w-4 h-4  text-xs' onClick={(e: MouseEvent) => {
-                    e.stopPropagation()
-                    removeFile(firstFile?.fileID)
-                  }}><XCircleIcon/></div>
-                </div>
+                    <div className='w-4 h-4  text-xs' onClick={(e: MouseEvent) => {
+                      e.stopPropagation()
+                      removeFile(firstFile?.fileID)
+                    }}><XCircleIcon/></div>
+                  </div>
+                }
               </>}
 
           </>}
