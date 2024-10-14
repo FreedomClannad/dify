@@ -9,7 +9,7 @@ const useLigand = () => {
      */
   const addLigandResultFileList = (file: DockingResultFile) => {
     setLigandResultFileList((prev) => {
-      const index = prev.findIndex(item => item.fileId === file.fileId)
+      const index = prev.findIndex(item => item.fileID === file.fileID)
       if (index !== -1)
         prev[index] = file
       else
@@ -28,7 +28,7 @@ const useLigand = () => {
      * 根据传入的id来获取Ligand结果对应对象
      */
   const getLigandResultFileById = (id: string) => {
-    return ligandResultFileList.find(item => item.fileId === id)
+    return ligandResultFileList.find(item => item.fileID === id)
   }
   const clearLigandFileList = () => {
     setLigandFileList([])

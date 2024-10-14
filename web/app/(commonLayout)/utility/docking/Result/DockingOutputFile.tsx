@@ -38,7 +38,6 @@ const DockingOutputFile = () => {
   const { resultData } = useContext(ResultContext)
   const { addStructure, loadStructureFromData, setStructureVisibility } = useContext(MolstarContext)
   useEffect(() => {
-    console.log('112233')
     try {
       const t_data = JSON.parse(resultData)
       const table = initTable(t_data)

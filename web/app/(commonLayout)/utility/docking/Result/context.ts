@@ -9,6 +9,8 @@ type InputContextType = {
   ligandFileList: FileItem[]
   setLigandFileList: (receptorFileList: FileItem[]) => void
   getLigandResultFileById: (id: string) => DockingResultFile | undefined
+  cropReceptorList: DockingResultFile[]
+  getCropReceptorById: (id: string) => DockingResultFile | undefined
 }
 export const ResultContext = createContext<InputContextType>({
   receptorFileList: [],
@@ -17,4 +19,6 @@ export const ResultContext = createContext<InputContextType>({
   setLigandFileList: (receptorFileList: FileItem[]) => {},
   resultData: '',
   getLigandResultFileById: (id: string) => { return undefined },
+  cropReceptorList: [],
+  getCropReceptorById: (id: string) => { return undefined },
 })

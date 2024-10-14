@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
+import { formats } from './commin'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
 import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
-
 const LigandFile = () => {
   const { ligandFileList, setLigandFileList, addLigandResultFileList } = useContext(InputContext)
   // const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
@@ -20,7 +20,8 @@ const LigandFile = () => {
 
               if (id && mime_type) {
                 setValue('ligand_file_ids', id)
-                addLigandResultFileList({ fileId: fileItem.fileID, id, mime_type, extension: extension as BuiltInTrajectoryFormat || 'mmcif' })
+                const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
+                addLigandResultFileList({ fileID: fileItem.fileID, id, mime_type, extension: format })
                 // loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
                 // addStructure({ id: fileItem.fileID, visible: true })
               }

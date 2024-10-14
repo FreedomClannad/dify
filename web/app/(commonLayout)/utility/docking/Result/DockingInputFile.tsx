@@ -16,7 +16,7 @@ const Card = ({ docking, onClick }: CardType) => {
     <div className="flex w-full h-[32px] justify-between text-gray-1006">
       <div className="flex items-center">
         <div className='w-5 h-5  text-xs text-gray-1005'><DocumentTextIcon/></div>
-        <span className='ml-2'>{docking.file.name}</span>
+        <span className='ml-2'>{docking.name}</span>
       </div>
       <div className="cursor-pointer text-xs flex items-center" onClick={() => {
         onClick(docking)
@@ -26,7 +26,7 @@ const Card = ({ docking, onClick }: CardType) => {
 }
 
 const DockingInputFile = () => {
-  const { receptorFileList, ligandFileList, getLigandResultFileById } = useContext(ResultContext)
+  const { receptorFileList, ligandFileList, cropReceptorList, getLigandResultFileById, getCropReceptorById } = useContext(ResultContext)
   const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
   const receptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
@@ -34,7 +34,8 @@ const DockingInputFile = () => {
       const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
       if (docking) {
         n_list.push({
-          ...item,
+          fileID: item.fileID,
+          name: item.file.name,
           visible: docking.visible,
         },
         )
@@ -50,14 +51,16 @@ const DockingInputFile = () => {
       const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
       if (docking) {
         n_list.push({
-          ...item,
+          fileID: item.fileID,
+          name: item.file.name,
           visible: docking.visible,
         },
         )
       }
       else {
         n_list.push({
-          ...item,
+          fileID: item.fileID,
+          name: item.file.name,
           visible: false,
         })
       }
@@ -66,6 +69,30 @@ const DockingInputFile = () => {
     })
     return n_list
   }, [dockingMolstarList, ligandFileList])
+
+  const cropReceptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
+    const n_list: DockingUploadFile[] = []
+    cropReceptorList.map((item) => {
+      const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
+      if (docking) {
+        n_list.push({
+          fileID: item.fileID,
+          name: item.name || '',
+          visible: docking.visible,
+        },
+        )
+      }
+      else {
+        n_list.push({
+          fileID: item.fileID,
+          name: item.name || '',
+          visible: false,
+        })
+      }
+      return item
+    })
+    return n_list
+  }, [dockingMolstarList, cropReceptorList])
   const handleClick = (dockingFile: DockingUploadFile) => {
     setStructureVisibility({
       dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
@@ -73,13 +100,25 @@ const DockingInputFile = () => {
   }
 
   const handleLigandClick = (dockingFile: DockingUploadFile) => {
-    const file = getLigandResultFileById(dockingFile.fileID)
-    console.log(file)
-    if (file) {
+    const dockingResultFile = getLigandResultFileById(dockingFile.fileID)
+    console.log(dockingResultFile)
+    if (dockingResultFile) {
       setStructureVisibility({
         dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
         addCallback: () => {
-          loadStructureFromUrl(getDockingFileURL({ id: file.id, mime_type: file.mime_type }), file.extension)
+          loadStructureFromUrl(getDockingFileURL({ id: dockingResultFile.id, mime_type: dockingResultFile.mime_type }), dockingResultFile.extension)
+        },
+      })
+    }
+  }
+
+  const handleCropReceptorClick = (dockingFile: DockingUploadFile) => {
+    const dockingResultFile = getCropReceptorById(dockingFile.fileID)
+    if (dockingResultFile) {
+      setStructureVisibility({
+        dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
+        addCallback: () => {
+          loadStructureFromUrl(getDockingFileURL({ id: dockingResultFile.id, mime_type: dockingResultFile.mime_type }), dockingResultFile.extension)
         },
       })
     }
@@ -102,7 +141,12 @@ const DockingInputFile = () => {
             }
             {
               ligandVisibleFileList.map((item, index) => {
-                return <Card key={`receptro-${index}`} docking={item} onClick={handleLigandClick}/>
+                return <Card key={`ligand-${index}`} docking={item} onClick={handleLigandClick}/>
+              })
+            }
+            {
+              cropReceptorVisibleFileList.map((item, index) => {
+                return <Card key={`crop-${index}`} docking={item} onClick={handleCropReceptorClick}/>
               })
             }
           </>

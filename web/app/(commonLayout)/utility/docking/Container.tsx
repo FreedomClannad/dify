@@ -16,6 +16,7 @@ import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import useReceptor from '@/app/(commonLayout)/utility/docking/hooks/useReceptor'
 import useLigand from '@/app/(commonLayout)/utility/docking/hooks/useLigand'
+import useCropReceptor from '@/app/(commonLayout)/utility/docking/hooks/useCropReceptor'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -27,17 +28,21 @@ const Container = () => {
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
   const { receptorFileList, setReceptorFileList, clearReceptorFileList } = useReceptor()
   const { ligandFileList, setLigandFileList, clearLigandFileList, ligandResultFileList, addLigandResultFileList, getLigandResultFileById } = useLigand()
+  const { cropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
     setSubmitLoading(true)
     try {
       const res: any = await submitDockingTask(data)
+      console.log(res)
       setResult(res.result)
       setSubmitLoading(false)
       notify({ type: 'success', message: 'Task parsing successful' })
       if (res.result)
         setMode(DockingModeEnum.result)
+      if (res.remove_ligand_file)
+        addCropReceptor({ fileID: res.remove_ligand_file.id, id: res.remove_ligand_file.id, extension: res.remove_ligand_file.extension, mime_type: res.remove_ligand_file.mime_type, name: res.remove_ligand_file.name })
     }
     catch (error) {
       setResult('')
@@ -72,7 +77,7 @@ const Container = () => {
             <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition, ligandResultFileList, addLigandResultFileList }}>
               <InputForm onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
             </InputContext.Provider>
-            <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result, getLigandResultFileById }}>
+            <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result, getLigandResultFileById, cropReceptorList, getCropReceptorById }}>
               <Result isDisabled={!(DockingModeEnum.result === mode)}/>
             </ResultContext.Provider>
           </MolstarContext.Provider>
