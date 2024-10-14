@@ -10,14 +10,14 @@ import { MolstarPubSub } from '@/pubsub'
 
 type Props = {
   id?: string
-  onFocusCenter?: (center: { x: number; y: number; z: number; num: string; chain: string }) => void
+  onFocusCenter?: (center: { x: number; y: number; z: number; num: string; chain: string; label: string }) => void
 }
 
 export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
   setStructureVisibility: (index: number, visible: boolean) => void
-  getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string } | null | undefined>
+  getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string; label: string } | null | undefined>
   clear: () => void
 }
 // let ViewerStart = null;
@@ -26,8 +26,14 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
 
   const getCenter = async () => {
     if (molstart && molstart.current) {
-      // molstart.current?.getFocusedPolymer()
-      return molstart.current.getFocusedResidueCenter()
+      const center = molstart.current.getFocusedResidueCenter()
+      if (center) {
+        const { x, y, z, num, chain, indexArray } = center
+        const label = molstart.current?.getFocusedPolymer(indexArray) || ''
+        console.log(label)
+        return { x, y, z, num, chain, label }
+      }
+      return undefined
     }
   }
 
@@ -58,7 +64,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   const focusClicked = async () => {
     setTimeout(async () => {
       const center = await getCenter()
-      onFocusCenter?.(center as { x: number; y: number; z: number; num: string; chain: string })
+      onFocusCenter?.(center as { x: number; y: number; z: number; num: string; chain: string;label: string })
     }, 500)
   }
   useEffect(() => {

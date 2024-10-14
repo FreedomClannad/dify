@@ -19,13 +19,18 @@ const Constraints = () => {
   const { centerPosition } = useContext(InputContext)
   useEffect(() => {
     if (radioValue === ConstraintsCenterEnum.ligand || radioValue === ConstraintsCenterEnum.residue) {
-      const { x, y, z, num, chain } = centerPosition
+      const { x, y, z, num, chain, label } = centerPosition
       if (x && y && z) {
-        setValue('center_x', x)
-        setValue('center_y', y)
-        setValue('center_z', z)
-        setValue('residue_number', num || '')
-        setValue('chain', chain || '')
+        if (label && label === radioValue) {
+          setValue('center_x', x)
+          setValue('center_y', y)
+          setValue('center_z', z)
+          setValue('residue_number', num || '')
+          setValue('chain', chain || '')
+        }
+        else {
+          console.log('当前的选择不符合')
+        }
       }
       else {
         setValue('center_x', '')

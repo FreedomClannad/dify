@@ -54,6 +54,7 @@ import 'molstar/lib/mol-util/polyfill'
 import { ObjectKeys } from 'molstar/lib/mol-util/type-helpers'
 import type { StateTransform } from 'molstar/lib/commonjs/mol-state/transform'
 import { setSubtreeVisibility } from 'molstar/lib/mol-plugin/behavior/static/state'
+import type { ElementIndex } from 'molstar/lib/mol-model/structure/model/indexing'
 import { MesoFocusLoci } from './behavior/camera'
 
 export { PLUGIN_VERSION as version } from 'molstar/lib/mol-plugin/version'
@@ -636,7 +637,7 @@ export class Viewer {
           return sum
         }, { x: 0, y: 0, z: 0 })
         // return [sumCoordinates.x / count, sumCoordinates.y / count, sumCoordinates.z / count]
-        return { x: sumCoordinates.x / count, y: sumCoordinates.y / count, z: sumCoordinates.z / count, num, chain }
+        return { x: sumCoordinates.x / count, y: sumCoordinates.y / count, z: sumCoordinates.z / count, num, chain, indexArray: elementArray }
       }
     }
     return null
@@ -650,7 +651,7 @@ export class Viewer {
     setSubtreeVisibility(state, root, value)
   }
 
-  getFocusedPolymer() {
+  getFocusedPolymer(indexArray: ElementIndex[]) {
     const plugin = this.plugin
 
     // Get the structural element
@@ -665,38 +666,53 @@ export class Viewer {
       console.error('components is undefined.')
       return null
     }
-    console.log(components)
 
     const structure_element = components[0].cell.obj?.data.units[0]
     if (!structure_element) {
       console.error('structure_element is undefined.')
       return null
     }
-    console.log(structure_element.model)
     const offsets = structure_element.model.atomicHierarchy.residueAtomSegments.offsets
     console.log(offsets)
     const atomCount = offsets[offsets.length - 1]
     const index: number[] = new Array(atomCount).fill(0).map((_, i) => Math.floor(i / 10)) // 根据实际原子数量填充索引
     const residues = structure_element.model.atomicHierarchy.residues
+    const atomLabels = structure_element.model.atomicHierarchy.atoms.auth_comp_id.toArray()
+    console.log(structure_element.model.atomicHierarchy.atoms.auth_comp_id.toArray())
     console.log(residues)
     console.log(residues.group_PDB.toArray())
+    console.log(index)
     // const residueLabels = residues.group_PDB.__array as number[]
+
     const residueLabels = residues.group_PDB.toArray()
-
-    if (residueLabels && residueLabels.length === offsets.length - 1) {
-      for (let i = 0; i < offsets.length - 1; i++) {
-        const start = offsets[i] // 当前残基的起始位置
-        const end = offsets[i + 1] // 下一个残基的起始位置
-
-        // 提取当前残基的原子索引范围
-        const residueLabel = residueLabels[i]
-        const residueAtoms = index.slice(start, end) // 提取index数组中[start, end)范围的元素
-        console.log(`Residue ${residueLabel} atoms: ${residueAtoms.join(', ')}`)
+    if (indexArray) {
+      const startIndex = indexArray[0]
+      if (residueLabels && residueLabels.length === offsets.length - 1) {
+        for (let i = 0; i < offsets.length - 1; i++) {
+          const start = offsets[i] // 当前残基的起始位置
+          const end = offsets[i + 1] // 下一个残基的起始位置
+          // 提取当前残基的原子索引范围
+          const residueLabel = residueLabels[i]
+          // const residueAtoms = index.slice(start, end) // 提取index数组中[start, end)范围的元素
+          console.log(`${residueLabel} --- ${start} -> ${end}`)
+          // console.log(`Residue ${residueLabel} atoms: ${residueAtoms.join(', ')}`)
+          if (start === startIndex && indexArray.length === 1) {
+            if (residueLabel === 'HETATM')
+              return atomLabels[start]
+          }
+          else if (start === startIndex) {
+            if (residueLabel === 'ATOM')
+              return 'residue'
+            else
+              return 'ligand'
+          }
+        }
+      }
+      else {
+        console.error('residueLabels is undefined or its length does not match offsets length.')
       }
     }
-    else {
-      console.error('residueLabels is undefined or its length does not match offsets length.')
-    }
+    return ''
   }
 
   dispose() {

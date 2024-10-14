@@ -11,6 +11,7 @@ export type CenterPosition = {
   z?: number
   num?: string
   chain?: string
+  label?: string
 }
 
 export enum ConstraintsCenterEnum {
