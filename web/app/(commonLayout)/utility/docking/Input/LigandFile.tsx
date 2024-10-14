@@ -4,11 +4,10 @@ import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
 import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
-import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 
 const LigandFile = () => {
-  const { ligandFileList, setLigandFileList } = useContext(InputContext)
-  const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
+  const { ligandFileList, setLigandFileList, addLigandResultFileList } = useContext(InputContext)
+  // const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
   const { setValue, errors } = useContext(FormContext)
   return <>
     <VerticalTitleCard title="Ligand file" tooltip="上传配体文件，当配体为一个时允许上传SDF，PDB和MOL格式，当配体为多个时（≤2000）只允许上传SDF格式。格式：SDF、Mol、PDB。">
@@ -21,8 +20,9 @@ const LigandFile = () => {
 
               if (id && mime_type) {
                 setValue('ligand_file_ids', id)
-                loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
-                addStructure({ id: fileItem.fileID, visible: true })
+                addLigandResultFileList({ fileId: fileItem.fileID, id, mime_type, extension: extension as BuiltInTrajectoryFormat || 'mmcif' })
+                // loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
+                // addStructure({ id: fileItem.fileID, visible: true })
               }
               return {
                 ...item,

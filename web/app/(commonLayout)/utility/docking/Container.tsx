@@ -26,7 +26,7 @@ const Container = () => {
   const { notify } = useContext1(ToastContext)
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
   const { receptorFileList, setReceptorFileList, clearReceptorFileList } = useReceptor()
-  const { ligandFileList, setLigandFileList, clearLigandFileList } = useLigand()
+  const { ligandFileList, setLigandFileList, clearLigandFileList, ligandResultFileList, addLigandResultFileList, getLigandResultFileById } = useLigand()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -69,10 +69,10 @@ const Container = () => {
         </div>
         <div className="flex-1 overflow-y-auto">
           <MolstarContext.Provider value={{ addStructure, dockingMolstarList, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
-            <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition }}>
+            <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition, ligandResultFileList, addLigandResultFileList }}>
               <InputForm onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
             </InputContext.Provider>
-            <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result }}>
+            <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result, getLigandResultFileById }}>
               <Result isDisabled={!(DockingModeEnum.result === mode)}/>
             </ResultContext.Provider>
           </MolstarContext.Provider>

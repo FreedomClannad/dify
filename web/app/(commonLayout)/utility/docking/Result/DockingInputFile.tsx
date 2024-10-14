@@ -5,6 +5,7 @@ import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Result/context'
 import type { DockingUploadFile } from '@/types/docking'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
+import { getDockingFileURL } from '@/service/docking'
 
 type CardType = {
   docking: DockingUploadFile
@@ -25,8 +26,8 @@ const Card = ({ docking, onClick }: CardType) => {
 }
 
 const DockingInputFile = () => {
-  const { receptorFileList, ligandFileList } = useContext(ResultContext)
-  const { dockingMolstarList, setStructureVisibility } = useContext(MolstarContext)
+  const { receptorFileList, ligandFileList, getLigandResultFileById } = useContext(ResultContext)
+  const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
   const receptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
     receptorFileList.map((item) => {
@@ -54,16 +55,34 @@ const DockingInputFile = () => {
         },
         )
       }
+      else {
+        n_list.push({
+          ...item,
+          visible: false,
+        })
+      }
 
       return item
     })
     return n_list
   }, [dockingMolstarList, ligandFileList])
   const handleClick = (dockingFile: DockingUploadFile) => {
-    console.log(dockingFile)
     setStructureVisibility({
       dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
     })
+  }
+
+  const handleLigandClick = (dockingFile: DockingUploadFile) => {
+    const file = getLigandResultFileById(dockingFile.fileID)
+    console.log(file)
+    if (file) {
+      setStructureVisibility({
+        dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
+        addCallback: () => {
+          loadStructureFromUrl(getDockingFileURL({ id: file.id, mime_type: file.mime_type }), file.extension)
+        },
+      })
+    }
   }
 
   return <VerticalTitleCard title="Docking input file">
@@ -83,7 +102,7 @@ const DockingInputFile = () => {
             }
             {
               ligandVisibleFileList.map((item, index) => {
-                return <Card key={`receptro-${index}`} docking={item} onClick={handleClick}/>
+                return <Card key={`receptro-${index}`} docking={item} onClick={handleLigandClick}/>
               })
             }
           </>

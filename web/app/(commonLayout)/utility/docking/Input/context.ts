@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import type { FieldError, FieldValues, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
-import type { CenterPosition } from '@/types/docking'
+import type { CenterPosition, DockingResultFile } from '@/types/docking'
 import type { FileItem } from '@/models/datasets'
 import type { DockingFormValues } from '@/app/(commonLayout)/utility/docking/Input/InputForm'
 
@@ -11,6 +11,8 @@ type InputContextType = {
   setLigandFileList: (receptorFileList: FileItem[]) => void
   centerPosition: CenterPosition
   setCenterPosition: (centerPosition: CenterPosition) => void
+  ligandResultFileList: DockingResultFile[]
+  addLigandResultFileList: (file: DockingResultFile) => void
 }
 export const InputContext = createContext<InputContextType>({
   receptorFileList: [],
@@ -19,6 +21,8 @@ export const InputContext = createContext<InputContextType>({
   setLigandFileList: (receptorFileList: FileItem[]) => {},
   centerPosition: {},
   setCenterPosition: () => {},
+  ligandResultFileList: [],
+  addLigandResultFileList: (file: DockingResultFile) => {},
 })
 
 type FormContextType = {

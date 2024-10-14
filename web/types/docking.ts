@@ -1,3 +1,4 @@
+import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import type { FileItem } from '@/models/datasets'
 
 export enum DockingModeEnum {
@@ -22,6 +23,13 @@ export enum ConstraintsCenterEnum {
 export type DockingMolstar = {
   id: string
   visible: boolean
+}
+
+export type DockingResultFile = {
+  fileId: string
+  id: string
+  mime_type: string
+  extension: BuiltInTrajectoryFormat
 }
 
 export type DockingUploadFile = FileItem & {
