@@ -1,16 +1,18 @@
 import type { ReactNode } from 'react'
-import { Button } from '@nextui-org/react'
 import type { FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useContext } from 'react'
 import JobTitle from '@/app/(commonLayout)/utility/docking/Input/JobTitle'
 import ReceptorFile from '@/app/(commonLayout)/utility/docking/Input/ReceptorFile'
 import Constraints from '@/app/(commonLayout)/utility/docking/Input/Constraints'
 import LigandFile from '@/app/(commonLayout)/utility/docking/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/utility/docking/Input/OutPose'
-import { FormContext } from '@/app/(commonLayout)/utility/docking/Input/context'
+import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
 import './index.css'
+import Strategy from '@/app/(commonLayout)/utility/docking/Strategy'
+import SubmitButton from '@/app/(commonLayout)/utility/docking/SubmitButton'
 type Props = {
   isDisabled?: boolean
   onSubmit: (data: FieldValues) => void
@@ -57,9 +59,13 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
   })
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <Constraints/>, <LigandFile />, <OutPose />]
-
+  const { StrategyMap, strategy, setStrategy } = useContext(InputContext)
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3" style={{ display: isDisabled ? 'none' : 'flex' }}>
+      <div className="w-full mt-4">
+        <Strategy strategy={strategy} StrategyMap={StrategyMap} setStrategy={setStrategy} />
+      </div>
+
       <form className="h-full flex justify-between flex-col" onSubmit={handleSubmit((data) => {
         onSubmit(data)
       })}>
@@ -68,17 +74,10 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
             {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
           </FormContext.Provider>
         </div>
-        <div className="w-full flex justify-center gap-x-4">
-          <div className="flex justify-center w-full mt-6">
-            <Button type="submit" color="primary" radius="sm" fullWidth isLoading={submitLoading}>Run</Button>
-          </div>
-          <div className="flex justify-center w-full mt-6">
-            <Button color="primary" radius="sm" fullWidth onClick={() => {
-              reset()
-              onReset()
-            }}>Reset</Button>
-          </div>
-        </div>
+        <SubmitButton runLoading={submitLoading} onReset={() => {
+          reset()
+          onReset()
+        }} />
       </form>
     </div>
   </>

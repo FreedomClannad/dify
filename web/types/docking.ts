@@ -44,3 +44,8 @@ export type CenterState = {
   [ConstraintsCenterEnum.residue]: CenterPosition
   [ConstraintsCenterEnum.coordinates]: CenterPosition
 }
+
+export enum DockingStrategyEnum {
+  global = 'global',
+  pocket = 'pocket',
+}

@@ -1,8 +1,11 @@
 import { createContext } from 'react'
 import type { FieldError, FieldValues, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
+import { DockingStrategyEnum } from '@/types/docking'
 import type { CenterPosition, DockingResultFile } from '@/types/docking'
 import type { FileItem } from '@/models/datasets'
 import type { DockingFormValues } from '@/app/(commonLayout)/utility/docking/Input/InputForm'
+import type { StrategyMapType } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
+import { StrategyMap } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
 
 type InputContextType = {
   receptorFileList: FileItem[]
@@ -13,6 +16,9 @@ type InputContextType = {
   setCenterPosition: (centerPosition: CenterPosition) => void
   ligandResultFileList: DockingResultFile[]
   addLigandResultFileList: (file: DockingResultFile) => void
+  StrategyMap: StrategyMapType
+  strategy: DockingStrategyEnum
+  setStrategy: (strategy: DockingStrategyEnum) => void
 }
 export const InputContext = createContext<InputContextType>({
   receptorFileList: [],
@@ -23,6 +29,9 @@ export const InputContext = createContext<InputContextType>({
   setCenterPosition: () => {},
   ligandResultFileList: [],
   addLigandResultFileList: (file: DockingResultFile) => {},
+  StrategyMap,
+  strategy: DockingStrategyEnum.global,
+  setStrategy: (strategy: DockingStrategyEnum) => {},
 })
 
 type FormContextType = {

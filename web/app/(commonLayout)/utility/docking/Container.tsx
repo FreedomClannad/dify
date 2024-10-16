@@ -3,20 +3,23 @@ import dynamic from 'next/dynamic'
 import { useContext as useContext1 } from 'use-context-selector'
 import type { FieldValues } from 'react-hook-form'
 import style from './Container.module.css'
-import Result from './Result'
 import type { CenterPosition } from '@/types/docking'
-import { DockingModeEnum } from '@/types/docking'
+import { DockingModeEnum, DockingStrategyEnum } from '@/types/docking'
 import cn from '@/utils/classnames'
-import InputForm from '@/app/(commonLayout)/utility/docking/Input/InputForm'
-import { InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
 import { ToastContext } from '@/app/components/base/toast'
 import { submitDockingTask } from '@/service/docking'
-import { ResultContext } from '@/app/(commonLayout)/utility/docking/Result/context'
 import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
-import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import useReceptor from '@/app/(commonLayout)/utility/docking/hooks/useReceptor'
 import useLigand from '@/app/(commonLayout)/utility/docking/hooks/useLigand'
 import useCropReceptor from '@/app/(commonLayout)/utility/docking/hooks/useCropReceptor'
+import useStrategy from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
+import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
+import { InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
+import InputForm from '@/app/(commonLayout)/utility/docking/Input/InputForm'
+import { ResultContext } from '@/app/(commonLayout)/utility/docking/Result/context'
+import Result from '@/app/(commonLayout)/utility/docking/Result'
+import { GlobalInputContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
+import GlobalInput from '@/app/(commonLayout)/utility/docking/Global/Input'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -29,6 +32,7 @@ const Container = () => {
   const { receptorFileList, setReceptorFileList, clearReceptorFileList } = useReceptor()
   const { ligandFileList, setLigandFileList, clearLigandFileList, ligandResultFileList, addLigandResultFileList, getLigandResultFileById } = useLigand()
   const { cropReceptorList, clearCropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
+  const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -56,6 +60,28 @@ const Container = () => {
     clearCropReceptorList()
     setResult('')
   }
+  const Content = () => {
+    if (strategy === DockingStrategyEnum.global) {
+      return <>
+        <GlobalInputContext.Provider value={{ StrategyMap, strategy, setStrategy }}>
+          <GlobalInput />
+        </GlobalInputContext.Provider>
+      </>
+    }
+
+    if (strategy === DockingStrategyEnum.pocket) {
+      return <>
+        <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition, ligandResultFileList, addLigandResultFileList, setStrategy, strategy, StrategyMap }}>
+          <InputForm onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
+        </InputContext.Provider>
+        <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result, getLigandResultFileById, cropReceptorList, getCropReceptorById }}>
+          <Result isDisabled={!(DockingModeEnum.result === mode)}/>
+        </ResultContext.Provider>
+      </>
+    }
+
+    return null
+  }
   return (<>
     <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">
       <div className="flex flex-col w-fit sm:w-[410px] shrink-0 border-gray-550 border-r h-full">
@@ -75,12 +101,7 @@ const Container = () => {
         </div>
         <div className="flex-1 overflow-y-auto">
           <MolstarContext.Provider value={{ addStructure, dockingMolstarList, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
-            <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition, ligandResultFileList, addLigandResultFileList }}>
-              <InputForm onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
-            </InputContext.Provider>
-            <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result, getLigandResultFileById, cropReceptorList, getCropReceptorById }}>
-              <Result isDisabled={!(DockingModeEnum.result === mode)}/>
-            </ResultContext.Provider>
+            {Content()}
           </MolstarContext.Provider>
         </div>
       </div>
