@@ -28,7 +28,7 @@ const Container = () => {
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
   const { receptorFileList, setReceptorFileList, clearReceptorFileList } = useReceptor()
   const { ligandFileList, setLigandFileList, clearLigandFileList, ligandResultFileList, addLigandResultFileList, getLigandResultFileById } = useLigand()
-  const { cropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
+  const { cropReceptorList, clearCropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -41,7 +41,7 @@ const Container = () => {
       notify({ type: 'success', message: 'Task parsing successful' })
       if (res.result)
         setMode(DockingModeEnum.result)
-      if (res.remove_ligand_file)
+      if (res.remove_ligand_file && res.remove_ligand_file.id)
         addCropReceptor({ fileID: res.remove_ligand_file.id, id: res.remove_ligand_file.id, extension: res.remove_ligand_file.extension, mime_type: res.remove_ligand_file.mime_type, name: res.remove_ligand_file.name })
     }
     catch (error) {
@@ -53,6 +53,7 @@ const Container = () => {
     clear()
     clearReceptorFileList()
     clearLigandFileList()
+    clearCropReceptorList()
     setResult('')
   }
   return (<>

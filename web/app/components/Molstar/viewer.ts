@@ -678,10 +678,6 @@ export class Viewer {
     const index: number[] = new Array(atomCount).fill(0).map((_, i) => Math.floor(i / 10)) // 根据实际原子数量填充索引
     const residues = structure_element.model.atomicHierarchy.residues
     const atomLabels = structure_element.model.atomicHierarchy.atoms.auth_comp_id.toArray()
-    console.log(structure_element.model.atomicHierarchy.atoms.auth_comp_id.toArray())
-    console.log(residues)
-    console.log(residues.group_PDB.toArray())
-    console.log(index)
     // const residueLabels = residues.group_PDB.__array as number[]
 
     const residueLabels = residues.group_PDB.toArray()
