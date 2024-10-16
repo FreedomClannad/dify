@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react'
-import { Radio, RadioGroup, Textarea } from '@nextui-org/react'
+import { Radio, RadioGroup } from '@nextui-org/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import type { FileItem } from '@/models/datasets'
 import UploadCard from '@/app/components/upload/upload-card'
 import { GlobalInputContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
+import InputUpload from '@/app/(commonLayout)/utility/docking/InputUpload'
 enum Mode {
   upload = 'upload',
   input = 'input',
@@ -18,14 +19,12 @@ const Receptor = () => {
   const { globalReceptorFileList, setGlobalReceptorFileList } = useContext(GlobalInputContext)
   const InputContent = () => {
     return <>
-      <Textarea
-        placeholder="Enter protein sequence"
-      />
+      <InputUpload accept={accept} placeholder="Enter protein sequence"/>
     </>
   }
   const UploadContent = () => {
     return <>
-      <UploadCard accept={accept} fileList={globalReceptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+      <UploadCard uploadURL="" accept={accept} fileList={globalReceptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
         const n_list = list.map((item) => {
           if (item.fileID === fileItem.fileID) {
             const file = item.file
