@@ -25,7 +25,7 @@ const Card = ({ docking, onClick }: CardType) => {
   </>
 }
 
-const DockingInputFile = () => {
+const GlobalInputFile = () => {
   const { receptorFileList, ligandFileList, cropReceptorList, getLigandResultFileById, getCropReceptorById } = useContext(ResultContext)
   const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
   const receptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
@@ -124,7 +124,7 @@ const DockingInputFile = () => {
     }
   }
 
-  return <VerticalTitleCard title="Pocket docking input file">
+  return <VerticalTitleCard title="Global docking input file">
     <div className="w-full docking-input-file">
       {
         (receptorVisibleFileList.length === 0 && ligandVisibleFileList.length === 0)
@@ -156,4 +156,4 @@ const DockingInputFile = () => {
   </VerticalTitleCard>
 }
 
-export default DockingInputFile
+export default GlobalInputFile

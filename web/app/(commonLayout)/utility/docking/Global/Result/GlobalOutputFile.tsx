@@ -33,7 +33,7 @@ const initTable = (data: any[]): TableType[] => {
   return n_data
 }
 
-const DockingOutputFile = () => {
+const GlobalOutputFile = () => {
   const [table, setTable] = useState<TableType[]>([])
   const { resultData } = useContext(ResultContext)
   const { addStructure, loadStructureFromData, setStructureVisibility } = useContext(MolstarContext)
@@ -70,7 +70,7 @@ const DockingOutputFile = () => {
     })
     setTable(n_list)
   }
-  return <VerticalTitleCard title="Pocket docking output file">
+  return <VerticalTitleCard title="Global docking output file">
     <>
       {
         table.length === 0
@@ -100,4 +100,4 @@ const DockingOutputFile = () => {
     </>
   </VerticalTitleCard>
 }
-export default DockingOutputFile
+export default GlobalOutputFile
