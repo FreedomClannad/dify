@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Radio, RadioGroup } from '@nextui-org/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import type { DockingStrategyEnum } from '@/types/docking'
 import type { StrategyMapType } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
@@ -18,15 +19,15 @@ const Strategy = ({ StrategyMap, strategy, setStrategy }: Props) => {
   }
   return <VerticalTitleCard title="Strategy" >
     <div className="flex">
-      {
-        strategyList.map(({ key, value }, index) => {
-          return <div key={key} className={cn(index > 0 ? 'ml-2' : '', 'px-5 py-1 bg-gray-1007 rounded cursor-pointer', strategy === key && 'bg-primary-1002')} onClick={() => {
-            handleClick(key as DockingStrategyEnum)
-          }}>
-            <span>{value}</span>
-          </div>
-        })
-      }
+      <RadioGroup value={strategy} onValueChange={(value) => {
+        handleClick(value as DockingStrategyEnum)
+      }} orientation="horizontal">
+        {
+          strategyList.map(({ key, value }, index) => {
+            return <Radio key={key} size="sm" className={cn(index > 0 && 'ml-2')} value={key}>{value}</Radio>
+          })
+        }
+      </RadioGroup>
     </div>
   </VerticalTitleCard>
 }
