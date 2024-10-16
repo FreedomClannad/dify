@@ -14,7 +14,7 @@ const ReceptorFile = () => {
   return <>
     <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
       <div>
-        <UploadCard accept={accept} fileList={receptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+        <UploadCard uploadURL="/molecular-docking/files/upload" accept={accept} fileList={receptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
           const n_list = list.map((item) => {
             if (item.fileID === fileItem.fileID) {
               const file = item.file

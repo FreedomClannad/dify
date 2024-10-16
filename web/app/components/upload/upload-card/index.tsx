@@ -16,6 +16,7 @@ type Props = {
   onUploadError?: (fileItem: FileItem) => void
   multiple?: boolean
   description?: string
+  uploadURL: string
 }
 
 const FILES_NUMBER_LIMIT = 20
@@ -23,7 +24,7 @@ const fileUploadConfig = {
   file_size_limit: 15,
   batch_count_limit: 5,
 }
-const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, multiple = false, description = 'Select or drag and drop ligand file here', onUploadError }: Props) => {
+const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, multiple = false, description = 'Select or drag and drop ligand file here', onUploadError, uploadURL }: Props) => {
   const { t } = useTranslation()
   const fileUploader = useRef<HTMLInputElement>(null)
   const dropRef = useRef<HTMLDivElement>(null)
@@ -98,7 +99,7 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
       xhr: new XMLHttpRequest(),
       data: formData,
       onprogress: onProgress,
-    }, false, '/molecular-docking/files/upload')
+    }, false, uploadURL)
       .then((res: File) => {
         const completeFile = {
           fileID: fileItem.fileID,

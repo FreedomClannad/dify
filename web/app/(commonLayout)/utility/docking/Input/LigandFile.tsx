@@ -12,7 +12,7 @@ const LigandFile = () => {
   return <>
     <VerticalTitleCard title="Ligand file" tooltip="上传配体文件，当配体为一个时允许上传SDF，PDB和MOL格式，当配体为多个时（≤2000）只允许上传SDF格式。格式：SDF、Mol、PDB。">
       <div>
-        <UploadCard accept=".pdb, .sdf, .mol, mol2" fileList={ligandFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+        <UploadCard uploadURL="/molecular-docking/files/upload" accept=".pdb, .sdf, .mol, mol2" fileList={ligandFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
           const n_list = list.map((item) => {
             if (item.fileID === fileItem.fileID) {
               const file = item.file

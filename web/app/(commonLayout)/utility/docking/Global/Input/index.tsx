@@ -10,6 +10,8 @@ import {
 } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
 import JobTitle from '@/app/(commonLayout)/utility/docking/Global/Input/JobTitle'
 import SubmitButton from '@/app/(commonLayout)/utility/docking/SubmitButton'
+import Receptor from '@/app/(commonLayout)/utility/docking/Global/Input/Receptor'
+import Ligand from '@/app/(commonLayout)/utility/docking/Global/Input/Ligand'
 const GlobalInputFormSchema = z.object({
   task_name: z.string().min(1, { message: 'Please enter a task name' }),
 })
@@ -25,7 +27,7 @@ const GlobalInput = () => {
   })
   const { StrategyMap, strategy, setStrategy } = useContext(GlobalInputContext)
   // eslint-disable-next-line react/jsx-key
-  const contentList: ReactNode[] = [<JobTitle/>]
+  const contentList: ReactNode[] = [<JobTitle/>, <Receptor/>, <Ligand />]
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3">
       <div className="w-full mt-4">

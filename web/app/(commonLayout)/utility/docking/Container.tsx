@@ -20,6 +20,8 @@ import { ResultContext } from '@/app/(commonLayout)/utility/docking/Result/conte
 import Result from '@/app/(commonLayout)/utility/docking/Result'
 import { GlobalInputContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
 import GlobalInput from '@/app/(commonLayout)/utility/docking/Global/Input'
+import useGlobalReceptor from '@/app/(commonLayout)/utility/docking/Global/hooks/useGlobalReceptor'
+import useGlobalLigand from '@/app/(commonLayout)/utility/docking/Global/hooks/useGlobalLigand'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -34,6 +36,9 @@ const Container = () => {
   const { cropReceptorList, clearCropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
   const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
+  // Global
+  const { globalReceptorFileList, setGlobalReceptorFileList } = useGlobalReceptor()
+  const { globalLigandFileList, setGlobalLigandFileList } = useGlobalLigand()
   const handleSubmit = async (data: FieldValues) => {
     console.log(data)
     setSubmitLoading(true)
@@ -63,7 +68,7 @@ const Container = () => {
   const Content = () => {
     if (strategy === DockingStrategyEnum.global) {
       return <>
-        <GlobalInputContext.Provider value={{ StrategyMap, strategy, setStrategy }}>
+        <GlobalInputContext.Provider value={{ globalReceptorFileList, setGlobalReceptorFileList, globalLigandFileList, setGlobalLigandFileList, StrategyMap, strategy, setStrategy }}>
           <GlobalInput />
         </GlobalInputContext.Provider>
       </>

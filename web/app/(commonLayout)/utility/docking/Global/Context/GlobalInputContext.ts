@@ -4,14 +4,23 @@ import type { StrategyMapType } from '@/app/(commonLayout)/utility/docking/hooks
 import { StrategyMap } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
 import { DockingStrategyEnum } from '@/types/docking'
 import type { GlobalInputFormValues } from '@/app/(commonLayout)/utility/docking/Global/Input'
+import type { FileItem } from '@/models/datasets'
 
 type GlobalInputContextType = {
+  globalReceptorFileList: FileItem[]
+  setGlobalReceptorFileList: (receptorFileList: FileItem[]) => void
+  globalLigandFileList: FileItem[]
+  setGlobalLigandFileList: (receptorFileList: FileItem[]) => void
   StrategyMap: StrategyMapType
   strategy: DockingStrategyEnum
   setStrategy: (strategy: DockingStrategyEnum) => void
 }
 
 export const GlobalInputContext = createContext<GlobalInputContextType>({
+  globalReceptorFileList: [],
+  setGlobalReceptorFileList: (globalReceptorFileList: FileItem[]) => {},
+  globalLigandFileList: [],
+  setGlobalLigandFileList: (globalReceptorFileList: FileItem[]) => {},
   StrategyMap,
   strategy: DockingStrategyEnum.global,
   setStrategy: (strategy: DockingStrategyEnum) => {},
