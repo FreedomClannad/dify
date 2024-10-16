@@ -1,9 +1,11 @@
 import { Radio, RadioGroup } from '@nextui-org/react'
 import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext as useContextNotify } from 'use-context-selector'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
 import type { CenterPosition } from '@/types/docking'
 import { ConstraintsCenterEnum } from '@/types/docking'
+import { ToastContext } from '@/app/components/base/toast'
 type CenterState = {
   [ConstraintsCenterEnum.ligand]: CenterPosition
   [ConstraintsCenterEnum.residue]: CenterPosition
@@ -13,6 +15,7 @@ const Constraints = () => {
   const { register, getValues, setValue, errors } = useContext(FormContext)
   const [radioValue, setRadioValue] = useState<ConstraintsCenterEnum>(ConstraintsCenterEnum.ligand)
   const [CenterState, setCenterState] = useState<CenterState>({ [ConstraintsCenterEnum.ligand]: {}, [ConstraintsCenterEnum.residue]: {}, [ConstraintsCenterEnum.coordinates]: {} })
+  const { notify } = useContextNotify(ToastContext)
   const radioDisabled = useMemo(() => {
     return !(radioValue === ConstraintsCenterEnum.coordinates)
   }, [radioValue])
@@ -29,7 +32,7 @@ const Constraints = () => {
           setValue('chain', chain || '')
         }
         else {
-          console.log('当前的选择不符合')
+          notify({ type: 'warning', message: 'The clicked molecule does not match the current selection mode' })
         }
       }
       else {
