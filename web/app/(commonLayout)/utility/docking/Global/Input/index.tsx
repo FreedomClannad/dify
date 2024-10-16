@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useContext } from 'react'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { type FieldValues, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Strategy from '@/app/(commonLayout)/utility/docking/Strategy'
 import {
@@ -20,9 +20,11 @@ export type GlobalInputFormValues = z.infer<typeof GlobalInputFormSchema>
 
 type Props = {
   isDisabled?: boolean
+  onSubmit: (data: FieldValues) => void
+  onReset: () => void
 }
 
-const GlobalInput = ({ isDisabled = false }: Props) => {
+const GlobalInput = ({ isDisabled = false, onSubmit, onReset }: Props) => {
   const { register, handleSubmit, getValues, setValue, formState: { errors }, reset } = useForm<GlobalInputFormValues>({
     resolver: zodResolver(GlobalInputFormSchema),
     defaultValues: {
@@ -37,13 +39,15 @@ const GlobalInput = ({ isDisabled = false }: Props) => {
       <div className="w-full mt-4">
         <Strategy strategy={strategy} StrategyMap={StrategyMap} setStrategy={setStrategy}/>
       </div>
-      <form className="h-full flex justify-between flex-col w-full">
+      <form className="h-full flex justify-between flex-col w-full" onSubmit={handleSubmit((data) => {
+        onSubmit(data)
+      })}>
         <div>
           <GlobalFormContext.Provider value={{ register, getValues, setValue, errors }}>
-            {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
+            {contentList.map((content, index) => <div key={`Global-input-form-${index}`} className="mt-4">{content}</div>)}
           </GlobalFormContext.Provider>
         </div>
-        <SubmitButton/>
+        <SubmitButton onReset={onReset}/>
       </form>
     </div>
   </>

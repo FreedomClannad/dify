@@ -40,7 +40,10 @@ const Container = () => {
   // Global
   const { globalReceptorFileList, setGlobalReceptorFileList } = useGlobalReceptor()
   const { globalLigandFileList, setGlobalLigandFileList } = useGlobalLigand()
-  const handleSubmit = async (data: FieldValues) => {
+  const handleGlobalSubmit = async (data: FieldValues) => {
+    console.log(data)
+  }
+  const handlePocketSubmit = async (data: FieldValues) => {
     console.log(data)
     setSubmitLoading(true)
     try {
@@ -70,7 +73,7 @@ const Container = () => {
     if (strategy === DockingStrategyEnum.global) {
       return <>
         <GlobalInputContext.Provider value={{ globalReceptorFileList, setGlobalReceptorFileList, globalLigandFileList, setGlobalLigandFileList, StrategyMap, strategy, setStrategy }}>
-          <GlobalInput isDisabled={!(DockingModeEnum.input === mode)} />
+          <GlobalInput onSubmit={handleGlobalSubmit} onReset={handleReset} isDisabled={!(DockingModeEnum.input === mode)} />
         </GlobalInputContext.Provider>
         <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
       </>
@@ -79,7 +82,7 @@ const Container = () => {
     if (strategy === DockingStrategyEnum.pocket) {
       return <>
         <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition, ligandResultFileList, addLigandResultFileList, setStrategy, strategy, StrategyMap }}>
-          <InputForm onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
+          <InputForm onSubmit={handlePocketSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </InputContext.Provider>
         <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result, getLigandResultFileById, cropReceptorList, getCropReceptorById }}>
           <Result isDisabled={!(DockingModeEnum.result === mode)}/>
