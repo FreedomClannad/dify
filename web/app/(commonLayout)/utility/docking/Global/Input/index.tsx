@@ -18,6 +18,7 @@ const GlobalInputFormSchema = z.object({
   fasta_file_id: z.string().optional(),
   ligand_value: z.string().optional(),
   ligand_file_ids: z.string().optional(),
+  out_pose_num: z.number(),
 }).refine((data) => {
   return data.receptor_value || data.fasta_file_id
 }, { message: 'Please enter or upload the file', path: ['receptor_value'] }).refine((data) => {
@@ -41,6 +42,7 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset }: Props) => {
       fasta_file_id: '',
       ligand_value: '',
       ligand_file_ids: '',
+      out_pose_num: 10,
     },
   })
   const { StrategyMap, strategy, setStrategy } = useContext(GlobalInputContext)
