@@ -31,9 +31,10 @@ type Props = {
   isDisabled?: boolean
   onSubmit: (data: FieldValues) => void
   onReset: () => void
+  submitLoading?: boolean
 }
 
-const GlobalInput = ({ isDisabled = false, onSubmit, onReset }: Props) => {
+const GlobalInput = ({ isDisabled = false, onSubmit, onReset, submitLoading = false }: Props) => {
   const { register, handleSubmit, getValues, setValue, formState: { errors }, reset } = useForm<GlobalInputFormValues>({
     resolver: zodResolver(GlobalInputFormSchema),
     defaultValues: {
@@ -61,7 +62,7 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset }: Props) => {
             {contentList.map((content, index) => <div key={`Global-input-form-${index}`} className="mt-4">{content}</div>)}
           </GlobalFormContext.Provider>
         </div>
-        <SubmitButton onReset={onReset}/>
+        <SubmitButton onReset={onReset} runLoading={submitLoading}/>
       </form>
     </div>
   </>

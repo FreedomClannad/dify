@@ -7,7 +7,7 @@ import type { CenterPosition } from '@/types/docking'
 import { DockingModeEnum, DockingStrategyEnum } from '@/types/docking'
 import cn from '@/utils/classnames'
 import { ToastContext } from '@/app/components/base/toast'
-import { GlobalUpload, submitDockingTask } from '@/service/docking'
+import { GlobalUpload, submitDockingTask, submitGlobalDockingTask } from '@/service/docking'
 import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
 import useReceptor from '@/app/(commonLayout)/utility/docking/hooks/useReceptor'
 import useLigand from '@/app/(commonLayout)/utility/docking/hooks/useLigand'
@@ -42,6 +42,8 @@ const Container = () => {
   // Global
   const { globalReceptorFileList, setGlobalReceptorFileList } = useGlobalReceptor()
   const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList, getGlobalLigandResultFileById } = useGlobalLigand()
+  const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
+  const [globalResult, setGlobalResult] = useState<string>('')
   const handleGlobalSubmit = async (data: FieldValues) => {
     console.log(data)
     const submit_data = Object.assign({}, data)
@@ -63,6 +65,19 @@ const Container = () => {
         submit_data.ligand_file_ids = receptorList.map((item: any) => item.id).join(',')
       }
     }
+    setGlobalSubmitLoading(true)
+    try {
+      const res: any = await submitGlobalDockingTask(submit_data)
+      setGlobalResult(res.result)
+      setGlobalSubmitLoading(false)
+      notify({ type: 'success', message: 'Task parsing successful' })
+      if (res.result)
+        setMode(DockingModeEnum.result)
+    }
+    catch (error) {
+      setGlobalResult('')
+      setGlobalSubmitLoading(false)
+    }
     console.log(submit_data)
   }
   const handlePocketSubmit = async (data: FieldValues) => {
@@ -70,7 +85,6 @@ const Container = () => {
     setSubmitLoading(true)
     try {
       const res: any = await submitDockingTask(data)
-      console.log(res)
       setResult(res.result)
       setSubmitLoading(false)
       notify({ type: 'success', message: 'Task parsing successful' })
@@ -95,9 +109,9 @@ const Container = () => {
     if (strategy === DockingStrategyEnum.global) {
       return <>
         <GlobalInputContext.Provider value={{ globalReceptorFileList, setGlobalReceptorFileList, globalLigandFileList, setGlobalLigandFileList, StrategyMap, strategy, setStrategy, addGlobalLigandResultFileList }}>
-          <GlobalInput onSubmit={handleGlobalSubmit} onReset={handleReset} isDisabled={!(DockingModeEnum.input === mode)} />
+          <GlobalInput onSubmit={handleGlobalSubmit} onReset={handleReset} submitLoading={globalSubmitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </GlobalInputContext.Provider>
-        <GlobalResultContext.Provider value={{ receptorFileList: globalReceptorFileList, setReceptorFileList: setGlobalReceptorFileList, ligandFileList: globalLigandFileList, setLigandFileList: setGlobalLigandFileList, getLigandResultFileById: getGlobalLigandResultFileById }}>
+        <GlobalResultContext.Provider value={{ receptorFileList: globalReceptorFileList, resultData: globalResult, setReceptorFileList: setGlobalReceptorFileList, ligandFileList: globalLigandFileList, setLigandFileList: setGlobalLigandFileList, getLigandResultFileById: getGlobalLigandResultFileById }}>
           <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
         </GlobalResultContext.Provider>
 

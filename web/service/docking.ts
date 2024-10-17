@@ -18,3 +18,7 @@ export const GlobalUpload = (formData: any, source = 'fasta') => {
     data: formData,
   }, false, `/global-docking/files/upload?source=${source}`)
 }
+
+export const submitGlobalDockingTask = (data: any) => {
+  return post('/global-docking/task', { body: data })
+}

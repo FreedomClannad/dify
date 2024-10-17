@@ -20,7 +20,7 @@ const Receptor = () => {
   const [mode, setMode] = useState<Mode>(Mode.input)
   const accept = Object.keys(formats).map(key => `.${key}`).join(',')
   const { globalReceptorFileList, setGlobalReceptorFileList } = useContext(GlobalInputContext)
-  const { register, setValue, errors } = useContext(GlobalFormContext)
+  const { setValue, errors } = useContext(GlobalFormContext)
   const [inputValue, setInputValue] = useState<string>('')
   useEffect(() => {
     setValue('receptor_value', inputValue)

@@ -2,6 +2,7 @@ import { createContext } from 'react'
 import type { FileItem } from '@/models/datasets'
 import type { DockingResultFile } from '@/types/docking'
 type GlobalOutputContextType = {
+  resultData: string
   receptorFileList: FileItem[]
   setReceptorFileList: (files: FileItem[]) => void
   ligandFileList: FileItem[]
@@ -10,6 +11,7 @@ type GlobalOutputContextType = {
 }
 
 export const GlobalResultContext = createContext <GlobalOutputContextType> ({
+  resultData: '',
   receptorFileList: [],
   setReceptorFileList: () => {},
   ligandFileList: [],
