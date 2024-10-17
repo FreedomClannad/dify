@@ -14,7 +14,15 @@ import Receptor from '@/app/(commonLayout)/utility/docking/Global/Input/Receptor
 import Ligand from '@/app/(commonLayout)/utility/docking/Global/Input/Ligand'
 const GlobalInputFormSchema = z.object({
   task_name: z.string().min(1, { message: 'Please enter a task name' }),
-})
+  receptor_value: z.string().optional(),
+  fasta_file_id: z.string().optional(),
+  ligand_value: z.string().optional(),
+  ligand_file_ids: z.string().optional(),
+}).refine((data) => {
+  return data.receptor_value || data.fasta_file_id
+}, { message: 'Please enter or upload the file', path: ['receptor_value'] }).refine((data) => {
+  return data.ligand_value || data.ligand_file_ids
+}, { message: 'Please enter or upload the file', path: ['ligand_value'] })
 
 export type GlobalInputFormValues = z.infer<typeof GlobalInputFormSchema>
 
@@ -29,6 +37,10 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset }: Props) => {
     resolver: zodResolver(GlobalInputFormSchema),
     defaultValues: {
       task_name: 'Global Docking',
+      receptor_value: '',
+      fasta_file_id: '',
+      ligand_value: '',
+      ligand_file_ids: '',
     },
   })
   const { StrategyMap, strategy, setStrategy } = useContext(GlobalInputContext)

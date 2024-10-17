@@ -1,9 +1,12 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Radio, RadioGroup } from '@nextui-org/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import type { FileItem } from '@/models/datasets'
 import UploadCard from '@/app/components/upload/upload-card'
-import { GlobalInputContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
+import {
+  GlobalFormContext,
+  GlobalInputContext,
+} from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
 import InputUpload from '@/app/(commonLayout)/utility/docking/InputUpload'
 enum Mode {
   upload = 'upload',
@@ -17,27 +20,25 @@ const Receptor = () => {
   const [mode, setMode] = useState<Mode>(Mode.input)
   const accept = Object.keys(formats).map(key => `.${key}`).join(',')
   const { globalReceptorFileList, setGlobalReceptorFileList } = useContext(GlobalInputContext)
+  const { register, setValue, errors } = useContext(GlobalFormContext)
+  const [inputValue, setInputValue] = useState<string>('')
+  useEffect(() => {
+    setValue('receptor_value', inputValue)
+  }, [inputValue])
   const InputContent = () => {
     return <>
-      <InputUpload accept={accept} placeholder="Enter protein sequence"/>
+      <InputUpload value={inputValue} setValue={setInputValue} accept={accept} placeholder="Enter protein sequence"/>
     </>
   }
   const UploadContent = () => {
     return <>
-      <UploadCard uploadURL="" accept={accept} fileList={globalReceptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+      <UploadCard uploadURL="/global-docking/files/upload?source=fasta" accept={accept} fileList={globalReceptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
         const n_list = list.map((item) => {
           if (item.fileID === fileItem.fileID) {
-            const file = item.file
-            const { id, mime_type, extension } = file
-
-            if (id && mime_type) {
-              // setValue('pdb_file_id', id)
-              const format = formats[extension as keyof typeof formats] || 'mmcif'
-              // TODO 屏蔽向后端请求中心点坐标
-              // getCenterPosition(id).then((res) => {
-              //   const { center_x, center_y, center_z, residue_number, chain } = res
-              //   setCenterPosition({ x: center_x, y: center_y, z: center_z, num: residue_number.toString(), chain })
-              // })
+            const files = item.file
+            if (Array.isArray(files)) {
+              const file = files[0]
+              setValue('fasta_file_id', file.id)
             }
             return {
               ...item,
@@ -73,6 +74,9 @@ const Receptor = () => {
         <div>
           {mode === Mode.input && <div className="mt-3">{InputContent()}</div>}
           {mode === Mode.upload && <div className="mt-3">{UploadContent()}</div>}
+          {
+            (errors.receptor_value) ? <><span className='text-red-500 mt-2'>{errors.receptor_value?.message}</span></> : null
+          }
         </div>
       </div>
     </VerticalTitleCard>

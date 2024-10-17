@@ -65,6 +65,7 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
   }
 
   const firstFile = useMemo(() => {
+    console.log(fileList[0])
     if (fileList.length === 0)
       return null
     return fileList[0]
@@ -190,6 +191,14 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
       dropRef.current?.removeEventListener('drop', handleDrop)
     }
   }, [handleDrop])
+  const firstName = useMemo(() => {
+    const file = firstFile?.file
+    if (!file)
+      return ''
+    if (Array.isArray(file))
+      return file[0].name
+    return file?.name
+  }, [firstFile])
   return <>
     <div ref={dropRef}>
       <input className="hidden " type="file" accept={accept} ref={fileUploader} onChange={fileChangeHandle} multiple={multiple}></input>
@@ -225,7 +234,7 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
                     <div className="flex flex-1 items-center">
                       <div className='w-5 h-5  text-xs'><DocumentTextIcon/></div>
                       <span
-                        className="text-sm ml-3 flex-1 overflow-x-hidden whitespace-nowrap text-ellipsis max-w-[270px]">{firstFile.file.name}</span>
+                        className="text-sm ml-3 flex-1 overflow-x-hidden whitespace-nowrap text-ellipsis max-w-[270px]">{firstName}</span>
                     </div>
 
                     <div className='w-4 h-4  text-xs' onClick={(e: MouseEvent) => {

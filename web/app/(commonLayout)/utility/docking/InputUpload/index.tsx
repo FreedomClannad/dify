@@ -1,10 +1,12 @@
 import { Textarea } from '@nextui-org/react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useContext as useContextNotify } from 'use-context-selector'
 import { useTranslation } from 'react-i18next'
 import type { CustomFile as File } from '@/models/datasets'
 import { ToastContext } from '@/app/components/base/toast'
 type Props = {
+  value: string
+  setValue: (value: string) => void
   accept?: string
   placeholder?: string
 }
@@ -12,9 +14,8 @@ const fileUploadConfig = {
   file_size_limit: 15,
   batch_count_limit: 5,
 }
-const InputUpload = ({ accept, placeholder }: Props) => {
+const InputUpload = ({ value, setValue, accept, placeholder }: Props) => {
   const { t } = useTranslation()
-  const [value, setValue] = useState<string>('')
   const dropRef = useRef<HTMLDivElement>(null)
   const { notify } = useContextNotify(ToastContext)
   const getFileType = (currentFile: File) => {

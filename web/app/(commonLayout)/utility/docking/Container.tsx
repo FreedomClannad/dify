@@ -7,7 +7,7 @@ import type { CenterPosition } from '@/types/docking'
 import { DockingModeEnum, DockingStrategyEnum } from '@/types/docking'
 import cn from '@/utils/classnames'
 import { ToastContext } from '@/app/components/base/toast'
-import { submitDockingTask } from '@/service/docking'
+import { GlobalUpload, submitDockingTask } from '@/service/docking'
 import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
 import useReceptor from '@/app/(commonLayout)/utility/docking/hooks/useReceptor'
 import useLigand from '@/app/(commonLayout)/utility/docking/hooks/useLigand'
@@ -23,6 +23,7 @@ import GlobalInput from '@/app/(commonLayout)/utility/docking/Global/Input'
 import useGlobalReceptor from '@/app/(commonLayout)/utility/docking/Global/hooks/useGlobalReceptor'
 import useGlobalLigand from '@/app/(commonLayout)/utility/docking/Global/hooks/useGlobalLigand'
 import GlobalResult from '@/app/(commonLayout)/utility/docking/Global/Result'
+
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -42,6 +43,26 @@ const Container = () => {
   const { globalLigandFileList, setGlobalLigandFileList } = useGlobalLigand()
   const handleGlobalSubmit = async (data: FieldValues) => {
     console.log(data)
+    const submit_data = Object.assign({}, data)
+    if (data.receptor_value) {
+      const n_form = new FormData()
+      n_form.append('file_content', data.receptor_value)
+      const receptorList = await GlobalUpload(n_form, 'fasta')
+      if (receptorList.length > 0) {
+        // 遍历数组，将id拼接成字符串
+        submit_data.fasta_file_id = receptorList.map((item: any) => item.id).join(',')
+      }
+    }
+    if (data.ligand_value) {
+      const n_form = new FormData()
+      n_form.append('file_content', data.ligand_value)
+      const receptorList = await GlobalUpload(n_form, 'ligand')
+      if (receptorList.length > 0) {
+        // 遍历数组，将id拼接成字符串
+        submit_data.ligand_file_ids = receptorList.map((item: any) => item.id).join(',')
+      }
+    }
+    console.log(submit_data)
   }
   const handlePocketSubmit = async (data: FieldValues) => {
     console.log(data)
