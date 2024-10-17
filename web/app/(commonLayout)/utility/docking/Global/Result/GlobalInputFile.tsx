@@ -33,26 +33,26 @@ const GlobalInputFile = () => {
   const receptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
     receptorFileList.map((item) => {
-      const file = item.file
-      if (Array.isArray(file)) {
-        file.map((fileItem) => {
-          n_list.push({
-            fileID: fileItem.id,
-            name: fileItem.name,
-            visible: false,
-          })
-          return fileItem
-        })
+      const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
+      if (docking) {
+        n_list.push({
+          fileID: item.fileID,
+          name: item.file.name,
+          visible: docking.visible,
+        },
+        )
       }
       else {
-        const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
-        if (docking) {
-          n_list.push({
-            fileID: item.fileID,
-            name: item.file.name,
-            visible: docking.visible,
-          },
-          )
+        const file = item.file
+        if (Array.isArray(file)) {
+          file.map((fileItem) => {
+            n_list.push({
+              fileID: fileItem.id,
+              name: fileItem.name,
+              visible: false,
+            })
+            return fileItem
+          })
         }
       }
 
@@ -63,25 +63,39 @@ const GlobalInputFile = () => {
   const ligandVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
     ligandFileList.map((item) => {
+      console.log(item)
+      console.log(dockingMolstarList)
       const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
-      const file = item.file
-      if (Array.isArray(file)) {
-        file.map((fileItem) => {
-          n_list.push({
-            fileID: fileItem.id,
-            name: fileItem.name,
-            visible: false,
-          })
-          return fileItem
-        })
-      }
-      else if (docking) {
+      console.log(docking)
+      const fileList = item.file
+      if (docking) {
         n_list.push({
           fileID: item.fileID,
           name: item.file.name,
           visible: docking.visible,
         },
         )
+      }
+      else if (Array.isArray(fileList)) {
+        fileList.map((fileItem) => {
+          const docking = dockingMolstarList.find(dockingItem => dockingItem.id === fileItem.id)
+          if (docking) {
+            n_list.push({
+              fileID: fileItem.id,
+              name: fileItem.name,
+              visible: docking.visible,
+            })
+          }
+          else {
+            n_list.push({
+              fileID: fileItem.id,
+              name: fileItem.name,
+              visible: false,
+            })
+          }
+
+          return fileItem
+        })
       }
       else {
         n_list.push({
@@ -103,6 +117,7 @@ const GlobalInputFile = () => {
   }
 
   const handleLigandClick = (dockingFile: DockingUploadFile) => {
+    console.log(dockingFile)
     const dockingResultFile = getLigandResultFileById(dockingFile.fileID)
     console.log(dockingResultFile)
     if (dockingResultFile) {

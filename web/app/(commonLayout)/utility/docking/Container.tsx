@@ -41,7 +41,7 @@ const Container = () => {
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   // Global
   const { globalReceptorFileList, setGlobalReceptorFileList } = useGlobalReceptor()
-  const { globalLigandFileList, setGlobalLigandFileList } = useGlobalLigand()
+  const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList, getGlobalLigandResultFileById } = useGlobalLigand()
   const handleGlobalSubmit = async (data: FieldValues) => {
     console.log(data)
     const submit_data = Object.assign({}, data)
@@ -94,10 +94,10 @@ const Container = () => {
   const Content = () => {
     if (strategy === DockingStrategyEnum.global) {
       return <>
-        <GlobalInputContext.Provider value={{ globalReceptorFileList, setGlobalReceptorFileList, globalLigandFileList, setGlobalLigandFileList, StrategyMap, strategy, setStrategy }}>
+        <GlobalInputContext.Provider value={{ globalReceptorFileList, setGlobalReceptorFileList, globalLigandFileList, setGlobalLigandFileList, StrategyMap, strategy, setStrategy, addGlobalLigandResultFileList }}>
           <GlobalInput onSubmit={handleGlobalSubmit} onReset={handleReset} isDisabled={!(DockingModeEnum.input === mode)} />
         </GlobalInputContext.Provider>
-        <GlobalResultContext.Provider value={{ receptorFileList: globalReceptorFileList, setReceptorFileList: setGlobalReceptorFileList, ligandFileList: globalLigandFileList, setLigandFileList: setGlobalLigandFileList, getLigandResultFileById }}>
+        <GlobalResultContext.Provider value={{ receptorFileList: globalReceptorFileList, setReceptorFileList: setGlobalReceptorFileList, ligandFileList: globalLigandFileList, setLigandFileList: setGlobalLigandFileList, getLigandResultFileById: getGlobalLigandResultFileById }}>
           <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
         </GlobalResultContext.Provider>
 

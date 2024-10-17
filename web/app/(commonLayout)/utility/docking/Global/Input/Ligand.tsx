@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { Radio, RadioGroup } from '@nextui-org/react'
+import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import type { FileItem } from '@/models/datasets'
 import UploadCard from '@/app/components/upload/upload-card'
@@ -8,17 +9,18 @@ import {
   GlobalInputContext,
 } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
 import InputUpload from '@/app/(commonLayout)/utility/docking/InputUpload'
+import { formats } from '@/app/(commonLayout)/utility/docking/Input/commin'
 enum Mode {
   upload = 'upload',
   input = 'input',
 }
-const formats = {
+const acceptFormats = {
   txt: 'txt',
 }
 const Ligand = () => {
   const [mode, setMode] = useState<Mode>(Mode.input)
-  const accept = Object.keys(formats).map(key => `.${key}`).join(',')
-  const { globalLigandFileList, setGlobalLigandFileList } = useContext(GlobalInputContext)
+  const accept = Object.keys(acceptFormats).map(key => `.${key}`).join(',')
+  const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList } = useContext(GlobalInputContext)
   const { setValue, errors } = useContext(GlobalFormContext)
   const [inputValue, setInputValue] = useState<string>('')
   useEffect(() => {
@@ -34,9 +36,14 @@ const Ligand = () => {
       <UploadCard uploadURL="/global-docking/files/upload?source=ligand" accept={accept} fileList={globalLigandFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
         const n_list = list.map((item) => {
           if (item.fileID === fileItem.fileID) {
-            const files = item.file
-            if (Array.isArray(files)) {
-              const ids = files.map((item: any) => item.id).join(',')
+            const fileList = item.file
+            if (Array.isArray(fileList)) {
+              const ids = fileList.map((item: any) => {
+                const { id, mime_type, extension } = item
+                const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
+                addGlobalLigandResultFileList({ fileID: id, id, mime_type, extension: format })
+                return item.id
+              }).join(',')
               setValue('ligand_file_ids', ids)
             }
             return {

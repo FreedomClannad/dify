@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import type { FieldError, FieldValues, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import type { StrategyMapType } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
 import { StrategyMap } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
-import { DockingStrategyEnum } from '@/types/docking'
+import { type DockingResultFile, DockingStrategyEnum } from '@/types/docking'
 import type { GlobalInputFormValues } from '@/app/(commonLayout)/utility/docking/Global/Input'
 import type { FileItem } from '@/models/datasets'
 
@@ -11,6 +11,7 @@ type GlobalInputContextType = {
   setGlobalReceptorFileList: (receptorFileList: FileItem[]) => void
   globalLigandFileList: FileItem[]
   setGlobalLigandFileList: (receptorFileList: FileItem[]) => void
+  addGlobalLigandResultFileList: (file: DockingResultFile) => void
   StrategyMap: StrategyMapType
   strategy: DockingStrategyEnum
   setStrategy: (strategy: DockingStrategyEnum) => void
@@ -21,6 +22,7 @@ export const GlobalInputContext = createContext<GlobalInputContextType>({
   setGlobalReceptorFileList: (globalReceptorFileList: FileItem[]) => {},
   globalLigandFileList: [],
   setGlobalLigandFileList: (globalReceptorFileList: FileItem[]) => {},
+  addGlobalLigandResultFileList: (file: DockingResultFile) => {},
   StrategyMap,
   strategy: DockingStrategyEnum.global,
   setStrategy: (strategy: DockingStrategyEnum) => {},
