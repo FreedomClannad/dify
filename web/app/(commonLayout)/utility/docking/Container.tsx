@@ -23,6 +23,7 @@ import GlobalInput from '@/app/(commonLayout)/utility/docking/Global/Input'
 import useGlobalReceptor from '@/app/(commonLayout)/utility/docking/Global/hooks/useGlobalReceptor'
 import useGlobalLigand from '@/app/(commonLayout)/utility/docking/Global/hooks/useGlobalLigand'
 import GlobalResult from '@/app/(commonLayout)/utility/docking/Global/Result'
+import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalOutputContext'
 
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
@@ -96,7 +97,10 @@ const Container = () => {
         <GlobalInputContext.Provider value={{ globalReceptorFileList, setGlobalReceptorFileList, globalLigandFileList, setGlobalLigandFileList, StrategyMap, strategy, setStrategy }}>
           <GlobalInput onSubmit={handleGlobalSubmit} onReset={handleReset} isDisabled={!(DockingModeEnum.input === mode)} />
         </GlobalInputContext.Provider>
-        <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
+        <GlobalResultContext.Provider value={{ receptorFileList: globalReceptorFileList, setReceptorFileList: setGlobalReceptorFileList, ligandFileList: globalLigandFileList, setLigandFileList: setGlobalLigandFileList, getLigandResultFileById }}>
+          <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
+        </GlobalResultContext.Provider>
+
       </>
     }
 
