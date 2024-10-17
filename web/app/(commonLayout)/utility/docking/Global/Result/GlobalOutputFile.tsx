@@ -45,7 +45,7 @@ const GlobalOutputFile = () => {
       setTable(table)
       table.forEach((item) => {
         if (item.visible) {
-          loadStructureFromData(item.mol, 'mol')
+          loadStructureFromData(item.mol, 'mmcif')
           addStructure({ id: item.id, visible: item.visible })
         }
       })
@@ -61,7 +61,7 @@ const GlobalOutputFile = () => {
         setStructureVisibility({
           dockingMolstar: { id: item.id, visible },
           addCallback: () => {
-            loadStructureFromData(item.mol, 'mol')
+            loadStructureFromData(item.mol, 'mmcif')
           },
         })
         return { ...item, visible }

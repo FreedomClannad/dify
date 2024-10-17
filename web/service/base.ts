@@ -16,7 +16,7 @@ import type {
   WorkflowStartedResponse,
 } from '@/types/workflow'
 import { removeAccessToken } from '@/app/components/share/utils'
-const TIME_OUT = 100000
+const TIME_OUT = 1000000
 
 const ContentType = {
   json: 'application/json',

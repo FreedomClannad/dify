@@ -2,6 +2,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useContext as useContext1 } from 'use-context-selector'
 import type { FieldValues } from 'react-hook-form'
+import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import style from './Container.module.css'
 import type { CenterPosition } from '@/types/docking'
 import { DockingModeEnum, DockingStrategyEnum } from '@/types/docking'
@@ -24,6 +25,7 @@ import useGlobalReceptor from '@/app/(commonLayout)/utility/docking/Global/hooks
 import useGlobalLigand from '@/app/(commonLayout)/utility/docking/Global/hooks/useGlobalLigand'
 import GlobalResult from '@/app/(commonLayout)/utility/docking/Global/Result'
 import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalOutputContext'
+import { formats } from '@/app/(commonLayout)/utility/docking/Input/commin'
 
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
@@ -40,14 +42,13 @@ const Container = () => {
   const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   // Global
-  const { globalReceptorFileList, setGlobalReceptorFileList } = useGlobalReceptor()
-  const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList, getGlobalLigandResultFileById } = useGlobalLigand()
+  const { globalReceptorFileList, setGlobalReceptorFileList, clearGlobalReceptorFileList } = useGlobalReceptor()
+  const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList, getGlobalLigandResultFileById, clearGlobalLigandFileList } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
   const [globalResult, setGlobalResult] = useState<string>('')
   const handleGlobalSubmit = async (data: FieldValues) => {
-    console.log(data)
     const submit_data = Object.assign({}, data)
-    if (data.receptor_value) {
+    if (data.receptor_mode === 'input') {
       const n_form = new FormData()
       n_form.append('file_content', data.receptor_value)
       const receptorList = await GlobalUpload(n_form, 'fasta')
@@ -56,13 +57,18 @@ const Container = () => {
         submit_data.fasta_file_id = receptorList.map((item: any) => item.id).join(',')
       }
     }
-    if (data.ligand_value) {
+    if (data.ligand_mode === 'input') {
       const n_form = new FormData()
       n_form.append('file_content', data.ligand_value)
       const receptorList = await GlobalUpload(n_form, 'ligand')
       if (receptorList.length > 0) {
         // 遍历数组，将id拼接成字符串
-        submit_data.ligand_file_ids = receptorList.map((item: any) => item.id).join(',')
+        submit_data.ligand_file_ids = receptorList.map((item: any) => {
+          const { id, mime_type, extension } = item
+          const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
+          addGlobalLigandResultFileList({ fileID: id, id, mime_type, extension: format })
+          return item.id
+        }).join(',')
       }
     }
     setGlobalSubmitLoading(true)
@@ -104,6 +110,10 @@ const Container = () => {
     clearLigandFileList()
     clearCropReceptorList()
     setResult('')
+
+    clearGlobalReceptorFileList()
+    clearGlobalLigandFileList()
+    setGlobalResult('')
   }
   const Content = () => {
     if (strategy === DockingStrategyEnum.global) {

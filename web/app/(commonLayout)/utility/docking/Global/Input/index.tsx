@@ -14,6 +14,8 @@ import Receptor from '@/app/(commonLayout)/utility/docking/Global/Input/Receptor
 import Ligand from '@/app/(commonLayout)/utility/docking/Global/Input/Ligand'
 const GlobalInputFormSchema = z.object({
   task_name: z.string().min(1, { message: 'Please enter a task name' }),
+  receptor_mode: z.string(),
+  ligand_mode: z.string(),
   receptor_value: z.string().optional(),
   fasta_file_id: z.string().optional(),
   ligand_value: z.string().optional(),
@@ -44,6 +46,8 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset, submitLoading = fa
       ligand_value: '',
       ligand_file_ids: '',
       out_pose_num: 10,
+      receptor_mode: 'input',
+      ligand_mode: 'input',
     },
   })
   const { StrategyMap, strategy, setStrategy } = useContext(GlobalInputContext)
@@ -62,7 +66,10 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset, submitLoading = fa
             {contentList.map((content, index) => <div key={`Global-input-form-${index}`} className="mt-4">{content}</div>)}
           </GlobalFormContext.Provider>
         </div>
-        <SubmitButton onReset={onReset} runLoading={submitLoading}/>
+        <SubmitButton onReset={() => {
+          reset()
+          onReset()
+        }} runLoading={submitLoading}/>
       </form>
     </div>
   </>

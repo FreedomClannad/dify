@@ -66,6 +66,7 @@ const Receptor = () => {
         <div>
           <RadioGroup value={mode} onValueChange={(value) => {
             setMode(value as Mode)
+            setValue('receptor_mode', value)
           }} orientation="horizontal">
             <Radio size="sm" value={Mode.input}>Enter protein sequence</Radio>
             <Radio size="sm" className="ml-2" value={Mode.upload}>Upload file</Radio>

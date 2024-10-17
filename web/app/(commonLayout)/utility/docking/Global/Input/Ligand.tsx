@@ -72,6 +72,7 @@ const Ligand = () => {
         <div>
           <RadioGroup value={mode} onValueChange={(value) => {
             setMode(value as Mode)
+            setValue('ligand_mode', value)
           }} orientation="horizontal">
             <Radio size="sm" value={Mode.input}>Enter SMILES string</Radio>
             <Radio size="sm" className="ml-2" value={Mode.upload}>Upload file</Radio>
