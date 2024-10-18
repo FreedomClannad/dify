@@ -56,6 +56,15 @@ const useGlobalReceptor = () => {
       return [...prev]
     })
   }
+  // 更新
+  const updateGlobalReceptorInputFile = (dockingInputFile: DockingInputFile) => {
+    setGlobalReceptorInputFileList((prev) => {
+      const index = prev.findIndex(item => item.id === dockingInputFile.id)
+      if (index !== -1)
+        prev[index] = { ...prev[index], ...dockingInputFile }
+      return [...prev]
+    })
+  }
   // 清除
   const clearGlobalReceptorInputFile = () => {
     setGlobalReceptorInputFileList([])
@@ -89,6 +98,7 @@ const useGlobalReceptor = () => {
     // 控制显示Result Input File
     globalReceptorInputFileList,
     addGlobalReceptorInputFile,
+    updateGlobalReceptorInputFile,
     clearGlobalReceptorInputFile,
     visibleGlobalReceptorInputFile,
 

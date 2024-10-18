@@ -64,6 +64,7 @@ const Container = () => {
     deleteGlobalLigandUploadResult,
     clearGlobalLigandUploadResultFileList,
     getGlobalLigandUploadResultFile,
+    updateGlobalLigandInputFile,
   } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
   const [globalResult, setGlobalResult] = useState<string>('')
@@ -105,7 +106,7 @@ const Container = () => {
           const { id, name, mime_type, extension } = item
           const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
           addGlobalLigandUploadResultFileList({ fileID: id, id, mime_type, extension: format })
-          addGlobalLigandInputFile({ id, name, visible: true, display: true })
+          addGlobalLigandInputFile({ id, name, visible: false, display: true })
           return item.id
         }).join(',')
       }
@@ -117,7 +118,7 @@ const Container = () => {
         const dockingResultFile = getGlobalLigandUploadResultFile(index)
         if (dockingResultFile) {
           const { id, name = '' } = dockingResultFile
-          addGlobalLigandInputFile({ id, name, visible: true, display: true })
+          addGlobalLigandInputFile({ id, name, visible: false, display: true })
         }
       })
     }
@@ -196,6 +197,8 @@ const Container = () => {
             resultData: globalResult,
             globalReceptorInputFileList,
             globalLigandInputFileList,
+            getGlobalLigandUploadResultFile,
+            updateGlobalLigandInputFile,
           }}>
           <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
         </GlobalResultContext.Provider>

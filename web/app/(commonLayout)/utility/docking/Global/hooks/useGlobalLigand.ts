@@ -57,6 +57,15 @@ const useGlobalLigand = () => {
       return [...prev]
     })
   }
+  // 更新
+  const updateGlobalLigandInputFile = (dockingInputFile: DockingInputFile) => {
+    setGlobalLigandInputFileList((prev) => {
+      const index = prev.findIndex(item => item.id === dockingInputFile.id)
+      if (index !== -1)
+        prev[index] = { ...prev[index], ...dockingInputFile }
+      return [...prev]
+    })
+  }
   // 清除
   const clearGlobalLigandInputFile = () => {
     setGlobalLigandInputFileList([])
@@ -84,6 +93,7 @@ const useGlobalLigand = () => {
     // 上传文件结果
     globalLigandUploadResultFileList,
     addGlobalLigandUploadResultFileList,
+    updateGlobalLigandInputFile,
     clearGlobalLigandUploadResultFileList,
     getGlobalLigandUploadResultFile,
     deleteGlobalLigandUploadResult,
