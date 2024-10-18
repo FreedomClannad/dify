@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 // import { data } from './data'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/Result/context'
+import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getUUID } from '@/utils'
 export type TableType = {

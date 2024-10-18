@@ -11,7 +11,7 @@ import ReceptorFile from '@/app/(commonLayout)/utility/docking/Pocket/Input/Rece
 import Constraints from '@/app/(commonLayout)/utility/docking/Pocket/Input/Constraints'
 import LigandFile from '@/app/(commonLayout)/utility/docking/Pocket/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/utility/docking/Pocket/Input/OutPose'
-import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Pocket/Input/context'
+import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketInputContext'
 import './index.css'
 type Props = {
   isDisabled?: boolean
