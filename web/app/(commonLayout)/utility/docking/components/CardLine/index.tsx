@@ -10,7 +10,7 @@ const CardLine = (props: CardType) => {
   return <>
     <div className="flex w-full h-[32px] justify-between text-gray-1006">
       <div className="flex items-center w-[90%]">
-        <div className='w-5 h-5  text-xs text-gray-1005'><DocumentTextIcon/></div>
+        <div className='w-5 h-5 min-w-5  text-xs text-gray-1005'><DocumentTextIcon/></div>
         <Tooltip content={name}>
           <div className='ml-2 whitespace-nowrap overflow-hidden text-ellipsis'>{name}</div>
         </Tooltip>

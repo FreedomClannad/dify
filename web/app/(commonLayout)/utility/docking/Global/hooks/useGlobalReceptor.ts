@@ -17,15 +17,15 @@ const useGlobalReceptor = () => {
   // 增加返回结果
   const addGlobalReceptorUploadResult = (dockingResultFile: DockingResultFile) => {
     // 如果已经存在，则更新，如果没有则新增
-    const newList = globalReceptorUploadResultList.map((item) => {
-      if (item.id === dockingResultFile.id)
-        return dockingResultFile
-      return item
+    setGlobalReceptorUploadResultList((prev) => {
+      const index = prev.findIndex(item => item.id === dockingResultFile.id)
+      if (index !== -1)
+        prev[index] = dockingResultFile
+      else
+        prev.push(dockingResultFile)
+
+      return [...prev]
     })
-    if (!newList.find(item => item.id === dockingResultFile.id))
-      newList.push(dockingResultFile)
-    console.log(newList)
-    setGlobalReceptorUploadResultList(newList)
   }
 
   // 删除结果
@@ -41,21 +41,24 @@ const useGlobalReceptor = () => {
 
   // 根据传入的ID获取到返回结果内容
   const getGlobalReceptorResultFile = (id: string): DockingResultFile | undefined => {
-    console.log(globalReceptorUploadResultList)
     return globalReceptorUploadResultList.find(item => item.id === id)
   }
 
   // 控制显示Result Input File
   // 增加Result Input 的数据
   const addGlobalReceptorInputFile = (dockingInputFile: DockingInputFile) => {
-    const newList = globalReceptorInputFileList.map((item) => {
-      if (item.id === dockingInputFile.id)
-        return dockingInputFile
-      return item
+    setGlobalReceptorInputFileList((prev) => {
+      const index = prev.findIndex(item => item.id === dockingInputFile.id)
+      if (index !== -1)
+        prev[index] = dockingInputFile
+      else
+        prev.push(dockingInputFile)
+      return [...prev]
     })
-    if (!newList.find(item => item.id === dockingInputFile.id))
-      newList.push(dockingInputFile)
-    setGlobalReceptorInputFileList(newList)
+  }
+  // 清除
+  const clearGlobalReceptorInputFile = () => {
+    setGlobalReceptorInputFileList([])
   }
   // 控制显示Result Input的是否显示3D结构
   const visibleGlobalReceptorInputFile = (id: string, visible: boolean) => {
@@ -86,6 +89,7 @@ const useGlobalReceptor = () => {
     // 控制显示Result Input File
     globalReceptorInputFileList,
     addGlobalReceptorInputFile,
+    clearGlobalReceptorInputFile,
     visibleGlobalReceptorInputFile,
 
   }

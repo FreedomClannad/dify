@@ -52,6 +52,7 @@ const Container = () => {
     deleteGlobalReceptorUploadResult,
     clearGlobalReceptorUploadResultList,
     addGlobalReceptorInputFile,
+    clearGlobalReceptorInputFile,
   } = useGlobalReceptor()
   const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList, getGlobalLigandResultFileById, clearGlobalLigandFileList } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
@@ -59,6 +60,7 @@ const Container = () => {
   // 全局对接提交
   const handleGlobalSubmit = async (data: FieldValues) => {
     const submit_data = Object.assign({}, data)
+    clearGlobalReceptorInputFile()
     // receptor 为输入模式
     if (data.receptor_mode === 'input') {
       const n_form = new FormData()
