@@ -22,9 +22,13 @@ const GlobalInputFormSchema = z.object({
   ligand_file_ids: z.string().optional(),
   out_pose_num: z.number(),
 }).refine((data) => {
-  return data.receptor_value || data.fasta_file_id
+  if (data.receptor_mode === 'input' && !data.receptor_value)
+    return false
+  return !(data.receptor_mode === 'upload' && !data.fasta_file_id)
 }, { message: 'Please enter or upload the file', path: ['receptor_value'] }).refine((data) => {
-  return data.ligand_value || data.ligand_file_ids
+  if (data.ligand_mode === 'input' && !data.ligand_value)
+    return false
+  return !(data.ligand_mode === 'upload' && !data.ligand_file_ids)
 }, { message: 'Please enter or upload the file', path: ['ligand_value'] })
 
 export type GlobalInputFormValues = z.infer<typeof GlobalInputFormSchema>
