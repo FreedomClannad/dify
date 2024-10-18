@@ -5,7 +5,7 @@ import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getUUID } from '@/utils'
-import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalOutputContext'
+import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalOutputContext'
 export type TableType = {
   id: string
   mode: number

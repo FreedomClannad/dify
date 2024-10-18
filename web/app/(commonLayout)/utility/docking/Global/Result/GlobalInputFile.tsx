@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalOutputContext'
+import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalOutputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
 import type { DockingInputFile } from '@/types/docking'

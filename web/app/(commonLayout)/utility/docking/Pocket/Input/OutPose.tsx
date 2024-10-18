@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-import { FormContext } from '@/app/(commonLayout)/utility/docking/Input/context'
+import { FormContext } from '@/app/(commonLayout)/utility/docking/Pocket/Input/context'
 
 const OutPose = () => {
   const { register, errors } = useContext(FormContext)

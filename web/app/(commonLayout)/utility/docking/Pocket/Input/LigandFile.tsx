@@ -4,7 +4,7 @@ import { formats } from './commin'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
-import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
+import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Pocket/Input/context'
 const LigandFile = () => {
   const { ligandFileList, setLigandFileList, addLigandResultFileList } = useContext(InputContext)
   // const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)

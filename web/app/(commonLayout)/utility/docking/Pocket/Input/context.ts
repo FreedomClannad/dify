@@ -3,7 +3,7 @@ import type { FieldError, FieldValues, UseFormGetValues, UseFormRegister, UseFor
 import { DockingStrategyEnum } from '@/types/docking'
 import type { CenterPosition, DockingResultFile } from '@/types/docking'
 import type { FileItem } from '@/models/datasets'
-import type { DockingFormValues } from '@/app/(commonLayout)/utility/docking/Input/InputForm'
+import type { DockingFormValues } from '@/app/(commonLayout)/utility/docking/Pocket/Input/InputForm'
 import type { StrategyMapType } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
 import { StrategyMap } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
 

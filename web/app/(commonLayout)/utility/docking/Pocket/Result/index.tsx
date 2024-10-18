@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import './index.css'
-import DockingInputFile from '@/app/(commonLayout)/utility/docking/Result/DockingInputFile'
-import DockingOutputFile from '@/app/(commonLayout)/utility/docking/Result/DockingOutputFile'
+import DockingInputFile from '@/app/(commonLayout)/utility/docking/Pocket/Result/DockingInputFile'
+import DockingOutputFile from '@/app/(commonLayout)/utility/docking/Pocket/Result/DockingOutputFile'
 type ResultProps = {
   isDisabled?: boolean
 }

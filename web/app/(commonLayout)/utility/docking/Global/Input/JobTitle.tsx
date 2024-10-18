@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-import { GlobalFormContext } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
+import { GlobalFormContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalInputContext'
 
 const JobTitle = () => {
   const { register, errors } = useContext(GlobalFormContext)

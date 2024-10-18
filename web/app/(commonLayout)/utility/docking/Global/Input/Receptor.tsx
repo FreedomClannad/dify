@@ -7,7 +7,7 @@ import UploadCard from '@/app/components/upload/upload-card'
 import {
   GlobalFormContext,
   GlobalInputContext,
-} from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
+} from '@/app/(commonLayout)/utility/docking/Global/context/GlobalInputContext'
 enum Mode {
   upload = 'upload',
   input = 'input',

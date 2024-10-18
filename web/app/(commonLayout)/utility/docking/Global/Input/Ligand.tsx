@@ -8,8 +8,8 @@ import UploadCard from '@/app/components/upload/upload-card'
 import {
   GlobalFormContext,
   GlobalInputContext,
-} from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
-import { formats } from '@/app/(commonLayout)/utility/docking/Input/commin'
+} from '@/app/(commonLayout)/utility/docking/Global/context/GlobalInputContext'
+import { formats } from '@/app/(commonLayout)/utility/docking/Pocket/Input/commin'
 enum Mode {
   upload = 'upload',
   input = 'input',

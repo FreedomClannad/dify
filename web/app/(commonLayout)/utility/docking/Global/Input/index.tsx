@@ -8,7 +8,7 @@ import SubmitButton from '../../components/SubmitButton'
 import {
   GlobalFormContext,
   GlobalInputContext,
-} from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
+} from '@/app/(commonLayout)/utility/docking/Global/context/GlobalInputContext'
 import JobTitle from '@/app/(commonLayout)/utility/docking/Global/Input/JobTitle'
 import Receptor from '@/app/(commonLayout)/utility/docking/Global/Input/Receptor'
 import Ligand from '@/app/(commonLayout)/utility/docking/Global/Input/Ligand'
