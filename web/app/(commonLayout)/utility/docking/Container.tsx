@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useContext as useContext1 } from 'use-context-selector'
 import type { FieldValues } from 'react-hook-form'
@@ -72,6 +72,7 @@ const Container = () => {
   const handleGlobalSubmit = async (data: FieldValues) => {
     const submit_data = Object.assign({}, data)
     clearGlobalReceptorInputFile()
+    setGlobalResult('')
     // receptor 为输入模式
     if (data.receptor_mode === 'input') {
       const n_form = new FormData()
@@ -135,12 +136,11 @@ const Container = () => {
       setGlobalResult('')
       setGlobalSubmitLoading(false)
     }
-    console.log(submit_data)
   }
   // 口袋对决提交
   const handlePocketSubmit = async (data: FieldValues) => {
-    console.log(data)
     setSubmitLoading(true)
+    setResult('')
     try {
       const res: any = await submitDockingTask(data)
       setResult(res.result)
@@ -208,10 +208,31 @@ const Container = () => {
 
     if (strategy === DockingStrategyEnum.pocket) {
       return <>
-        <InputContext.Provider value={{ receptorFileList, setReceptorFileList, ligandFileList, setLigandFileList, centerPosition, setCenterPosition, ligandResultFileList, addLigandResultFileList, setStrategy, strategy, StrategyMap }}>
+        <InputContext.Provider value={{
+          receptorFileList,
+          setReceptorFileList,
+          ligandFileList,
+          setLigandFileList,
+          centerPosition,
+          setCenterPosition,
+          ligandResultFileList,
+          addLigandResultFileList,
+          setStrategy,
+          strategy,
+          StrategyMap,
+        }}>
           <InputForm onSubmit={handlePocketSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </InputContext.Provider>
-        <ResultContext.Provider value={{ receptorFileList, ligandFileList, setReceptorFileList, setLigandFileList, resultData: result, getLigandResultFileById, cropReceptorList, getCropReceptorById }}>
+        <ResultContext.Provider value={{
+          receptorFileList,
+          ligandFileList,
+          setReceptorFileList,
+          setLigandFileList,
+          resultData: result,
+          getLigandResultFileById,
+          cropReceptorList,
+          getCropReceptorById,
+        }}>
           <Result isDisabled={!(DockingModeEnum.result === mode)}/>
         </ResultContext.Provider>
       </>
@@ -219,6 +240,15 @@ const Container = () => {
 
     return null
   }
+  const resultVisible: boolean = useMemo(() => {
+    if (strategy === DockingStrategyEnum.global)
+      return !!globalResult
+
+    if (strategy === DockingStrategyEnum.pocket)
+      return !!result
+
+    return false
+  }, [strategy, globalResult, result])
   return (<>
     <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">
       <div className="flex flex-col w-fit sm:w-[410px] shrink-0 border-gray-550 border-r h-full">
@@ -229,8 +259,9 @@ const Container = () => {
             }}>
               <span>Inputs</span>
             </div>
-            <div className={cn(mode === DockingModeEnum.result && style.mode, 'ml-10 h-[44px] flex items-center justify-center cursor-pointer relative px-4 after:bg-primary-1001')} onClick={() => {
-              setMode(DockingModeEnum.result)
+            <div className={cn(mode === DockingModeEnum.result && style.mode, 'ml-10 h-[44px] flex items-center justify-center cursor-not-allowed text-gray-1003 relative px-4 after:bg-primary-1001', resultVisible && 'cursor-pointer text-gray-950')} onClick={() => {
+              if (resultVisible)
+                setMode(DockingModeEnum.result)
             }}>
               <span>Results</span>
             </div>

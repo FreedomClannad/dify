@@ -15,7 +15,7 @@ const CardLine = (props: CardType) => {
           <div className='ml-2 whitespace-nowrap overflow-hidden text-ellipsis'>{name}</div>
         </Tooltip>
       </div>
-      {display && onClick && <div className="cursor-pointer text-xs flex items-center" onClick={() => {
+      {display && onClick && <div className="cursor-pointer text-xs flex items-center justify-center w-5" onClick={() => {
         onClick(props)
       }}>{visible ? <RiEyeLine className="w-4 h-4"/> : <RiEyeOffLine className="w-4 h-4"/>}</div>}
 
