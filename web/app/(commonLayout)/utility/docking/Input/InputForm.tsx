@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext } from 'react'
+import Strategy from '../components/Strategy'
+import SubmitButton from '../components/SubmitButton'
 import JobTitle from '@/app/(commonLayout)/utility/docking/Input/JobTitle'
 import ReceptorFile from '@/app/(commonLayout)/utility/docking/Input/ReceptorFile'
 import Constraints from '@/app/(commonLayout)/utility/docking/Input/Constraints'
@@ -11,8 +13,6 @@ import LigandFile from '@/app/(commonLayout)/utility/docking/Input/LigandFile'
 import OutPose from '@/app/(commonLayout)/utility/docking/Input/OutPose'
 import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Input/context'
 import './index.css'
-import Strategy from '@/app/(commonLayout)/utility/docking/Strategy'
-import SubmitButton from '@/app/(commonLayout)/utility/docking/SubmitButton'
 type Props = {
   isDisabled?: boolean
   onSubmit: (data: FieldValues) => void

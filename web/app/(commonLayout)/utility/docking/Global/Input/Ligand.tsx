@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { Radio, RadioGroup } from '@nextui-org/react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
+import InputUpload from '../../components/InputUpload'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import type { FileItem } from '@/models/datasets'
 import UploadCard from '@/app/components/upload/upload-card'
@@ -8,7 +9,6 @@ import {
   GlobalFormContext,
   GlobalInputContext,
 } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
-import InputUpload from '@/app/(commonLayout)/utility/docking/InputUpload'
 import { formats } from '@/app/(commonLayout)/utility/docking/Input/commin'
 enum Mode {
   upload = 'upload',

@@ -3,13 +3,13 @@ import { useContext } from 'react'
 import { z } from 'zod'
 import { type FieldValues, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Strategy from '@/app/(commonLayout)/utility/docking/Strategy'
+import Strategy from '../../components/Strategy'
+import SubmitButton from '../../components/SubmitButton'
 import {
   GlobalFormContext,
   GlobalInputContext,
 } from '@/app/(commonLayout)/utility/docking/Global/Context/GlobalInputContext'
 import JobTitle from '@/app/(commonLayout)/utility/docking/Global/Input/JobTitle'
-import SubmitButton from '@/app/(commonLayout)/utility/docking/SubmitButton'
 import Receptor from '@/app/(commonLayout)/utility/docking/Global/Input/Receptor'
 import Ligand from '@/app/(commonLayout)/utility/docking/Global/Input/Ligand'
 const GlobalInputFormSchema = z.object({
