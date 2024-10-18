@@ -7,28 +7,38 @@ import type { GlobalInputFormValues } from '@/app/(commonLayout)/utility/docking
 import type { FileItem } from '@/models/datasets'
 
 type GlobalInputContextType = {
+  // Receptor
   globalReceptorUploadFileList: FileItem[]
   setGlobalReceptorUploadFileList: (receptorUploadFileList: FileItem[]) => void
   addGlobalReceptorUploadResult: (dockingResultFile: DockingResultFile) => void
   deleteGlobalReceptorUploadResult: (id: string) => void
   clearGlobalReceptorUploadResultList: () => void
-  globalLigandFileList: FileItem[]
-  setGlobalLigandFileList: (receptorFileList: FileItem[]) => void
-  addGlobalLigandResultFileList: (file: DockingResultFile) => void
+  // Ligand
+  globalLigandUploadFileList: FileItem[]
+  setGlobalLigandUploadFileList: (receptorFileList: FileItem[]) => void
+  addGlobalLigandUploadResultFileList: (file: DockingResultFile) => void
+  deleteGlobalLigandUploadResult: (id: string) => void
+  clearGlobalLigandUploadResultFileList: () => void
+  // Strategy 模式选择
   StrategyMap: StrategyMapType
   strategy: DockingStrategyEnum
   setStrategy: (strategy: DockingStrategyEnum) => void
 }
 
 export const GlobalInputContext = createContext<GlobalInputContextType>({
+  // Receptor
   globalReceptorUploadFileList: [],
   setGlobalReceptorUploadFileList: (receptorUploadFileList: FileItem[]) => {},
   addGlobalReceptorUploadResult: (dockingResultFile: DockingResultFile) => {},
   deleteGlobalReceptorUploadResult: (id: string) => {},
   clearGlobalReceptorUploadResultList: () => {},
-  globalLigandFileList: [],
-  setGlobalLigandFileList: (globalReceptorFileList: FileItem[]) => {},
-  addGlobalLigandResultFileList: (file: DockingResultFile) => {},
+  // Ligand
+  globalLigandUploadFileList: [],
+  setGlobalLigandUploadFileList: (globalReceptorFileList: FileItem[]) => {},
+  addGlobalLigandUploadResultFileList: (file: DockingResultFile) => {},
+  deleteGlobalLigandUploadResult: (id: string) => {},
+  clearGlobalLigandUploadResultFileList: () => {},
+  // Strategy 模式选择
   StrategyMap,
   strategy: DockingStrategyEnum.global,
   setStrategy: (strategy: DockingStrategyEnum) => {},

@@ -47,14 +47,24 @@ const Container = () => {
     setGlobalReceptorUploadFileList,
     clearGlobalReceptorFileList,
     globalReceptorInputFileList,
-    getGlobalReceptorResultFile,
+    getGlobalReceptorUploadResultFile,
     addGlobalReceptorUploadResult,
     deleteGlobalReceptorUploadResult,
     clearGlobalReceptorUploadResultList,
     addGlobalReceptorInputFile,
     clearGlobalReceptorInputFile,
   } = useGlobalReceptor()
-  const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList, getGlobalLigandResultFileById, clearGlobalLigandFileList } = useGlobalLigand()
+  const {
+    globalLigandUploadFileList,
+    setGlobalLigandUploadFileList,
+    addGlobalLigandUploadResultFileList,
+    clearGlobalLigandFileList,
+    globalLigandInputFileList,
+    addGlobalLigandInputFile,
+    deleteGlobalLigandUploadResult,
+    clearGlobalLigandUploadResultFileList,
+    getGlobalLigandUploadResultFile,
+  } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
   const [globalResult, setGlobalResult] = useState<string>('')
   // 全局对接提交
@@ -78,7 +88,7 @@ const Container = () => {
     }
     else {
       const fasta_file_id = data.fasta_file_id
-      const dockingResultFile = getGlobalReceptorResultFile(fasta_file_id)
+      const dockingResultFile = getGlobalReceptorUploadResultFile(fasta_file_id)
       if (dockingResultFile) {
         const { id, name = '' } = dockingResultFile
         addGlobalReceptorInputFile({ id, name, visible: true, display: false })
@@ -92,15 +102,24 @@ const Container = () => {
       if (receptorList.length > 0) {
         // 遍历数组，将id拼接成字符串
         submit_data.ligand_file_ids = receptorList.map((item: any) => {
-          const { id, mime_type, extension } = item
+          const { id, name, mime_type, extension } = item
           const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
-          addGlobalLigandResultFileList({ fileID: id, id, mime_type, extension: format })
+          addGlobalLigandUploadResultFileList({ fileID: id, id, mime_type, extension: format })
+          addGlobalLigandInputFile({ id, name, visible: true, display: true })
           return item.id
         }).join(',')
       }
     }
     else {
-      console.log('ligand 为文件模式')
+      const ligand_file_ids = data.ligand_file_ids
+      const ids = ligand_file_ids.split(',')
+      ids.forEach((index: string) => {
+        const dockingResultFile = getGlobalLigandUploadResultFile(index)
+        if (dockingResultFile) {
+          const { id, name = '' } = dockingResultFile
+          addGlobalLigandInputFile({ id, name, visible: true, display: true })
+        }
+      })
     }
     setGlobalSubmitLoading(true)
     try {
@@ -152,30 +171,31 @@ const Container = () => {
       return <>
         <GlobalInputContext.Provider value={
           {
+            // receptor
             globalReceptorUploadFileList,
             setGlobalReceptorUploadFileList,
-            globalLigandFileList,
-            setGlobalLigandFileList,
-            StrategyMap,
-            strategy,
-            setStrategy,
-            addGlobalLigandResultFileList,
             addGlobalReceptorUploadResult,
             deleteGlobalReceptorUploadResult,
             clearGlobalReceptorUploadResultList,
+
+            // ligand
+            globalLigandUploadFileList,
+            setGlobalLigandUploadFileList,
+            addGlobalLigandUploadResultFileList,
+            clearGlobalLigandUploadResultFileList,
+            deleteGlobalLigandUploadResult,
+
+            StrategyMap,
+            strategy,
+            setStrategy,
           }}>
           <GlobalInput onSubmit={handleGlobalSubmit} onReset={handleReset} submitLoading={globalSubmitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </GlobalInputContext.Provider>
         <GlobalResultContext.Provider value={
           {
-            globalReceptorUploadFileList,
-            setGlobalReceptorUploadFileList,
             resultData: globalResult,
-            ligandFileList: globalLigandFileList,
-            setLigandFileList: setGlobalLigandFileList,
-            getLigandResultFileById: getGlobalLigandResultFileById,
             globalReceptorInputFileList,
-            getGlobalReceptorResultFile,
+            globalLigandInputFileList,
           }}>
           <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
         </GlobalResultContext.Provider>

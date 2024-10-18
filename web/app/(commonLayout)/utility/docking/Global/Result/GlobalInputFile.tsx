@@ -5,7 +5,7 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
 
 const GlobalInputFile = () => {
-  const { globalReceptorInputFileList } = useContext(GlobalResultContext)
+  const { globalReceptorInputFileList, globalLigandInputFileList } = useContext(GlobalResultContext)
   const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
   // const receptorList: DockingInputFile[] = useMemo(() => {
   //   const newList: DockingInputFile[] = []
@@ -14,7 +14,7 @@ const GlobalInputFile = () => {
   return <VerticalTitleCard title="Global docking input file">
     <div className="w-full docking-input-file">
       {
-        (globalReceptorInputFileList.length === 0)
+        (globalReceptorInputFileList.length === 0 && globalLigandInputFileList.length === 0)
           ? <>
             <div className="w-full flex justify-center items-center rounded h-[100px] leading-[40px] shadow-md">
               <span>No data</span>
@@ -24,6 +24,13 @@ const GlobalInputFile = () => {
             {
               globalReceptorInputFileList.map((item, index) => {
                 return <CardLine key={`receptro-${index}`} {...item}/>
+              })
+            }
+            {
+              globalLigandInputFileList.map((item, index) => {
+                return <CardLine key={`ligand-${index}`} {...item} onClick={() => {
+                  console.log('112233')
+                }}/>
               })
             }
           </>

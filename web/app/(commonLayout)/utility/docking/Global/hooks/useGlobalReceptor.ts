@@ -40,7 +40,7 @@ const useGlobalReceptor = () => {
   }
 
   // 根据传入的ID获取到返回结果内容
-  const getGlobalReceptorResultFile = (id: string): DockingResultFile | undefined => {
+  const getGlobalReceptorUploadResultFile = (id: string): DockingResultFile | undefined => {
     return globalReceptorUploadResultList.find(item => item.id === id)
   }
 
@@ -85,7 +85,7 @@ const useGlobalReceptor = () => {
     addGlobalReceptorUploadResult,
     deleteGlobalReceptorUploadResult,
     clearGlobalReceptorUploadResultList,
-    getGlobalReceptorResultFile,
+    getGlobalReceptorUploadResultFile,
     // 控制显示Result Input File
     globalReceptorInputFileList,
     addGlobalReceptorInputFile,

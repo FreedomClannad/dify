@@ -36,7 +36,6 @@ const Receptor = () => {
         const n_list = list.map((item) => {
           if (item.fileID === fileItem.fileID) {
             const files = item.file
-            console.log(progress)
             if (Array.isArray(files) && progress === 100) {
               files.map((file) => {
                 const { id, mime_type, extension, name } = file

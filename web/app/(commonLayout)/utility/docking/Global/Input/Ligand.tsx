@@ -20,7 +20,13 @@ const acceptFormats = {
 const Ligand = () => {
   const [mode, setMode] = useState<Mode>(Mode.input)
   const accept = Object.keys(acceptFormats).map(key => `.${key}`).join(',')
-  const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList } = useContext(GlobalInputContext)
+  const {
+    globalLigandUploadFileList,
+    setGlobalLigandUploadFileList,
+    addGlobalLigandUploadResultFileList,
+    clearGlobalLigandUploadResultFileList,
+    deleteGlobalLigandUploadResult,
+  } = useContext(GlobalInputContext)
   const { setValue, errors } = useContext(GlobalFormContext)
   const [inputValue, setInputValue] = useState<string>('')
   useEffect(() => {
@@ -33,15 +39,15 @@ const Ligand = () => {
   }
   const UploadContent = () => {
     return <>
-      <UploadCard uploadURL="/global-docking/files/upload?source=ligand" accept={accept} fileList={globalLigandFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+      <UploadCard uploadURL="/global-docking/files/upload?source=ligand" accept={accept} fileList={globalLigandUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
         const n_list = list.map((item) => {
           if (item.fileID === fileItem.fileID) {
             const fileList = item.file
-            if (Array.isArray(fileList)) {
+            if (Array.isArray(fileList) && progress === 100) {
               const ids = fileList.map((item: any) => {
-                const { id, mime_type, extension } = item
+                const { id, mime_type, extension, name } = item
                 const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
-                addGlobalLigandResultFileList({ fileID: id, id, mime_type, extension: format })
+                addGlobalLigandUploadResultFileList({ id, name, mime_type, extension: format, fileID: id })
                 return item.id
               }).join(',')
               setValue('ligand_file_ids', ids)
@@ -53,15 +59,23 @@ const Ligand = () => {
           }
           return item
         })
-        setGlobalLigandFileList(n_list)
+        setGlobalLigandUploadFileList(n_list)
       }} prepareFileList={(files) => {
-        setGlobalLigandFileList(files)
-        // if (files.length === 0)
-        //   setValue('pdb_file_id', '')
+        setGlobalLigandUploadFileList(files)
+        if (files.length === 0) {
+          clearGlobalLigandUploadResultFileList()
+          setValue('ligand_file_ids', '')
+        }
       }}
       onUploadError={(file) => {
-        const n_list = globalLigandFileList.filter(item => item.fileID !== file.fileID)
-        setGlobalLigandFileList(n_list)
+        const n_list = globalLigandUploadFileList.filter(item => item.fileID !== file.fileID)
+        setGlobalLigandUploadFileList(n_list)
+        const files = file.file
+        if (Array.isArray(files)) {
+          files.forEach((item) => {
+            deleteGlobalLigandUploadResult(item.id)
+          })
+        }
       }}
       />
     </>
