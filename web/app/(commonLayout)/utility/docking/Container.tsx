@@ -66,14 +66,17 @@ const Container = () => {
       const receptorList = await GlobalUpload(n_form, 'fasta')
       if (receptorList.length > 0) {
         // 遍历数组，将id拼接成字符串
-        submit_data.fasta_file_id = receptorList.map((item: any) => item.id).join(',')
+        submit_data.fasta_file_id = receptorList.map((item: any) => {
+          const { id, name, mime_type, extension } = item
+          addGlobalReceptorUploadResult({ id, mime_type, extension, name, fileID: id })
+          addGlobalReceptorInputFile({ id, name, visible: true, display: false })
+          return item.id
+        }).join(',')
       }
     }
     else {
       const fasta_file_id = data.fasta_file_id
-      console.log(fasta_file_id)
       const dockingResultFile = getGlobalReceptorResultFile(fasta_file_id)
-      console.log(dockingResultFile)
       if (dockingResultFile) {
         const { id, name = '' } = dockingResultFile
         addGlobalReceptorInputFile({ id, name, visible: true, display: false })
