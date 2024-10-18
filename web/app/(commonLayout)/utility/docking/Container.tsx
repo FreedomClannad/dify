@@ -42,12 +42,24 @@ const Container = () => {
   const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   // Global
-  const { globalReceptorFileList, setGlobalReceptorFileList, clearGlobalReceptorFileList } = useGlobalReceptor()
+  const {
+    globalReceptorUploadFileList,
+    setGlobalReceptorUploadFileList,
+    clearGlobalReceptorFileList,
+    globalReceptorInputFileList,
+    getGlobalReceptorResultFile,
+    addGlobalReceptorUploadResult,
+    deleteGlobalReceptorUploadResult,
+    clearGlobalReceptorUploadResultList,
+    addGlobalReceptorInputFile,
+  } = useGlobalReceptor()
   const { globalLigandFileList, setGlobalLigandFileList, addGlobalLigandResultFileList, getGlobalLigandResultFileById, clearGlobalLigandFileList } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
   const [globalResult, setGlobalResult] = useState<string>('')
+  // 全局对接提交
   const handleGlobalSubmit = async (data: FieldValues) => {
     const submit_data = Object.assign({}, data)
+    // receptor 为输入模式
     if (data.receptor_mode === 'input') {
       const n_form = new FormData()
       n_form.append('file_content', data.receptor_value)
@@ -57,6 +69,17 @@ const Container = () => {
         submit_data.fasta_file_id = receptorList.map((item: any) => item.id).join(',')
       }
     }
+    else {
+      const fasta_file_id = data.fasta_file_id
+      console.log(fasta_file_id)
+      const dockingResultFile = getGlobalReceptorResultFile(fasta_file_id)
+      console.log(dockingResultFile)
+      if (dockingResultFile) {
+        const { id, name = '' } = dockingResultFile
+        addGlobalReceptorInputFile({ id, name, visible: true, display: false })
+      }
+    }
+    // ligand 为输入模式
     if (data.ligand_mode === 'input') {
       const n_form = new FormData()
       n_form.append('file_content', data.ligand_value)
@@ -70,6 +93,9 @@ const Container = () => {
           return item.id
         }).join(',')
       }
+    }
+    else {
+      console.log('ligand 为文件模式')
     }
     setGlobalSubmitLoading(true)
     try {
@@ -86,6 +112,7 @@ const Container = () => {
     }
     console.log(submit_data)
   }
+  // 口袋对决提交
   const handlePocketSubmit = async (data: FieldValues) => {
     console.log(data)
     setSubmitLoading(true)
@@ -118,10 +145,33 @@ const Container = () => {
   const Content = () => {
     if (strategy === DockingStrategyEnum.global) {
       return <>
-        <GlobalInputContext.Provider value={{ globalReceptorFileList, setGlobalReceptorFileList, globalLigandFileList, setGlobalLigandFileList, StrategyMap, strategy, setStrategy, addGlobalLigandResultFileList }}>
+        <GlobalInputContext.Provider value={
+          {
+            globalReceptorUploadFileList,
+            setGlobalReceptorUploadFileList,
+            globalLigandFileList,
+            setGlobalLigandFileList,
+            StrategyMap,
+            strategy,
+            setStrategy,
+            addGlobalLigandResultFileList,
+            addGlobalReceptorUploadResult,
+            deleteGlobalReceptorUploadResult,
+            clearGlobalReceptorUploadResultList,
+          }}>
           <GlobalInput onSubmit={handleGlobalSubmit} onReset={handleReset} submitLoading={globalSubmitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </GlobalInputContext.Provider>
-        <GlobalResultContext.Provider value={{ receptorFileList: globalReceptorFileList, resultData: globalResult, setReceptorFileList: setGlobalReceptorFileList, ligandFileList: globalLigandFileList, setLigandFileList: setGlobalLigandFileList, getLigandResultFileById: getGlobalLigandResultFileById }}>
+        <GlobalResultContext.Provider value={
+          {
+            globalReceptorUploadFileList,
+            setGlobalReceptorUploadFileList,
+            resultData: globalResult,
+            ligandFileList: globalLigandFileList,
+            setLigandFileList: setGlobalLigandFileList,
+            getLigandResultFileById: getGlobalLigandResultFileById,
+            globalReceptorInputFileList,
+            getGlobalReceptorResultFile,
+          }}>
           <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
         </GlobalResultContext.Provider>
 

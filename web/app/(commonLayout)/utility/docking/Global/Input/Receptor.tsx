@@ -19,7 +19,7 @@ const formats = {
 const Receptor = () => {
   const [mode, setMode] = useState<Mode>(Mode.input)
   const accept = Object.keys(formats).map(key => `.${key}`).join(',')
-  const { globalReceptorFileList, setGlobalReceptorFileList } = useContext(GlobalInputContext)
+  const { globalReceptorUploadFileList, setGlobalReceptorUploadFileList, addGlobalReceptorUploadResult, deleteGlobalReceptorUploadResult, clearGlobalReceptorUploadResultList } = useContext(GlobalInputContext)
   const { setValue, errors } = useContext(GlobalFormContext)
   const [inputValue, setInputValue] = useState<string>('')
   useEffect(() => {
@@ -32,13 +32,18 @@ const Receptor = () => {
   }
   const UploadContent = () => {
     return <>
-      <UploadCard uploadURL="/global-docking/files/upload?source=fasta" accept={accept} fileList={globalReceptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+      <UploadCard uploadURL="/global-docking/files/upload?source=fasta" accept={accept} fileList={globalReceptorUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
         const n_list = list.map((item) => {
           if (item.fileID === fileItem.fileID) {
             const files = item.file
-            if (Array.isArray(files)) {
-              const file = files[0]
-              setValue('fasta_file_id', file.id)
+            console.log(progress)
+            if (Array.isArray(files) && progress === 100) {
+              files.map((file) => {
+                const { id, mime_type, extension, name } = file
+                setValue('fasta_file_id', file.id)
+                addGlobalReceptorUploadResult({ id, mime_type, extension, name, fileID: fileItem.fileID })
+                return file
+              })
             }
             return {
               ...item,
@@ -47,15 +52,24 @@ const Receptor = () => {
           }
           return item
         })
-        setGlobalReceptorFileList(n_list)
+        setGlobalReceptorUploadFileList(n_list)
       }} prepareFileList={(files) => {
-        setGlobalReceptorFileList(files)
-        // if (files.length === 0)
-        //   setValue('pdb_file_id', '')
+        setGlobalReceptorUploadFileList(files)
+        if (files.length === 0) {
+          setValue('fasta_file_id', '')
+          clearGlobalReceptorUploadResultList()
+        }
       }}
       onUploadError={(file) => {
-        const n_list = globalReceptorFileList.filter(item => item.fileID !== file.fileID)
-        setGlobalReceptorFileList(n_list)
+        const newList = globalReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
+        setGlobalReceptorUploadFileList(newList)
+        const files = file.file
+        if (Array.isArray(files)) {
+          files.map((file) => {
+            deleteGlobalReceptorUploadResult(file.id)
+            return file
+          })
+        }
       }}
       />
     </>

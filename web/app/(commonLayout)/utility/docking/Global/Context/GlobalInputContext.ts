@@ -7,8 +7,11 @@ import type { GlobalInputFormValues } from '@/app/(commonLayout)/utility/docking
 import type { FileItem } from '@/models/datasets'
 
 type GlobalInputContextType = {
-  globalReceptorFileList: FileItem[]
-  setGlobalReceptorFileList: (receptorFileList: FileItem[]) => void
+  globalReceptorUploadFileList: FileItem[]
+  setGlobalReceptorUploadFileList: (receptorUploadFileList: FileItem[]) => void
+  addGlobalReceptorUploadResult: (dockingResultFile: DockingResultFile) => void
+  deleteGlobalReceptorUploadResult: (id: string) => void
+  clearGlobalReceptorUploadResultList: () => void
   globalLigandFileList: FileItem[]
   setGlobalLigandFileList: (receptorFileList: FileItem[]) => void
   addGlobalLigandResultFileList: (file: DockingResultFile) => void
@@ -18,8 +21,11 @@ type GlobalInputContextType = {
 }
 
 export const GlobalInputContext = createContext<GlobalInputContextType>({
-  globalReceptorFileList: [],
-  setGlobalReceptorFileList: (globalReceptorFileList: FileItem[]) => {},
+  globalReceptorUploadFileList: [],
+  setGlobalReceptorUploadFileList: (receptorUploadFileList: FileItem[]) => {},
+  addGlobalReceptorUploadResult: (dockingResultFile: DockingResultFile) => {},
+  deleteGlobalReceptorUploadResult: (id: string) => {},
+  clearGlobalReceptorUploadResultList: () => {},
   globalLigandFileList: [],
   setGlobalLigandFileList: (globalReceptorFileList: FileItem[]) => {},
   addGlobalLigandResultFileList: (file: DockingResultFile) => {},

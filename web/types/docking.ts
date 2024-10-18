@@ -49,3 +49,10 @@ export enum DockingStrategyEnum {
   global = 'global',
   pocket = 'pocket',
 }
+
+export type DockingInputFile = {
+  id: string
+  name: string
+  visible: boolean
+  display?: boolean
+}

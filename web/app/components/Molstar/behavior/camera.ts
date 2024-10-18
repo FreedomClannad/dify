@@ -64,21 +64,15 @@ export const MesoFocusLoci = PluginBehavior.create<MesoFocusLociProps>({
           if (Loci.isEmpty(current.loci)) {
             console.log('点击1')
             PluginCommands.Camera.Reset(this.ctx, {})
+            MolstarPubSub.publish('molstar-focus-clicked', {})
             return
           }
           if (StructureElement.Loci.is(current.loci)) {
             if (centerOnly) {
               console.log('点击2')
-              console.log(sphere.center)
               const snapshot = canvas3d.camera.getCenter(sphere.center)
-              console.log(snapshot)
-              console.log(durationMs)
               canvas3d.requestCameraReset({ durationMs, snapshot })
               MolstarPubSub.publish('molstar-focus-clicked', {})
-              console.log(this.params)
-              console.log(current)
-              console.log(button)
-              console.log(modifiers)
             }
             else {
               console.log('点击3')
