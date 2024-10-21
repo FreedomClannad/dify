@@ -37,7 +37,6 @@ const Container = () => {
   const { notify } = useContext1(ToastContext)
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
 
-  const { ligandFileList, setLigandFileList, clearLigandFileList, ligandResultFileList, addLigandResultFileList, getLigandResultFileById } = usePocketLigand()
   const { cropReceptorList, clearCropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
   const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
@@ -83,6 +82,19 @@ const Container = () => {
     updatePocketReceptorResultInputFile,
     pocketReceptorResultInputFileList,
   } = usePocketReceptor()
+
+  const {
+    pocketLigandUploadFileList,
+    setPocketLigandUploadFileList,
+    clearPocketLigandUploadFileList,
+    addPocketLigandUploadResultFile,
+    getPocketLigandUploadResultFile,
+    deletePocketLigandUploadResultFile,
+    clearPocketLigandUploadResultFileList,
+    pocketLigandResultInputFileList,
+    addPocketLigandResultInputFile,
+    updatePocketLigandResultInputFile,
+  } = usePocketLigand()
 
   // 全局对接提交
   const handleGlobalSubmit = async (data: FieldValues) => {
@@ -176,7 +188,7 @@ const Container = () => {
   const handleReset = () => {
     clear()
     clearPocketReceptorUploadFileList()
-    clearLigandFileList()
+    clearPocketLigandUploadFileList()
     clearCropReceptorList()
     setResult('')
 
@@ -232,27 +244,35 @@ const Container = () => {
           deletePocketReceptorUploadResultFile,
           clearPocketReceptorUploadResultFileList,
           addPocketReceptorResultInputFile,
-          ligandFileList,
-          setLigandFileList,
-          centerPosition,
-          setCenterPosition,
-          ligandResultFileList,
-          addLigandResultFileList,
+
+          pocketLigandUploadFileList,
+          setPocketLigandUploadFileList,
+          addPocketLigandUploadResultFile,
+          deletePocketLigandUploadResultFile,
+          clearPocketLigandUploadResultFileList,
+          addPocketLigandResultInputFile,
+
           setStrategy,
           strategy,
           StrategyMap,
+
+          centerPosition,
+          setCenterPosition,
+
         }}>
           <InputForm onSubmit={handlePocketSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </InputContext.Provider>
         <ResultContext.Provider value={{
-          setPocketReceptorUploadFileList,
+          resultData: result,
+
           pocketReceptorResultInputFileList,
           getPocketReceptorUploadResultFile,
           updatePocketReceptorResultInputFile,
-          ligandFileList,
-          setLigandFileList,
-          resultData: result,
-          getLigandResultFileById,
+
+          getPocketLigandUploadResultFile,
+          pocketLigandResultInputFileList,
+          updatePocketLigandResultInputFile,
+
           cropReceptorList,
           getCropReceptorById,
         }}>

@@ -30,36 +30,13 @@ const PocketInputFile = () => {
     pocketReceptorResultInputFileList,
     getPocketReceptorUploadResultFile,
     updatePocketReceptorResultInputFile,
-    ligandFileList,
     cropReceptorList,
-    getLigandResultFileById,
+    getPocketLigandUploadResultFile,
+    pocketLigandResultInputFileList,
+    updatePocketLigandResultInputFile,
     getCropReceptorById,
   } = useContext(ResultContext)
   const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
-  const ligandVisibleFileList: DockingUploadFile[] = useMemo(() => {
-    const n_list: DockingUploadFile[] = []
-    ligandFileList.map((item) => {
-      const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
-      if (docking) {
-        n_list.push({
-          fileID: item.fileID,
-          name: item.file.name,
-          visible: docking.visible,
-        },
-        )
-      }
-      else {
-        n_list.push({
-          fileID: item.fileID,
-          name: item.file.name,
-          visible: false,
-        })
-      }
-
-      return item
-    })
-    return n_list
-  }, [dockingMolstarList, ligandFileList])
 
   const cropReceptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
@@ -88,7 +65,6 @@ const PocketInputFile = () => {
   const handleReceptorClick = (dockingInputFile: DockingInputFile) => {
     const { id, visible } = dockingInputFile
     const dockingResultFile = getPocketReceptorUploadResultFile(id)
-    console.log(dockingResultFile)
     if (dockingResultFile) {
       const n_visible = !visible
       const n_docking = { ...dockingInputFile, visible: n_visible }
@@ -99,14 +75,18 @@ const PocketInputFile = () => {
     }
   }
 
-  const handleLigandClick = (dockingFile: DockingUploadFile) => {
-    const dockingResultFile = getLigandResultFileById(dockingFile.fileID)
-    console.log(dockingResultFile)
+  const handleLigandClick = (dockingInputFile: DockingInputFile) => {
+    const { id, visible } = dockingInputFile
+    const dockingResultFile = getPocketLigandUploadResultFile(id)
     if (dockingResultFile) {
+      const n_visible = !visible
+      const n_docking = { ...dockingInputFile, visible: n_visible }
+      updatePocketLigandResultInputFile(n_docking)
       setStructureVisibility({
-        dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
+        dockingMolstar: { id, visible: n_visible },
         addCallback: () => {
-          loadStructureFromUrl(getDockingFileURL({ id: dockingResultFile.id, mime_type: dockingResultFile.mime_type }), dockingResultFile.extension)
+          const { id, mime_type, extension } = dockingResultFile
+          loadStructureFromUrl(getDockingFileURL({ id, mime_type }), extension)
         },
       })
     }
@@ -127,7 +107,7 @@ const PocketInputFile = () => {
   return <VerticalTitleCard title="Pocket docking input file">
     <div className="w-full docking-input-file">
       {
-        (pocketReceptorResultInputFileList.length === 0 && ligandVisibleFileList.length === 0)
+        (pocketReceptorResultInputFileList.length === 0 && pocketLigandResultInputFileList.length === 0)
           ? <>
             <div className="w-full flex justify-center items-center rounded h-[100px] leading-[40px] shadow-md">
               <span>No data</span>
@@ -142,8 +122,10 @@ const PocketInputFile = () => {
               })
             }
             {
-              ligandVisibleFileList.map((item, index) => {
-                return <Card key={`ligand-${index}`} docking={item} onClick={handleLigandClick}/>
+              pocketLigandResultInputFileList.map((item, index) => {
+                return <CardLine key={`receptor-${index}`} {...item} onClick={() => {
+                  handleLigandClick(item)
+                }}/>
               })
             }
             {

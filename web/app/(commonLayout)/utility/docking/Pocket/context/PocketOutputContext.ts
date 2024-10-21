@@ -1,28 +1,32 @@
 import { createContext } from 'react'
-import type { FileItem } from '@/models/datasets'
 import type { DockingInputFile, DockingResultFile } from '@/types/docking'
 
 type InputContextType = {
   resultData: string
-  setPocketReceptorUploadFileList: (receptorFileList: FileItem[]) => void
+  // Receptor
   pocketReceptorResultInputFileList: DockingInputFile[]
   getPocketReceptorUploadResultFile: (id: string) => DockingResultFile | undefined
   updatePocketReceptorResultInputFile: (dockingInputFile: DockingInputFile) => void
-  ligandFileList: FileItem[]
-  setLigandFileList: (receptorFileList: FileItem[]) => void
-  getLigandResultFileById: (id: string) => DockingResultFile | undefined
+  // Ligand
+  getPocketLigandUploadResultFile: (id: string) => DockingResultFile | undefined
+  pocketLigandResultInputFileList: DockingInputFile[]
+  updatePocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => void
+  // Crop
   cropReceptorList: DockingResultFile[]
   getCropReceptorById: (id: string) => DockingResultFile | undefined
 }
 export const ResultContext = createContext<InputContextType>({
-  setPocketReceptorUploadFileList: (receptorFileList: FileItem[]) => {},
+  resultData: '',
+  // Receptor
   pocketReceptorResultInputFileList: [],
   getPocketReceptorUploadResultFile: (id: string) => { return undefined },
   updatePocketReceptorResultInputFile: (dockingInputFile: DockingInputFile) => {},
-  ligandFileList: [],
-  setLigandFileList: (receptorFileList: FileItem[]) => {},
-  resultData: '',
-  getLigandResultFileById: (id: string) => { return undefined },
+  // Ligand
+  getPocketLigandUploadResultFile: (id: string) => { return undefined },
+  pocketLigandResultInputFileList: [],
+  updatePocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => {},
+
+  // Crop
   cropReceptorList: [],
   getCropReceptorById: (id: string) => { return undefined },
 })

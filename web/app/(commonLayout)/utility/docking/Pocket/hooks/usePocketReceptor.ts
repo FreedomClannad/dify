@@ -32,8 +32,6 @@ const usePocketReceptor = () => {
      * 根据传入的id来获取Receptor结果对应的对象
      */
   const getPocketReceptorUploadResultFile = (id: string): DockingResultFile | undefined => {
-    console.log(id)
-    console.log(pocketReceptorUploadResultList)
     return pocketReceptorUploadResultList.find(item => item.fileID === id)
   }
   /**

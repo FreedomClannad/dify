@@ -16,10 +16,12 @@ type InputContextType = {
   clearPocketReceptorUploadResultFileList: () => void
   addPocketReceptorResultInputFile: (dockingInputFile: DockingInputFile) => void
   // Ligand
-  ligandFileList: FileItem[]
-  setLigandFileList: (receptorFileList: FileItem[]) => void
-  ligandResultFileList: DockingResultFile[]
-  addLigandResultFileList: (file: DockingResultFile) => void
+  pocketLigandUploadFileList: FileItem[]
+  setPocketLigandUploadFileList: (receptorFileList: FileItem[]) => void
+  addPocketLigandUploadResultFile: (file: DockingResultFile) => void
+  deletePocketLigandUploadResultFile: (id: string) => void
+  clearPocketLigandUploadResultFileList: () => void
+  addPocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => void
   // Strategy 模式选择
   StrategyMap: StrategyMapType
   strategy: DockingStrategyEnum
@@ -36,12 +38,14 @@ export const InputContext = createContext<InputContextType>({
   deletePocketReceptorUploadResultFile: (id: string) => {},
   clearPocketReceptorUploadResultFileList: () => {},
   addPocketReceptorResultInputFile: (dockingInputFile: DockingInputFile) => {},
-  ligandFileList: [],
-  setLigandFileList: (receptorFileList: FileItem[]) => {},
+  deletePocketLigandUploadResultFile: (id: string) => {},
+  clearPocketLigandUploadResultFileList: () => {},
+  pocketLigandUploadFileList: [],
+  setPocketLigandUploadFileList: (receptorFileList: FileItem[]) => {},
   centerPosition: {},
   setCenterPosition: () => {},
-  ligandResultFileList: [],
-  addLigandResultFileList: (file: DockingResultFile) => {},
+  addPocketLigandUploadResultFile: (file: DockingResultFile) => {},
+  addPocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => {},
   StrategyMap,
   strategy: DockingStrategyEnum.global,
   setStrategy: (strategy: DockingStrategyEnum) => {},

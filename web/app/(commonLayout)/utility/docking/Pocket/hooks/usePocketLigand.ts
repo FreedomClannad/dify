@@ -1,14 +1,24 @@
 import { useState } from 'react'
 import type { FileItem } from '@/models/datasets'
-import type { DockingResultFile } from '@/types/docking'
+import type { DockingInputFile, DockingResultFile } from '@/types/docking'
 const usePocketLigand = () => {
-  const [ligandFileList, setLigandFileList] = useState<FileItem[]>([])
-  const [ligandResultFileList, setLigandResultFileList] = useState<DockingResultFile[]>([])
+  // 上传文件内容
+  const [pocketLigandUploadFileList, setPocketLigandUploadFileList] = useState<FileItem[]>([])
+  // 上传文件结果
+  const [pocketLigandUploadResultFileList, setPocketLigandUploadResultFileList] = useState<DockingResultFile[]>([])
+  // 控制显示Result Input File显示
+  const [pocketLigandResultInputFileList, setPocketLigandResultInputFileList] = useState<DockingInputFile[]>([])
+
+  // 上传文件内容
+  const clearPocketLigandUploadFileList = () => {
+    setPocketLigandUploadFileList([])
+  }
+  // 上传文件结果
   /**
      * 新增Ligand结果列表,先判断传入的是否存在，如果存在，则替换原来的数据
      */
-  const addLigandResultFileList = (file: DockingResultFile) => {
-    setLigandResultFileList((prev) => {
+  const addPocketLigandUploadResultFile = (file: DockingResultFile) => {
+    setPocketLigandUploadResultFileList((prev) => {
       const index = prev.findIndex(item => item.fileID === file.fileID)
       if (index !== -1)
         prev[index] = file
@@ -18,22 +28,90 @@ const usePocketLigand = () => {
       return [...prev]
     })
   }
+
   /**
-    * 清除Ligand结果列表
-    */
-  const clearLigandResultFileList = () => {
-    setLigandResultFileList([])
-  }
-  /**
-     * 根据传入的id来获取Ligand结果对应对象
+     * 根据传入的id来获取Receptor结果对应的对象
      */
-  const getLigandResultFileById = (id: string) => {
-    return ligandResultFileList.find(item => item.fileID === id)
+  const getPocketLigandUploadResultFile = (id: string): DockingResultFile | undefined => {
+    return pocketLigandUploadResultFileList.find(item => item.fileID === id)
   }
-  const clearLigandFileList = () => {
-    setLigandFileList([])
+
+  /**
+     * 删除指定对象结果
+     */
+  const deletePocketLigandUploadResultFile = (id: string) => {
+    const newList = pocketLigandUploadResultFileList.filter(item => item.fileID !== id)
+    setPocketLigandUploadResultFileList(newList)
   }
-  return { ligandFileList, setLigandFileList, ligandResultFileList, addLigandResultFileList, clearLigandResultFileList, getLigandResultFileById, clearLigandFileList }
+
+  /**
+     * 清除Ligand结果列表
+     */
+  const clearPocketLigandUploadResultFileList = () => {
+    setPocketLigandUploadResultFileList([])
+  }
+
+  // 控制显示Result Input File显示
+  const addPocketLigandResultInputFile = (dockingInputFile: DockingInputFile) => {
+    setPocketLigandResultInputFileList((prev) => {
+      const index = prev.findIndex(item => item.id === dockingInputFile.id)
+      if (index !== -1)
+        prev[index] = dockingInputFile
+      else
+        prev.push(dockingInputFile)
+      return [...prev]
+    })
+  }
+
+  // 更新
+  const updatePocketLigandResultInputFile = (dockingInputFile: DockingInputFile) => {
+    setPocketLigandResultInputFileList((prev) => {
+      const index = prev.findIndex(item => item.id === dockingInputFile.id)
+      if (index !== -1)
+        prev[index] = { ...prev[index], ...dockingInputFile }
+      return [...prev]
+    })
+  }
+
+  // 清除
+  const clearPocketLigandResultInputFileList = () => {
+    setPocketLigandResultInputFileList([])
+  }
+
+  // 控制显示Result Input的是否显示3D结构
+  const visiblePocketReceptorResultInputFile = (id: string, visible: boolean) => {
+    const newList = pocketLigandResultInputFileList.map((item) => {
+      if (item.id === id) {
+        item.visible = visible
+        return {
+          ...item,
+          visible,
+        }
+      }
+      return item
+    },
+    )
+    setPocketLigandResultInputFileList(newList)
+  }
+
+  return {
+    // 上传文件内容
+    pocketLigandUploadFileList,
+    setPocketLigandUploadFileList,
+    clearPocketLigandUploadFileList,
+    // 上传文件结果
+    addPocketLigandUploadResultFile,
+    getPocketLigandUploadResultFile,
+    deletePocketLigandUploadResultFile,
+    clearPocketLigandUploadResultFileList,
+
+    // 控制显示Result Input File显示
+    pocketLigandResultInputFileList,
+    addPocketLigandResultInputFile,
+    updatePocketLigandResultInputFile,
+    clearPocketLigandResultInputFileList,
+    visiblePocketReceptorResultInputFile,
+  }
 }
 
 export default usePocketLigand
