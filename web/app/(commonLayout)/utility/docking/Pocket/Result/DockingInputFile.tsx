@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import { DocumentTextIcon } from '@heroicons/react/24/outline'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
@@ -30,37 +30,15 @@ const PocketInputFile = () => {
     pocketReceptorResultInputFileList,
     getPocketReceptorUploadResultFile,
     updatePocketReceptorResultInputFile,
-    cropReceptorList,
     getPocketLigandUploadResultFile,
     pocketLigandResultInputFileList,
     updatePocketLigandResultInputFile,
-    getCropReceptorById,
-  } = useContext(ResultContext)
-  const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
 
-  const cropReceptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
-    const n_list: DockingUploadFile[] = []
-    cropReceptorList.map((item) => {
-      const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
-      if (docking) {
-        n_list.push({
-          fileID: item.fileID,
-          name: item.name || '',
-          visible: docking.visible,
-        },
-        )
-      }
-      else {
-        n_list.push({
-          fileID: item.fileID,
-          name: item.name || '',
-          visible: false,
-        })
-      }
-      return item
-    })
-    return n_list
-  }, [dockingMolstarList, cropReceptorList])
+    cropRecepResultInputList,
+    getCropReceptorResult,
+    updateCropRecepResultInputFile,
+  } = useContext(ResultContext)
+  const { setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
 
   const handleReceptorClick = (dockingInputFile: DockingInputFile) => {
     const { id, visible } = dockingInputFile
@@ -92,13 +70,19 @@ const PocketInputFile = () => {
     }
   }
 
-  const handleCropReceptorClick = (dockingFile: DockingUploadFile) => {
-    const dockingResultFile = getCropReceptorById(dockingFile.fileID)
+  const handleCropReceptorClick = (dockingInputFile: DockingInputFile) => {
+    const { id, visible } = dockingInputFile
+    const dockingResultFile = getCropReceptorResult(id)
+    console.log(dockingResultFile)
     if (dockingResultFile) {
+      const n_visible = !visible
+      const n_docking = { ...dockingInputFile, visible: n_visible }
+      updateCropRecepResultInputFile(n_docking)
       setStructureVisibility({
-        dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
+        dockingMolstar: { id, visible: n_visible },
         addCallback: () => {
-          loadStructureFromUrl(getDockingFileURL({ id: dockingResultFile.id, mime_type: dockingResultFile.mime_type }), dockingResultFile.extension)
+          const { id, mime_type, extension } = dockingResultFile
+          loadStructureFromUrl(getDockingFileURL({ id, mime_type }), extension)
         },
       })
     }
@@ -129,8 +113,10 @@ const PocketInputFile = () => {
               })
             }
             {
-              cropReceptorVisibleFileList.map((item, index) => {
-                return <Card key={`crop-${index}`} docking={item} onClick={handleCropReceptorClick}/>
+              cropRecepResultInputList.map((item, index) => {
+                return <CardLine key={`receptor-${index}`} {...item} onClick={() => {
+                  handleCropReceptorClick(item)
+                }}/>
               })
             }
           </>

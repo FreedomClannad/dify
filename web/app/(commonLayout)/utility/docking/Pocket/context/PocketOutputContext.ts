@@ -12,8 +12,10 @@ type InputContextType = {
   pocketLigandResultInputFileList: DockingInputFile[]
   updatePocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => void
   // Crop
-  cropReceptorList: DockingResultFile[]
-  getCropReceptorById: (id: string) => DockingResultFile | undefined
+  cropRecepResultInputList: DockingInputFile[]
+  cropReceptorResultList: DockingResultFile[]
+  getCropReceptorResult: (id: string) => DockingResultFile | undefined
+  updateCropRecepResultInputFile: (dockingInputFile: DockingInputFile) => void
 }
 export const ResultContext = createContext<InputContextType>({
   resultData: '',
@@ -27,6 +29,8 @@ export const ResultContext = createContext<InputContextType>({
   updatePocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => {},
 
   // Crop
-  cropReceptorList: [],
-  getCropReceptorById: (id: string) => { return undefined },
+  cropRecepResultInputList: [],
+  cropReceptorResultList: [],
+  getCropReceptorResult: (id: string) => { return undefined },
+  updateCropRecepResultInputFile: (dockingInputFile: DockingInputFile) => {},
 })

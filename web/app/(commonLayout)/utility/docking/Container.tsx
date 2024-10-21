@@ -37,7 +37,6 @@ const Container = () => {
   const { notify } = useContext1(ToastContext)
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
 
-  const { cropReceptorList, clearCropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
   const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   // Global
@@ -95,6 +94,17 @@ const Container = () => {
     addPocketLigandResultInputFile,
     updatePocketLigandResultInputFile,
   } = usePocketLigand()
+
+  // Pocket Receptor Crop
+  const {
+    cropReceptorResultList,
+    addCropReceptorResult,
+    getCropReceptorResult,
+    clearCropReceptorResultList,
+    cropRecepResultInputList,
+    addCropRecepResultInputFile,
+    updateCropRecepResultInputFile,
+  } = useCropReceptor()
 
   // 全局对接提交
   const handleGlobalSubmit = async (data: FieldValues) => {
@@ -177,8 +187,14 @@ const Container = () => {
       notify({ type: 'success', message: 'Task parsing successful' })
       if (res.result)
         setMode(DockingModeEnum.result)
-      if (res.remove_ligand_file && res.remove_ligand_file.id)
-        addCropReceptor({ fileID: res.remove_ligand_file.id, id: res.remove_ligand_file.id, extension: res.remove_ligand_file.extension, mime_type: res.remove_ligand_file.mime_type, name: res.remove_ligand_file.name })
+      if (res.remove_ligand_file && res.remove_ligand_file.id) {
+        const id = res.remove_ligand_file.id
+        const extension = res.remove_ligand_file.extension
+        const mime_type = res.remove_ligand_file.mime_type
+        const name = res.remove_ligand_file.name
+        addCropReceptorResult({ fileID: id, id, extension, mime_type, name })
+        addCropRecepResultInputFile({ id, name, visible: false, display: true })
+      }
     }
     catch (error) {
       setResult('')
@@ -189,7 +205,7 @@ const Container = () => {
     clear()
     clearPocketReceptorUploadFileList()
     clearPocketLigandUploadFileList()
-    clearCropReceptorList()
+    clearCropReceptorResultList()
     setResult('')
 
     clearGlobalReceptorFileList()
@@ -273,8 +289,10 @@ const Container = () => {
           pocketLigandResultInputFileList,
           updatePocketLigandResultInputFile,
 
-          cropReceptorList,
-          getCropReceptorById,
+          cropRecepResultInputList,
+          cropReceptorResultList,
+          getCropReceptorResult,
+          updateCropRecepResultInputFile,
         }}>
           <Result isDisabled={!(DockingModeEnum.result === mode)}/>
         </ResultContext.Provider>
