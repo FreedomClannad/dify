@@ -17,18 +17,23 @@ const usePocketReceptor = () => {
   const addPocketReceptorUploadResultFile = (file: DockingResultFile) => {
     setPocketReceptorUploadResultList((prev) => {
       const index = prev.findIndex(item => item.fileID === file.fileID)
-      if (index === -1)
+      if (index !== -1)
         prev[index] = file
       else
         prev.push(file)
 
       return [...prev]
     })
+    setTimeout(() => {
+      console.log(pocketReceptorUploadResultList)
+    }, 500)
   }
   /**
      * 根据传入的id来获取Receptor结果对应的对象
      */
   const getPocketReceptorUploadResultFile = (id: string): DockingResultFile | undefined => {
+    console.log(id)
+    console.log(pocketReceptorUploadResultList)
     return pocketReceptorUploadResultList.find(item => item.fileID === id)
   }
   /**
@@ -46,7 +51,6 @@ const usePocketReceptor = () => {
   }
 
   // 控制显示Result Input File显示
-
   const addPocketReceptorResultInputFile = (dockingInputFile: DockingInputFile) => {
     setPocketReceptorResultInputFileList((prev) => {
       const index = prev.findIndex(item => item.id === dockingInputFile.id)
@@ -90,6 +94,7 @@ const usePocketReceptor = () => {
   }
 
   return {
+    // 上传文件内容
     pocketReceptorUploadFileList,
     setPocketReceptorUploadFileList,
     clearPocketReceptorUploadFileList,
@@ -99,6 +104,7 @@ const usePocketReceptor = () => {
     deletePocketReceptorUploadResultFile,
     clearPocketReceptorUploadResultFileList,
     // 控制显示Result Input File显示
+    pocketReceptorResultInputFileList,
     addPocketReceptorResultInputFile,
     updatePocketReceptorResultInputFile,
     clearPocketReceptorResultInputFileList,

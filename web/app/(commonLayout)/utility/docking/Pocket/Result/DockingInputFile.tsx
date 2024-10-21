@@ -3,10 +3,10 @@ import { DocumentTextIcon } from '@heroicons/react/24/outline'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
-import type { DockingUploadFile } from '@/types/docking'
+import type { DockingInputFile, DockingUploadFile } from '@/types/docking'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getDockingFileURL } from '@/service/docking'
-
+import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
 type CardType = {
   docking: DockingUploadFile
   onClick: (dockingUploadFile: DockingUploadFile) => void
@@ -25,26 +25,17 @@ const Card = ({ docking, onClick }: CardType) => {
   </>
 }
 
-const DockingInputFile = () => {
-  const { pocketReceptorUploadFileList, ligandFileList, cropReceptorList, getLigandResultFileById, getCropReceptorById } = useContext(ResultContext)
+const PocketInputFile = () => {
+  const {
+    pocketReceptorResultInputFileList,
+    getPocketReceptorUploadResultFile,
+    updatePocketReceptorResultInputFile,
+    ligandFileList,
+    cropReceptorList,
+    getLigandResultFileById,
+    getCropReceptorById,
+  } = useContext(ResultContext)
   const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
-  const receptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
-    const n_list: DockingUploadFile[] = []
-    pocketReceptorUploadFileList.map((item) => {
-      const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
-      if (docking) {
-        n_list.push({
-          fileID: item.fileID,
-          name: item.file.name,
-          visible: docking.visible,
-        },
-        )
-      }
-
-      return item
-    })
-    return n_list
-  }, [dockingMolstarList, pocketReceptorUploadFileList])
   const ligandVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
     ligandFileList.map((item) => {
@@ -93,10 +84,19 @@ const DockingInputFile = () => {
     })
     return n_list
   }, [dockingMolstarList, cropReceptorList])
-  const handleClick = (dockingFile: DockingUploadFile) => {
-    setStructureVisibility({
-      dockingMolstar: { id: dockingFile.fileID, visible: !dockingFile.visible },
-    })
+
+  const handleReceptorClick = (dockingInputFile: DockingInputFile) => {
+    const { id, visible } = dockingInputFile
+    const dockingResultFile = getPocketReceptorUploadResultFile(id)
+    console.log(dockingResultFile)
+    if (dockingResultFile) {
+      const n_visible = !visible
+      const n_docking = { ...dockingInputFile, visible: n_visible }
+      updatePocketReceptorResultInputFile(n_docking)
+      setStructureVisibility({
+        dockingMolstar: { id, visible: n_visible },
+      })
+    }
   }
 
   const handleLigandClick = (dockingFile: DockingUploadFile) => {
@@ -127,7 +127,7 @@ const DockingInputFile = () => {
   return <VerticalTitleCard title="Pocket docking input file">
     <div className="w-full docking-input-file">
       {
-        (receptorVisibleFileList.length === 0 && ligandVisibleFileList.length === 0)
+        (pocketReceptorResultInputFileList.length === 0 && ligandVisibleFileList.length === 0)
           ? <>
             <div className="w-full flex justify-center items-center rounded h-[100px] leading-[40px] shadow-md">
               <span>No data</span>
@@ -135,8 +135,10 @@ const DockingInputFile = () => {
           </>
           : <>
             {
-              receptorVisibleFileList.map((item, index) => {
-                return <Card key={`receptro-${index}`} docking={item} onClick={handleClick}/>
+              pocketReceptorResultInputFileList.map((item, index) => {
+                return <CardLine key={`receptor-${index}`} {...item} onClick={() => {
+                  handleReceptorClick(item)
+                }}/>
               })
             }
             {
@@ -156,4 +158,4 @@ const DockingInputFile = () => {
   </VerticalTitleCard>
 }
 
-export default DockingInputFile
+export default PocketInputFile

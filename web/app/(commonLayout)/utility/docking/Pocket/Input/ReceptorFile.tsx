@@ -6,8 +6,16 @@ import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
 import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketInputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
+import { getDockingFileURL } from '@/service/docking'
 const ReceptorFile = () => {
-  const { pocketReceptorUploadFileList, setPocketReceptorUploadFileList } = useContext(InputContext)
+  const {
+    pocketReceptorUploadFileList,
+    setPocketReceptorUploadFileList,
+    addPocketReceptorUploadResultFile,
+    deletePocketReceptorUploadResultFile,
+    clearPocketReceptorUploadResultFileList,
+    addPocketReceptorResultInputFile,
+  } = useContext(InputContext)
   const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
   const { setValue, errors } = useContext(FormContext)
   const accept = Object.keys(formats).map(key => `.${key}`).join(',')
@@ -18,12 +26,14 @@ const ReceptorFile = () => {
           const n_list = list.map((item) => {
             if (item.fileID === fileItem.fileID) {
               const file = item.file
-              const { id, mime_type, extension } = file
+              const { id, mime_type, extension, name } = file
 
               if (id && mime_type) {
                 setValue('pdb_file_id', id)
-                const format = formats[extension as keyof typeof formats] || 'mmcif'
-                loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, format as BuiltInTrajectoryFormat || 'mmcif')
+                const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
+                loadStructureFromUrl(getDockingFileURL({ id, mime_type }), format)
+                addPocketReceptorUploadResultFile({ id, mime_type, extension: format, name, fileID: fileItem.fileID })
+                addPocketReceptorResultInputFile({ id: fileItem.fileID, name, visible: true, display: true })
                 addStructure({ id: fileItem.fileID, visible: true })
                 // TODO 屏蔽向后端请求中心点坐标
                 // getCenterPosition(id).then((res) => {
@@ -41,12 +51,15 @@ const ReceptorFile = () => {
           setPocketReceptorUploadFileList(n_list)
         }} prepareFileList={(files) => {
           setPocketReceptorUploadFileList(files)
-          if (files.length === 0)
+          if (files.length === 0) {
             setValue('pdb_file_id', '')
+            clearPocketReceptorUploadResultFileList()
+          }
         }}
         onUploadError={(file) => {
           const n_list = pocketReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
           setPocketReceptorUploadFileList(n_list)
+          deletePocketReceptorUploadResultFile(file.fileID)
         }}
         />
       </div>

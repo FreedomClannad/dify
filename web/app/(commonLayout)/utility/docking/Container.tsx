@@ -75,6 +75,13 @@ const Container = () => {
     pocketReceptorUploadFileList,
     setPocketReceptorUploadFileList,
     clearPocketReceptorUploadFileList,
+    addPocketReceptorUploadResultFile,
+    getPocketReceptorUploadResultFile,
+    deletePocketReceptorUploadResultFile,
+    clearPocketReceptorUploadResultFileList,
+    addPocketReceptorResultInputFile,
+    updatePocketReceptorResultInputFile,
+    pocketReceptorResultInputFileList,
   } = usePocketReceptor()
 
   // 全局对接提交
@@ -221,6 +228,10 @@ const Container = () => {
         <InputContext.Provider value={{
           pocketReceptorUploadFileList,
           setPocketReceptorUploadFileList,
+          addPocketReceptorUploadResultFile,
+          deletePocketReceptorUploadResultFile,
+          clearPocketReceptorUploadResultFileList,
+          addPocketReceptorResultInputFile,
           ligandFileList,
           setLigandFileList,
           centerPosition,
@@ -234,8 +245,10 @@ const Container = () => {
           <InputForm onSubmit={handlePocketSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </InputContext.Provider>
         <ResultContext.Provider value={{
-          pocketReceptorUploadFileList,
           setPocketReceptorUploadFileList,
+          pocketReceptorResultInputFileList,
+          getPocketReceptorUploadResultFile,
+          updatePocketReceptorResultInputFile,
           ligandFileList,
           setLigandFileList,
           resultData: result,
