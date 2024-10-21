@@ -11,8 +11,8 @@ import cn from '@/utils/classnames'
 import { ToastContext } from '@/app/components/base/toast'
 import { GlobalUpload, submitDockingTask, submitGlobalDockingTask } from '@/service/docking'
 import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
-import useReceptor from '@/app/(commonLayout)/utility/docking/Pocket/hooks/useReceptor'
-import useLigand from '@/app/(commonLayout)/utility/docking/Pocket/hooks/useLigand'
+import usePocketReceptor from '@/app/(commonLayout)/utility/docking/Pocket/hooks/usePocketReceptor'
+import usePocketLigand from '@/app/(commonLayout)/utility/docking/Pocket/hooks/usePocketLigand'
 import useCropReceptor from '@/app/(commonLayout)/utility/docking/Pocket/hooks/useCropReceptor'
 import useStrategy from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
@@ -36,8 +36,8 @@ const Container = () => {
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { notify } = useContext1(ToastContext)
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
-  const { receptorFileList, setReceptorFileList, clearReceptorFileList } = useReceptor()
-  const { ligandFileList, setLigandFileList, clearLigandFileList, ligandResultFileList, addLigandResultFileList, getLigandResultFileById } = useLigand()
+
+  const { ligandFileList, setLigandFileList, clearLigandFileList, ligandResultFileList, addLigandResultFileList, getLigandResultFileById } = usePocketLigand()
   const { cropReceptorList, clearCropReceptorList, getCropReceptorById, addCropReceptor } = useCropReceptor()
   const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
@@ -46,34 +46,42 @@ const Container = () => {
     globalReceptorUploadFileList,
     setGlobalReceptorUploadFileList,
     clearGlobalReceptorFileList,
-    globalReceptorInputFileList,
+    globalReceptorResultInputFileList,
     getGlobalReceptorUploadResultFile,
     addGlobalReceptorUploadResult,
     deleteGlobalReceptorUploadResult,
     clearGlobalReceptorUploadResultList,
-    addGlobalReceptorInputFile,
-    clearGlobalReceptorInputFile,
+    addGlobalReceptorResultInputFile,
+    clearGlobalReceptorResultInputFile,
   } = useGlobalReceptor()
   const {
     globalLigandUploadFileList,
     setGlobalLigandUploadFileList,
-    addGlobalLigandUploadResultFileList,
+    addGlobalLigandUploadResultFile,
     clearGlobalLigandFileList,
-    globalLigandInputFileList,
-    addGlobalLigandInputFile,
-    deleteGlobalLigandUploadResult,
+    globalLigandResultInputFileList,
+    addGlobalLigandResultInputFile,
+    deleteGlobalLigandUploadResultFile,
     clearGlobalLigandUploadResultFileList,
     getGlobalLigandUploadResultFile,
-    clearGlobalLigandInputFile,
-    updateGlobalLigandInputFile,
+    clearGlobalLigandResultInputFile,
+    updateGlobalLigandResultInputFile,
   } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
   const [globalResult, setGlobalResult] = useState<string>('')
+
+  // Pocket
+  const {
+    pocketReceptorUploadFileList,
+    setPocketReceptorUploadFileList,
+    clearPocketReceptorUploadFileList,
+  } = usePocketReceptor()
+
   // 全局对接提交
   const handleGlobalSubmit = async (data: FieldValues) => {
     const submit_data = Object.assign({}, data)
-    clearGlobalReceptorInputFile()
-    clearGlobalLigandInputFile()
+    clearGlobalReceptorResultInputFile()
+    clearGlobalLigandResultInputFile()
     setGlobalResult('')
     // receptor 为输入模式
     if (data.receptor_mode === 'input') {
@@ -85,7 +93,7 @@ const Container = () => {
         submit_data.fasta_file_id = receptorList.map((item: any) => {
           const { id, name, mime_type, extension } = item
           addGlobalReceptorUploadResult({ id, mime_type, extension, name, fileID: id })
-          addGlobalReceptorInputFile({ id, name, visible: true, display: false })
+          addGlobalReceptorResultInputFile({ id, name, visible: true, display: false })
           return item.id
         }).join(',')
       }
@@ -95,7 +103,7 @@ const Container = () => {
       const dockingResultFile = getGlobalReceptorUploadResultFile(fasta_file_id)
       if (dockingResultFile) {
         const { id, name = '' } = dockingResultFile
-        addGlobalReceptorInputFile({ id, name, visible: true, display: false })
+        addGlobalReceptorResultInputFile({ id, name, visible: true, display: false })
       }
     }
     // ligand 为输入模式
@@ -108,8 +116,8 @@ const Container = () => {
         submit_data.ligand_file_ids = receptorList.map((item: any) => {
           const { id, name, mime_type, extension } = item
           const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
-          addGlobalLigandUploadResultFileList({ fileID: id, id, mime_type, extension: format })
-          addGlobalLigandInputFile({ id, name, visible: false, display: true })
+          addGlobalLigandUploadResultFile({ fileID: id, id, mime_type, extension: format })
+          addGlobalLigandResultInputFile({ id, name, visible: false, display: true })
           return item.id
         }).join(',')
       }
@@ -121,7 +129,7 @@ const Container = () => {
         const dockingResultFile = getGlobalLigandUploadResultFile(index)
         if (dockingResultFile) {
           const { id, name = '' } = dockingResultFile
-          addGlobalLigandInputFile({ id, name, visible: false, display: true })
+          addGlobalLigandResultInputFile({ id, name, visible: false, display: true })
         }
       })
     }
@@ -160,7 +168,7 @@ const Container = () => {
   }
   const handleReset = () => {
     clear()
-    clearReceptorFileList()
+    clearPocketReceptorUploadFileList()
     clearLigandFileList()
     clearCropReceptorList()
     setResult('')
@@ -184,9 +192,9 @@ const Container = () => {
             // ligand
             globalLigandUploadFileList,
             setGlobalLigandUploadFileList,
-            addGlobalLigandUploadResultFileList,
+            addGlobalLigandUploadResultFile,
             clearGlobalLigandUploadResultFileList,
-            deleteGlobalLigandUploadResult,
+            deleteGlobalLigandUploadResultFile,
 
             StrategyMap,
             strategy,
@@ -197,10 +205,10 @@ const Container = () => {
         <GlobalResultContext.Provider value={
           {
             resultData: globalResult,
-            globalReceptorInputFileList,
-            globalLigandInputFileList,
+            globalReceptorResultInputFileList,
+            globalLigandResultInputFileList,
             getGlobalLigandUploadResultFile,
-            updateGlobalLigandInputFile,
+            updateGlobalLigandResultInputFile,
           }}>
           <GlobalResult isDisabled={!(DockingModeEnum.result === mode)} />
         </GlobalResultContext.Provider>
@@ -211,8 +219,8 @@ const Container = () => {
     if (strategy === DockingStrategyEnum.pocket) {
       return <>
         <InputContext.Provider value={{
-          receptorFileList,
-          setReceptorFileList,
+          pocketReceptorUploadFileList,
+          setPocketReceptorUploadFileList,
           ligandFileList,
           setLigandFileList,
           centerPosition,
@@ -226,9 +234,9 @@ const Container = () => {
           <InputForm onSubmit={handlePocketSubmit} onReset={handleReset} submitLoading={submitLoading} isDisabled={!(DockingModeEnum.input === mode)} />
         </InputContext.Provider>
         <ResultContext.Provider value={{
-          receptorFileList,
+          pocketReceptorUploadFileList,
+          setPocketReceptorUploadFileList,
           ligandFileList,
-          setReceptorFileList,
           setLigandFileList,
           resultData: result,
           getLigandResultFileById,

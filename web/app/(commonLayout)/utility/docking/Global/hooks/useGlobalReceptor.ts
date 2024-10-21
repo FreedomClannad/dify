@@ -7,7 +7,7 @@ const useGlobalReceptor = () => {
   // 存放向后端上传文件后，后端返回结果内容
   const [globalReceptorUploadResultList, setGlobalReceptorUploadResultList] = useState<DockingResultFile[]>([])
   // 控制显示Result Input File显示
-  const [globalReceptorInputFileList, setGlobalReceptorInputFileList] = useState<DockingInputFile[]>([])
+  const [globalReceptorResultInputFileList, setGlobalReceptorResultInputFileList] = useState<DockingInputFile[]>([])
 
   const clearGlobalReceptorFileList = () => {
     setGlobalReceptorUploadFileList([])
@@ -46,8 +46,8 @@ const useGlobalReceptor = () => {
 
   // 控制显示Result Input File
   // 增加Result Input 的数据
-  const addGlobalReceptorInputFile = (dockingInputFile: DockingInputFile) => {
-    setGlobalReceptorInputFileList((prev) => {
+  const addGlobalReceptorResultInputFile = (dockingInputFile: DockingInputFile) => {
+    setGlobalReceptorResultInputFileList((prev) => {
       const index = prev.findIndex(item => item.id === dockingInputFile.id)
       if (index !== -1)
         prev[index] = dockingInputFile
@@ -57,8 +57,8 @@ const useGlobalReceptor = () => {
     })
   }
   // 更新
-  const updateGlobalReceptorInputFile = (dockingInputFile: DockingInputFile) => {
-    setGlobalReceptorInputFileList((prev) => {
+  const updateGlobalReceptorResultInputFile = (dockingInputFile: DockingInputFile) => {
+    setGlobalReceptorResultInputFileList((prev) => {
       const index = prev.findIndex(item => item.id === dockingInputFile.id)
       if (index !== -1)
         prev[index] = { ...prev[index], ...dockingInputFile }
@@ -66,12 +66,12 @@ const useGlobalReceptor = () => {
     })
   }
   // 清除
-  const clearGlobalReceptorInputFile = () => {
-    setGlobalReceptorInputFileList([])
+  const clearGlobalReceptorResultInputFile = () => {
+    setGlobalReceptorResultInputFileList([])
   }
   // 控制显示Result Input的是否显示3D结构
-  const visibleGlobalReceptorInputFile = (id: string, visible: boolean) => {
-    const newList = globalReceptorInputFileList.map((item) => {
+  const visibleGlobalReceptorResultInputFile = (id: string, visible: boolean) => {
+    const newList = globalReceptorResultInputFileList.map((item) => {
       if (item.id === id) {
         item.visible = visible
         return {
@@ -82,7 +82,7 @@ const useGlobalReceptor = () => {
       return item
     },
     )
-    setGlobalReceptorInputFileList(newList)
+    setGlobalReceptorResultInputFileList(newList)
   }
   return {
     globalReceptorUploadFileList,
@@ -96,11 +96,11 @@ const useGlobalReceptor = () => {
     clearGlobalReceptorUploadResultList,
     getGlobalReceptorUploadResultFile,
     // 控制显示Result Input File
-    globalReceptorInputFileList,
-    addGlobalReceptorInputFile,
-    updateGlobalReceptorInputFile,
-    clearGlobalReceptorInputFile,
-    visibleGlobalReceptorInputFile,
+    globalReceptorResultInputFileList,
+    addGlobalReceptorResultInputFile,
+    updateGlobalReceptorResultInputFile,
+    clearGlobalReceptorResultInputFile,
+    visibleGlobalReceptorResultInputFile,
 
   }
 }

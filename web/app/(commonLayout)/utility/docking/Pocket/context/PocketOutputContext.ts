@@ -4,8 +4,8 @@ import type { DockingResultFile } from '@/types/docking'
 
 type InputContextType = {
   resultData: string
-  receptorFileList: FileItem[]
-  setReceptorFileList: (receptorFileList: FileItem[]) => void
+  pocketReceptorUploadFileList: FileItem[]
+  setPocketReceptorUploadFileList: (receptorFileList: FileItem[]) => void
   ligandFileList: FileItem[]
   setLigandFileList: (receptorFileList: FileItem[]) => void
   getLigandResultFileById: (id: string) => DockingResultFile | undefined
@@ -13,8 +13,8 @@ type InputContextType = {
   getCropReceptorById: (id: string) => DockingResultFile | undefined
 }
 export const ResultContext = createContext<InputContextType>({
-  receptorFileList: [],
-  setReceptorFileList: (receptorFileList: FileItem[]) => {},
+  pocketReceptorUploadFileList: [],
+  setPocketReceptorUploadFileList: (receptorFileList: FileItem[]) => {},
   ligandFileList: [],
   setLigandFileList: (receptorFileList: FileItem[]) => {},
   resultData: '',

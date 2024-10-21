@@ -7,7 +7,7 @@ const useGlobalLigand = () => {
   // 上传文件结果
   const [globalLigandUploadResultFileList, setGlobalLigandUploadResultFileList] = useState<DockingResultFile[]>([])
   // 控制显示Result Input File显示
-  const [globalLigandInputFileList, setGlobalLigandInputFileList] = useState<DockingInputFile[]>([])
+  const [globalLigandResultInputFileList, setGlobalLigandResultInputFileList] = useState<DockingInputFile[]>([])
   // 上传文件内容
   const clearGlobalLigandFileList = () => {
     setGlobalLigandUploadFileList([])
@@ -17,7 +17,7 @@ const useGlobalLigand = () => {
   /**
      * 新增Ligand结果列表,先判断传入的是否存在，如果存在，则替换原来的数据
      */
-  const addGlobalLigandUploadResultFileList = (file: DockingResultFile) => {
+  const addGlobalLigandUploadResultFile = (file: DockingResultFile) => {
     setGlobalLigandUploadResultFileList((prev) => {
       const index = prev.findIndex(item => item.fileID === file.fileID)
       if (index !== -1)
@@ -35,7 +35,7 @@ const useGlobalLigand = () => {
     return globalLigandUploadResultFileList.find(item => item.fileID === id)
   }
   // 删除结果
-  const deleteGlobalLigandUploadResult = (id: string) => {
+  const deleteGlobalLigandUploadResultFile = (id: string) => {
     const newList = globalLigandUploadResultFileList.filter(item => item.id !== id)
     setGlobalLigandUploadResultFileList(newList)
   }
@@ -47,8 +47,8 @@ const useGlobalLigand = () => {
   }
 
   // 控制显示Result Input File显示
-  const addGlobalLigandInputFile = (dockingInputFile: DockingInputFile) => {
-    setGlobalLigandInputFileList((prev) => {
+  const addGlobalLigandResultInputFile = (dockingInputFile: DockingInputFile) => {
+    setGlobalLigandResultInputFileList((prev) => {
       const index = prev.findIndex(item => item.id === dockingInputFile.id)
       if (index !== -1)
         prev[index] = dockingInputFile
@@ -58,8 +58,8 @@ const useGlobalLigand = () => {
     })
   }
   // 更新
-  const updateGlobalLigandInputFile = (dockingInputFile: DockingInputFile) => {
-    setGlobalLigandInputFileList((prev) => {
+  const updateGlobalLigandResultInputFile = (dockingInputFile: DockingInputFile) => {
+    setGlobalLigandResultInputFileList((prev) => {
       const index = prev.findIndex(item => item.id === dockingInputFile.id)
       if (index !== -1)
         prev[index] = { ...prev[index], ...dockingInputFile }
@@ -67,12 +67,12 @@ const useGlobalLigand = () => {
     })
   }
   // 清除
-  const clearGlobalLigandInputFile = () => {
-    setGlobalLigandInputFileList([])
+  const clearGlobalLigandResultInputFile = () => {
+    setGlobalLigandResultInputFileList([])
   }
   // 控制显示Result Input的是否显示3D结构
-  const visibleGlobalLigandInputFile = (id: string, visible: boolean) => {
-    const newList = globalLigandInputFileList.map((item) => {
+  const visibleGlobalLigandResultInputFile = (id: string, visible: boolean) => {
+    const newList = globalLigandResultInputFileList.map((item) => {
       if (item.id === id) {
         item.visible = visible
         return {
@@ -83,7 +83,7 @@ const useGlobalLigand = () => {
       return item
     },
     )
-    setGlobalLigandInputFileList(newList)
+    setGlobalLigandResultInputFileList(newList)
   }
   return {
     // 上传文件内容
@@ -92,16 +92,16 @@ const useGlobalLigand = () => {
     setGlobalLigandUploadFileList,
     // 上传文件结果
     globalLigandUploadResultFileList,
-    addGlobalLigandUploadResultFileList,
-    updateGlobalLigandInputFile,
+    addGlobalLigandUploadResultFile,
+    updateGlobalLigandResultInputFile,
     clearGlobalLigandUploadResultFileList,
     getGlobalLigandUploadResultFile,
-    deleteGlobalLigandUploadResult,
+    deleteGlobalLigandUploadResultFile,
     // 控制显示Result Input File显示
-    globalLigandInputFileList,
-    addGlobalLigandInputFile,
-    clearGlobalLigandInputFile,
-    visibleGlobalLigandInputFile,
+    globalLigandResultInputFileList,
+    addGlobalLigandResultInputFile,
+    clearGlobalLigandResultInputFile,
+    visibleGlobalLigandResultInputFile,
 
   }
 }

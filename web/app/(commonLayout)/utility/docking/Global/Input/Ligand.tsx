@@ -23,9 +23,9 @@ const Ligand = () => {
   const {
     globalLigandUploadFileList,
     setGlobalLigandUploadFileList,
-    addGlobalLigandUploadResultFileList,
+    addGlobalLigandUploadResultFile,
     clearGlobalLigandUploadResultFileList,
-    deleteGlobalLigandUploadResult,
+    deleteGlobalLigandUploadResultFile,
   } = useContext(GlobalInputContext)
   const { setValue, errors } = useContext(GlobalFormContext)
   const [inputValue, setInputValue] = useState<string>('')
@@ -47,7 +47,7 @@ const Ligand = () => {
               const ids = fileList.map((item: any) => {
                 const { id, mime_type, extension, name } = item
                 const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
-                addGlobalLigandUploadResultFileList({ id, name, mime_type, extension: format, fileID: id })
+                addGlobalLigandUploadResultFile({ id, name, mime_type, extension: format, fileID: id })
                 return item.id
               }).join(',')
               setValue('ligand_file_ids', ids)
@@ -73,7 +73,7 @@ const Ligand = () => {
         const files = file.file
         if (Array.isArray(files)) {
           files.forEach((item) => {
-            deleteGlobalLigandUploadResult(item.id)
+            deleteGlobalLigandUploadResultFile(item.id)
           })
         }
       }}

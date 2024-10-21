@@ -7,7 +7,7 @@ import type { DockingInputFile } from '@/types/docking'
 import { getDockingFileURL } from '@/service/docking'
 
 const GlobalInputFile = () => {
-  const { globalReceptorInputFileList, globalLigandInputFileList, getGlobalLigandUploadResultFile, updateGlobalLigandInputFile } = useContext(GlobalResultContext)
+  const { globalReceptorResultInputFileList, globalLigandResultInputFileList, getGlobalLigandUploadResultFile, updateGlobalLigandResultInputFile } = useContext(GlobalResultContext)
   const { setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
   // const receptorList: DockingInputFile[] = useMemo(() => {
   //   const newList: DockingInputFile[] = []
@@ -19,7 +19,7 @@ const GlobalInputFile = () => {
     if (dockingResultFile) {
       const n_visible = !visible
       const n_docking = { ...dockingInputFile, visible: n_visible }
-      updateGlobalLigandInputFile(n_docking)
+      updateGlobalLigandResultInputFile(n_docking)
       setStructureVisibility({
         dockingMolstar: { id: dockingInputFile.id, visible: n_visible },
         addCallback: () => {
@@ -32,7 +32,7 @@ const GlobalInputFile = () => {
   return <VerticalTitleCard title="Global docking input file">
     <div className="w-full docking-input-file">
       {
-        (globalReceptorInputFileList.length === 0 && globalLigandInputFileList.length === 0)
+        (globalReceptorResultInputFileList.length === 0 && globalLigandResultInputFileList.length === 0)
           ? <>
             <div className="w-full flex justify-center items-center rounded h-[100px] leading-[40px] shadow-md">
               <span>No data</span>
@@ -40,12 +40,12 @@ const GlobalInputFile = () => {
           </>
           : <>
             {
-              globalReceptorInputFileList.map((item, index) => {
+              globalReceptorResultInputFileList.map((item, index) => {
                 return <CardLine key={`receptro-${index}`} {...item}/>
               })
             }
             {
-              globalLigandInputFileList.map((item, index) => {
+              globalLigandResultInputFileList.map((item, index) => {
                 return <CardLine key={`ligand-${index}`} {...item} onClick={() => {
                   handleLigandClick(item)
                 }}/>

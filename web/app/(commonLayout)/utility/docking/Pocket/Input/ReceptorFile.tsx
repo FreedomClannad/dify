@@ -7,14 +7,14 @@ import type { FileItem } from '@/models/datasets'
 import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketInputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 const ReceptorFile = () => {
-  const { receptorFileList, setReceptorFileList } = useContext(InputContext)
+  const { pocketReceptorUploadFileList, setPocketReceptorUploadFileList } = useContext(InputContext)
   const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
   const { setValue, errors } = useContext(FormContext)
   const accept = Object.keys(formats).map(key => `.${key}`).join(',')
   return <>
     <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
       <div>
-        <UploadCard uploadURL="/molecular-docking/files/upload" accept={accept} fileList={receptorFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+        <UploadCard uploadURL="/molecular-docking/files/upload" accept={accept} fileList={pocketReceptorUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
           const n_list = list.map((item) => {
             if (item.fileID === fileItem.fileID) {
               const file = item.file
@@ -38,15 +38,15 @@ const ReceptorFile = () => {
             }
             return item
           })
-          setReceptorFileList(n_list)
+          setPocketReceptorUploadFileList(n_list)
         }} prepareFileList={(files) => {
-          setReceptorFileList(files)
+          setPocketReceptorUploadFileList(files)
           if (files.length === 0)
             setValue('pdb_file_id', '')
         }}
         onUploadError={(file) => {
-          const n_list = receptorFileList.filter(item => item.fileID !== file.fileID)
-          setReceptorFileList(n_list)
+          const n_list = pocketReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
+          setPocketReceptorUploadFileList(n_list)
         }}
         />
       </div>

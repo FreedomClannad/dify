@@ -16,8 +16,8 @@ type GlobalInputContextType = {
   // Ligand
   globalLigandUploadFileList: FileItem[]
   setGlobalLigandUploadFileList: (receptorFileList: FileItem[]) => void
-  addGlobalLigandUploadResultFileList: (file: DockingResultFile) => void
-  deleteGlobalLigandUploadResult: (id: string) => void
+  addGlobalLigandUploadResultFile: (file: DockingResultFile) => void
+  deleteGlobalLigandUploadResultFile: (id: string) => void
   clearGlobalLigandUploadResultFileList: () => void
   // Strategy 模式选择
   StrategyMap: StrategyMapType
@@ -35,8 +35,8 @@ export const GlobalInputContext = createContext<GlobalInputContextType>({
   // Ligand
   globalLigandUploadFileList: [],
   setGlobalLigandUploadFileList: (globalReceptorFileList: FileItem[]) => {},
-  addGlobalLigandUploadResultFileList: (file: DockingResultFile) => {},
-  deleteGlobalLigandUploadResult: (id: string) => {},
+  addGlobalLigandUploadResultFile: (file: DockingResultFile) => {},
+  deleteGlobalLigandUploadResultFile: (id: string) => {},
   clearGlobalLigandUploadResultFileList: () => {},
   // Strategy 模式选择
   StrategyMap,

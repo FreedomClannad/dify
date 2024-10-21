@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { FileItem } from '@/models/datasets'
 import type { DockingResultFile } from '@/types/docking'
-const useLigand = () => {
+const usePocketLigand = () => {
   const [ligandFileList, setLigandFileList] = useState<FileItem[]>([])
   const [ligandResultFileList, setLigandResultFileList] = useState<DockingResultFile[]>([])
   /**
@@ -36,4 +36,4 @@ const useLigand = () => {
   return { ligandFileList, setLigandFileList, ligandResultFileList, addLigandResultFileList, clearLigandResultFileList, getLigandResultFileById, clearLigandFileList }
 }
 
-export default useLigand
+export default usePocketLigand

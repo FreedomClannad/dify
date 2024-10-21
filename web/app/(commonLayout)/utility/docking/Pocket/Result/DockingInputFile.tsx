@@ -26,11 +26,11 @@ const Card = ({ docking, onClick }: CardType) => {
 }
 
 const DockingInputFile = () => {
-  const { receptorFileList, ligandFileList, cropReceptorList, getLigandResultFileById, getCropReceptorById } = useContext(ResultContext)
+  const { pocketReceptorUploadFileList, ligandFileList, cropReceptorList, getLigandResultFileById, getCropReceptorById } = useContext(ResultContext)
   const { dockingMolstarList, setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
   const receptorVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
-    receptorFileList.map((item) => {
+    pocketReceptorUploadFileList.map((item) => {
       const docking = dockingMolstarList.find(dockingItem => dockingItem.id === item.fileID)
       if (docking) {
         n_list.push({
@@ -44,7 +44,7 @@ const DockingInputFile = () => {
       return item
     })
     return n_list
-  }, [dockingMolstarList, receptorFileList])
+  }, [dockingMolstarList, pocketReceptorUploadFileList])
   const ligandVisibleFileList: DockingUploadFile[] = useMemo(() => {
     const n_list: DockingUploadFile[] = []
     ligandFileList.map((item) => {

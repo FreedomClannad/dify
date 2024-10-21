@@ -8,8 +8,8 @@ import type { StrategyMapType } from '@/app/(commonLayout)/utility/docking/hooks
 import { StrategyMap } from '@/app/(commonLayout)/utility/docking/hooks/useStrategy'
 
 type InputContextType = {
-  receptorFileList: FileItem[]
-  setReceptorFileList: (receptorFileList: FileItem[]) => void
+  pocketReceptorUploadFileList: FileItem[]
+  setPocketReceptorUploadFileList: (receptorFileList: FileItem[]) => void
   ligandFileList: FileItem[]
   setLigandFileList: (receptorFileList: FileItem[]) => void
   centerPosition: CenterPosition
@@ -21,8 +21,8 @@ type InputContextType = {
   setStrategy: (strategy: DockingStrategyEnum) => void
 }
 export const InputContext = createContext<InputContextType>({
-  receptorFileList: [],
-  setReceptorFileList: (receptorFileList: FileItem[]) => {},
+  pocketReceptorUploadFileList: [],
+  setPocketReceptorUploadFileList: (receptorFileList: FileItem[]) => {},
   ligandFileList: [],
   setLigandFileList: (receptorFileList: FileItem[]) => {},
   centerPosition: {},
