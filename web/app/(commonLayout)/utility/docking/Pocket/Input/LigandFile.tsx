@@ -10,7 +10,7 @@ import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/
 import ModalImage from '@/app/(commonLayout)/utility/docking/components/ModalImage'
 import type { SVGPreview } from '@/types/docking'
 import { getLigandFileRenderList } from '@/service/docking'
-
+import Tooltip from '@/app/components/base/tooltip'
 const LigandFile = () => {
   const {
     pocketLigandUploadFileList,
@@ -66,7 +66,7 @@ const LigandFile = () => {
     <VerticalTitleCard
       title="Ligand file"
       tooltip="上传配体文件，当配体为一个时允许上传SDF，PDB和MOL格式，当配体为多个时（≤2000）只允许上传SDF格式。格式：SDF、Mol、PDB。"
-      right={pocketLigandUploadFileList.length > 0 ? <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleOpenPreview}><DocumentMagnifyingGlassIcon /></div> : null}
+      right={pocketLigandUploadFileList.length > 0 ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleOpenPreview}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
     >
       <div>
         <UploadCard uploadURL="/molecular-docking/files/upload" accept=".pdb, .sdf, .mol, mol2" fileList={pocketLigandUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
