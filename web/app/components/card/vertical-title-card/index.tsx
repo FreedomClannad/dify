@@ -9,8 +9,9 @@ type props = {
   tooltip?: string | ReactNode
   children?: ReactNode
   onExample?: () => void
+  right?: ReactNode
 }
-const VerticalTitleCard = ({ title, tooltip, children, onExample }: props) => {
+const VerticalTitleCard = ({ title, tooltip, children, onExample, right }: props) => {
   const tooltipDisabled = useMemo(() => {
     return !tooltip
   }, [tooltip])
@@ -32,6 +33,7 @@ const VerticalTitleCard = ({ title, tooltip, children, onExample }: props) => {
         </div>
         <div className="flex">
           {onExample && <div onClick={onExample}>Example</div>}
+          {right && <div>{right}</div>}
         </div>
       </div>
       <div className="mt-3">{children}</div>

@@ -1,4 +1,4 @@
-import { post, upload } from './base'
+import { get, post, upload } from './base'
 
 export const getCenterPosition = (pdb_file_id: string): Promise<{ center_x: number; center_y: number; center_z: number; residue_number: number; chain: string }> => {
   return post<{ center_x: number; center_y: number; center_z: number; residue_number: number; chain: string }>('/molecular-docking/center-position', { body: { pdb_file_id } })
@@ -21,4 +21,9 @@ export const GlobalUpload = (formData: any, source = 'fasta') => {
 
 export const submitGlobalDockingTask = (data: any) => {
   return post('/global-docking/task', { body: data })
+}
+
+// 获取ligand file图片渲染
+export const getLigandFileRenderList = (id: string) => {
+  return get<string[]>(`/molecular-docking/files/rendering?file_id=${id}`)
 }

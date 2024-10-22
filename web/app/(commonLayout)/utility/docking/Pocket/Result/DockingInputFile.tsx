@@ -1,30 +1,10 @@
 import { useContext } from 'react'
-import { DocumentTextIcon } from '@heroicons/react/24/outline'
-import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
-import type { DockingInputFile, DockingUploadFile } from '@/types/docking'
+import type { DockingInputFile } from '@/types/docking'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getDockingFileURL } from '@/service/docking'
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
-type CardType = {
-  docking: DockingUploadFile
-  onClick: (dockingUploadFile: DockingUploadFile) => void
-}
-const Card = ({ docking, onClick }: CardType) => {
-  return <>
-    <div className="flex w-full h-[32px] justify-between text-gray-1006">
-      <div className="flex items-center">
-        <div className='w-5 h-5  text-xs text-gray-1005'><DocumentTextIcon/></div>
-        <span className='ml-2'>{docking.name}</span>
-      </div>
-      <div className="cursor-pointer text-xs flex items-center" onClick={() => {
-        onClick(docking)
-      }}>{docking.visible ? <RiEyeLine className="w-4 h-4"/> : <RiEyeOffLine className="w-4 h-4"/>}</div>
-    </div>
-  </>
-}
-
 const PocketInputFile = () => {
   const {
     pocketReceptorResultInputFileList,

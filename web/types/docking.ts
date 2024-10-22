@@ -56,3 +56,8 @@ export type DockingInputFile = {
   visible: boolean
   display?: boolean
 }
+
+export type SVGPreview = {
+  id: string
+  svg: string
+}
