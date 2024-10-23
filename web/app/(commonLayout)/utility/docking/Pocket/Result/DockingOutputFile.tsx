@@ -1,11 +1,15 @@
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useContext, useEffect, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
+import { DocumentArrowDownIcon } from '@heroicons/react/24/outline'
+import { saveAs } from 'file-saver'
+import Tooltip from '@/app/components/base/tooltip'
 // import { data } from './data'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getUUID } from '@/utils'
+import { downloadPocketFile } from '@/service/docking'
 export type TableType = {
   id: string
   mode: number
@@ -35,7 +39,7 @@ const initTable = (data: any[]): TableType[] => {
 
 const DockingOutputFile = () => {
   const [table, setTable] = useState<TableType[]>([])
-  const { resultData } = useContext(ResultContext)
+  const { resultData, resultID } = useContext(ResultContext)
   const { addStructure, loadStructureFromData, setStructureVisibility } = useContext(MolstarContext)
   useEffect(() => {
     try {
@@ -70,7 +74,12 @@ const DockingOutputFile = () => {
     })
     setTable(n_list)
   }
-  return <VerticalTitleCard title="Pocket docking output file">
+  const handleDownloadClick = async () => {
+    const data = await downloadPocketFile(resultID, 'all')
+    if (data)
+      saveAs(data, `${resultID}.pdb`)
+  }
+  return <VerticalTitleCard title="Pocket docking output file" right={<Tooltip popupContent="Download"><div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}><DocumentArrowDownIcon/></div></Tooltip>}>
     <>
       {
         table.length === 0

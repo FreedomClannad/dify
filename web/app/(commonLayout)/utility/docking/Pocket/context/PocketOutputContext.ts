@@ -2,7 +2,11 @@ import { createContext } from 'react'
 import type { DockingInputFile, DockingResultFile } from '@/types/docking'
 
 type InputContextType = {
+  // 返回的结果数据
   resultData: string
+  // 任务ID
+  resultID: string
+
   // Receptor
   pocketReceptorResultInputFileList: DockingInputFile[]
   getPocketReceptorUploadResultFile: (id: string) => DockingResultFile | undefined
@@ -19,6 +23,7 @@ type InputContextType = {
 }
 export const ResultContext = createContext<InputContextType>({
   resultData: '',
+  resultID: '',
   // Receptor
   pocketReceptorResultInputFileList: [],
   getPocketReceptorUploadResultFile: (id: string) => { return undefined },

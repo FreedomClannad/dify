@@ -27,3 +27,15 @@ export const submitGlobalDockingTask = (data: any) => {
 export const getLigandFileRenderList = (id: string) => {
   return get<string[]>(`/molecular-docking/files/rendering?file_id=${id}`)
 }
+
+export const downloadPocketFile = (id: string, range: string) => {
+  return get<Blob>('/molecular-docking/download', {
+    headers: new Headers({
+      'Content-Type': 'application/octet-stream',
+    }),
+    params: {
+      task_id: id,
+      range,
+    },
+  })
+}

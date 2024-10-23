@@ -33,7 +33,7 @@ const VerticalTitleCard = ({ title, tooltip, children, onExample, right }: props
         </div>
         <div className="flex">
           {onExample && <div onClick={onExample}>Example</div>}
-          {right && <div>{right}</div>}
+          {right && <div className="flex justify-center items-center">{right}</div>}
         </div>
       </div>
       <div className="mt-3">{children}</div>

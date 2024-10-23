@@ -1,5 +1,6 @@
 import { escape } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
+import { saveAs } from 'file-saver'
 export const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
@@ -46,4 +47,13 @@ export const getShortId = () => {
 
 export const getUUID = () => {
   return uuidv4()
+}
+
+/**
+ * SDF下载文件内容
+ * @param text
+ */
+export function downloadSDF(text: string) {
+  const data = new Blob([text], { type: 'text/plain;charset=utf-8' })
+  saveAs(data, 'download.sdf')
 }

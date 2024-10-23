@@ -32,7 +32,7 @@ const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.def
 })
 const Container = () => {
   const [mode, setMode] = useState<DockingModeEnum>(DockingModeEnum.input)
-  const [result, setResult] = useState<string>('')
+
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { notify } = useContext1(ToastContext)
   const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
@@ -69,6 +69,9 @@ const Container = () => {
   const [globalResult, setGlobalResult] = useState<string>('')
 
   // Pocket
+  const [result, setResult] = useState<string>('')
+  const [pocketResultId, setPocketResultId] = useState<string>('')
+
   const {
     pocketReceptorUploadFileList,
     setPocketReceptorUploadFileList,
@@ -188,6 +191,10 @@ const Container = () => {
     try {
       const res: any = await submitDockingTask(data)
       setResult(res.result)
+      const id = res.id
+      if (id)
+        setPocketResultId(id)
+
       setSubmitLoading(false)
       notify({ type: 'success', message: 'Task parsing successful' })
       if (res.result)
@@ -299,6 +306,7 @@ const Container = () => {
         </InputContext.Provider>
         <ResultContext.Provider value={{
           resultData: result,
+          resultID: pocketResultId,
 
           pocketReceptorResultInputFileList,
           getPocketReceptorUploadResultFile,
@@ -325,7 +333,8 @@ const Container = () => {
       return !!globalResult
 
     if (strategy === DockingStrategyEnum.pocket)
-      return !!result
+      // return !!result
+      return true
 
     return false
   }, [strategy, globalResult, result])
