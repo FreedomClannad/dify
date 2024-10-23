@@ -77,7 +77,7 @@ const DockingOutputFile = () => {
   const handleDownloadClick = async () => {
     const data = await downloadPocketFile(resultID, 'all')
     if (data)
-      saveAs(data, `${resultID}.pdb`)
+      saveAs(data, `${resultID}.sdf`)
   }
   return <VerticalTitleCard title="Pocket docking output file" right={<Tooltip popupContent="Download"><div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}><DocumentArrowDownIcon/></div></Tooltip>}>
     <>
