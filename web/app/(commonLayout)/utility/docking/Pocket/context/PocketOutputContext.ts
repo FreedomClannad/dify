@@ -15,6 +15,7 @@ type InputContextType = {
   getPocketLigandUploadResultFile: (id: string) => DockingResultFile | undefined
   pocketLigandResultInputFileList: DockingInputFile[]
   updatePocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => void
+  pocketLigandFilesIds: string
   // Crop
   cropRecepResultInputList: DockingInputFile[]
   cropReceptorResultList: DockingResultFile[]
@@ -32,7 +33,7 @@ export const ResultContext = createContext<InputContextType>({
   getPocketLigandUploadResultFile: (id: string) => { return undefined },
   pocketLigandResultInputFileList: [],
   updatePocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => {},
-
+  pocketLigandFilesIds: '',
   // Crop
   cropRecepResultInputList: [],
   cropReceptorResultList: [],

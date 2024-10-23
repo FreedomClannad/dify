@@ -44,8 +44,10 @@ const LigandFile = () => {
 
     if (!ligand_file_ids)
       return
-    if (ligand_file_ids && ligand_file_ids === ligandIdStorage)
+    if (ligand_file_ids && ligand_file_ids === ligandIdStorage) {
       setIsShow(true)
+      return
+    }
 
     if (ligand_file_ids && ligand_file_ids !== ligandIdStorage) {
       setModalLoading(true)

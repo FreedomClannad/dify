@@ -98,6 +98,9 @@ const Container = () => {
     addPocketLigandResultInputFile,
     updatePocketLigandResultInputFile,
     clearPocketLigandResultInputFileList,
+    pocketLigandFilesIds,
+    updatePocketLigandFilesIds,
+    clearPocketLigandFilesIds,
   } = usePocketLigand()
 
   // Pocket Receptor Crop
@@ -197,6 +200,10 @@ const Container = () => {
 
       setSubmitLoading(false)
       notify({ type: 'success', message: 'Task parsing successful' })
+      const { ligand_file_ids } = data
+      if (ligand_file_ids)
+        updatePocketLigandFilesIds(ligand_file_ids)
+
       if (res.result)
         setMode(DockingModeEnum.result)
       if (res.remove_ligand_file && res.remove_ligand_file.id) {
@@ -225,6 +232,7 @@ const Container = () => {
     clearPocketLigandResultInputFileList()
     clearCropReceptorResultList()
     clearCropRecepResultInputFileList()
+    clearPocketLigandFilesIds()
     setResult('')
 
     // 清除Global的数据
@@ -315,6 +323,7 @@ const Container = () => {
           getPocketLigandUploadResultFile,
           pocketLigandResultInputFileList,
           updatePocketLigandResultInputFile,
+          pocketLigandFilesIds,
 
           cropRecepResultInputList,
           cropReceptorResultList,
@@ -356,6 +365,7 @@ const Container = () => {
       clearPocketLigandResultInputFileList()
       clearCropReceptorResultList()
       clearCropRecepResultInputFileList()
+      clearPocketLigandFilesIds()
     }
   }, [strategy])
   return (<>

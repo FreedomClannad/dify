@@ -8,6 +8,8 @@ const usePocketLigand = () => {
   const [pocketLigandUploadResultFileList, setPocketLigandUploadResultFileList] = useState<DockingResultFile[]>([])
   // 控制显示Result Input File显示
   const [pocketLigandResultInputFileList, setPocketLigandResultInputFileList] = useState<DockingInputFile[]>([])
+  // LigandFilesIds
+  const [pocketLigandFilesIds, setPocketLigandFilesIds] = useState<string>('')
 
   // 上传文件内容
   const clearPocketLigandUploadFileList = () => {
@@ -94,6 +96,15 @@ const usePocketLigand = () => {
     setPocketLigandResultInputFileList(newList)
   }
 
+  // LigandFilesIds
+  const updatePocketLigandFilesIds = (ids: string) => {
+    setPocketLigandFilesIds(ids)
+  }
+
+  const clearPocketLigandFilesIds = () => {
+    setPocketLigandFilesIds('')
+  }
+
   return {
     // 上传文件内容
     pocketLigandUploadFileList,
@@ -111,6 +122,11 @@ const usePocketLigand = () => {
     updatePocketLigandResultInputFile,
     clearPocketLigandResultInputFileList,
     visiblePocketReceptorResultInputFile,
+
+    // LigandFilesIds
+    pocketLigandFilesIds,
+    updatePocketLigandFilesIds,
+    clearPocketLigandFilesIds,
   }
 }
 
