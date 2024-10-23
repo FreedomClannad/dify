@@ -13,9 +13,6 @@ const ReceptorFile = () => {
     setPocketReceptorUploadFileList,
     addPocketReceptorUploadResultFile,
     deletePocketReceptorUploadResultFile,
-    clearPocketReceptorUploadResultFileList,
-    addPocketReceptorResultInputFile,
-    clearPocketReceptorResultInputFileList,
   } = useContext(InputContext)
   const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
   const { setValue, errors } = useContext(FormContext)

@@ -81,8 +81,7 @@ const LigandFile = () => {
               if (id && mime_type) {
                 setValue('ligand_file_ids', id)
                 const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
-                addPocketLigandUploadResultFile({ fileID: fileItem.fileID, id, mime_type, extension: format })
-                addPocketLigandResultInputFile({ id: fileItem.fileID, name, visible: false, display: true })
+                addPocketLigandUploadResultFile({ fileID: id, id, name, mime_type, extension: format })
                 // loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
                 // addStructure({ id: fileItem.fileID, visible: true })
               }
@@ -98,15 +97,14 @@ const LigandFile = () => {
           setPocketLigandUploadFileList(files)
           if (files.length === 0) {
             setValue('ligand_file_ids', '')
-            clearPocketLigandUploadResultFileList()
-            clearPocketLigandResultInputFileList()
             setLigandIdStorage('')
           }
         }}
         onUploadError={(file) => {
           const n_list = pocketLigandUploadFileList.filter(item => item.fileID !== file.fileID)
           setPocketLigandUploadFileList(n_list)
-          deletePocketLigandUploadResultFile(file.fileID)
+          const { id } = file.file
+          id && deletePocketLigandUploadResultFile(id)
         }}/>
       </div>
       {errors.ligand_file_ids && <div className="mt-1"><span className='text-red-500 '>{errors.ligand_file_ids.message}</span></div>}

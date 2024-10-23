@@ -214,19 +214,21 @@ const Container = () => {
         const id = pdb_file_id
         const dockingResultFile = getPocketReceptorUploadResultFile(id)
         const dockingMolstar = getStructure(id)
-        console.log(id)
-        console.log(pocketReceptorUploadFileList)
-        console.log(dockingMolstarList)
-        console.log(dockingResultFile)
-        console.log(dockingMolstar)
         if (dockingResultFile && dockingMolstar) {
           const { name = '' } = dockingResultFile
           const { visible } = dockingMolstar
           addPocketReceptorResultInputFile({ id, name, visible, display: true })
         }
       }
-      if (ligand_file_ids)
+      if (ligand_file_ids) {
         updatePocketLigandFilesIds(ligand_file_ids)
+        const id = ligand_file_ids
+        const dockingResultFile = getPocketLigandUploadResultFile(id)
+        if (dockingResultFile) {
+          const { name = '' } = dockingResultFile
+          addPocketLigandResultInputFile({ id, name, visible: false, display: true })
+        }
+      }
 
       if (res.result)
         setMode(DockingModeEnum.result)
