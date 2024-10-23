@@ -73,6 +73,9 @@ const Container = () => {
     getGlobalLigandUploadResultFile,
     clearGlobalLigandResultInputFile,
     updateGlobalLigandResultInputFile,
+    globalLigandFilesIds,
+    updateGlobalLigandFilesIds,
+    clearGlobalLigandFilesIds,
   } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
   const [globalResult, setGlobalResult] = useState<string>('')
@@ -160,18 +163,21 @@ const Container = () => {
       const receptorList = await GlobalUpload(n_form, 'ligand')
       if (receptorList.length > 0) {
         // 遍历数组，将id拼接成字符串
-        submit_data.ligand_file_ids = receptorList.map((item: any) => {
+        const ligand_file_ids = receptorList.map((item: any) => {
           const { id, name, mime_type, extension } = item
           const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
           addGlobalLigandUploadResultFile({ fileID: id, id, mime_type, extension: format })
           addGlobalLigandResultInputFile({ id, name, visible: false, display: true })
           return item.id
         }).join(',')
+        submit_data.ligand_file_ids = ligand_file_ids
+        updateGlobalLigandFilesIds(ligand_file_ids)
       }
     }
     else {
       const ligand_file_ids = data.ligand_file_ids
       const ids = ligand_file_ids.split(',')
+      updateGlobalLigandFilesIds(ids)
       ids.forEach((index: string) => {
         const dockingResultFile = getGlobalLigandUploadResultFile(index)
         if (dockingResultFile) {
@@ -268,6 +274,7 @@ const Container = () => {
     clearGlobalLigandFileList()
     clearGlobalLigandUploadResultFileList()
     clearGlobalLigandResultInputFile()
+    clearGlobalLigandFilesIds()
     setGlobalResult('')
   }
   const Content = () => {
@@ -298,6 +305,7 @@ const Container = () => {
         <GlobalResultContext.Provider value={
           {
             resultData: globalResult,
+            globalLigandFilesIds,
             globalReceptorResultInputFileList,
             globalLigandResultInputFileList,
             getGlobalLigandUploadResultFile,
@@ -381,6 +389,7 @@ const Container = () => {
       clearGlobalLigandFileList()
       clearGlobalLigandUploadResultFileList()
       clearGlobalLigandResultInputFile()
+      clearGlobalLigandFilesIds()
     }
     if (strategy === DockingStrategyEnum.pocket) {
       clearPocketReceptorUploadFileList()
