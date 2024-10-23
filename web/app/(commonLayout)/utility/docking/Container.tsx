@@ -333,8 +333,7 @@ const Container = () => {
       return !!globalResult
 
     if (strategy === DockingStrategyEnum.pocket)
-      // return !!result
-      return true
+      return !!result
 
     return false
   }, [strategy, globalResult, result])
