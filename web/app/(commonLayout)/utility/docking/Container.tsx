@@ -35,7 +35,16 @@ const Container = () => {
 
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { notify } = useContext1(ToastContext)
-  const { MolstarRef, dockingMolstarList, addStructure, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, clear } = useMolstar()
+  const {
+    MolstarRef,
+    dockingMolstarList,
+    addStructure,
+    getStructure,
+    loadStructureFromUrl,
+    loadStructureFromData,
+    setStructureVisibility,
+    clear,
+  } = useMolstar()
 
   const { StrategyMap, strategy, setStrategy } = useStrategy()
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
@@ -194,13 +203,28 @@ const Container = () => {
     try {
       const res: any = await submitDockingTask(data)
       setResult(res.result)
-      const id = res.id
-      if (id)
-        setPocketResultId(id)
+      const resId = res.id
+      if (resId)
+        setPocketResultId(resId)
 
       setSubmitLoading(false)
       notify({ type: 'success', message: 'Task parsing successful' })
-      const { ligand_file_ids } = data
+      const { ligand_file_ids, pdb_file_id } = data
+      if (pdb_file_id) {
+        const id = pdb_file_id
+        const dockingResultFile = getPocketReceptorUploadResultFile(id)
+        const dockingMolstar = getStructure(id)
+        console.log(id)
+        console.log(pocketReceptorUploadFileList)
+        console.log(dockingMolstarList)
+        console.log(dockingResultFile)
+        console.log(dockingMolstar)
+        if (dockingResultFile && dockingMolstar) {
+          const { name = '' } = dockingResultFile
+          const { visible } = dockingMolstar
+          addPocketReceptorResultInputFile({ id, name, visible, display: true })
+        }
+      }
       if (ligand_file_ids)
         updatePocketLigandFilesIds(ligand_file_ids)
 

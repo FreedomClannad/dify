@@ -33,9 +33,8 @@ const ReceptorFile = () => {
                 setValue('pdb_file_id', id)
                 const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
                 loadStructureFromUrl(getDockingFileURL({ id, mime_type }), format)
-                addPocketReceptorUploadResultFile({ id, mime_type, extension: format, name, fileID: fileItem.fileID })
-                addPocketReceptorResultInputFile({ id: fileItem.fileID, name, visible: true, display: true })
-                addStructure({ id: fileItem.fileID, visible: true })
+                addPocketReceptorUploadResultFile({ id, mime_type, extension: format, name, fileID: id })
+                addStructure({ id, visible: true })
                 // TODO 屏蔽向后端请求中心点坐标
                 // getCenterPosition(id).then((res) => {
                 //   const { center_x, center_y, center_z, residue_number, chain } = res
@@ -52,16 +51,14 @@ const ReceptorFile = () => {
           setPocketReceptorUploadFileList(n_list)
         }} prepareFileList={(files) => {
           setPocketReceptorUploadFileList(files)
-          if (files.length === 0) {
+          if (files.length === 0)
             setValue('pdb_file_id', '')
-            clearPocketReceptorUploadResultFileList()
-            clearPocketReceptorResultInputFileList()
-          }
         }}
         onUploadError={(file) => {
           const n_list = pocketReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
           setPocketReceptorUploadFileList(n_list)
-          deletePocketReceptorUploadResultFile(file.fileID)
+          const { id } = file.file
+          id && deletePocketReceptorUploadResultFile(id)
         }}
         />
       </div>

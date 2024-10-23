@@ -10,6 +10,11 @@ const useMolstar = () => {
   const addStructure = (dockingMolstar: DockingMolstar) => {
     setDockingMolstarList([...dockingMolstarList, dockingMolstar])
   }
+
+  // 根据id获取数据
+  const getStructure = (id: string) => {
+    return dockingMolstarList.find(item => item.id === id)
+  }
   // 根据URL进行下载并渲染
   const loadStructureFromUrl = (url: string, formats: BuiltInTrajectoryFormat) => {
     if (MolstarRef.current) {
@@ -75,6 +80,7 @@ const useMolstar = () => {
     MolstarRef,
     dockingMolstarList,
     addStructure,
+    getStructure,
     loadStructureFromUrl,
     loadStructureFromData,
     setStructureVisibility,
