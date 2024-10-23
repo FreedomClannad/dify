@@ -19,6 +19,7 @@ const LigandFile = () => {
     deletePocketLigandUploadResultFile,
     clearPocketLigandUploadResultFileList,
     addPocketLigandResultInputFile,
+    clearPocketLigandResultInputFileList,
   } = useContext(InputContext)
   // const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
   const { getValues, setValue, errors } = useContext(FormContext)
@@ -96,6 +97,7 @@ const LigandFile = () => {
           if (files.length === 0) {
             setValue('ligand_file_ids', '')
             clearPocketLigandUploadResultFileList()
+            clearPocketLigandResultInputFileList()
             setLigandIdStorage('')
           }
         }}

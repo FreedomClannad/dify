@@ -15,6 +15,7 @@ const ReceptorFile = () => {
     deletePocketReceptorUploadResultFile,
     clearPocketReceptorUploadResultFileList,
     addPocketReceptorResultInputFile,
+    clearPocketReceptorResultInputFileList,
   } = useContext(InputContext)
   const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
   const { setValue, errors } = useContext(FormContext)
@@ -54,6 +55,7 @@ const ReceptorFile = () => {
           if (files.length === 0) {
             setValue('pdb_file_id', '')
             clearPocketReceptorUploadResultFileList()
+            clearPocketReceptorResultInputFileList()
           }
         }}
         onUploadError={(file) => {

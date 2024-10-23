@@ -15,6 +15,7 @@ type InputContextType = {
   deletePocketReceptorUploadResultFile: (id: string) => void
   clearPocketReceptorUploadResultFileList: () => void
   addPocketReceptorResultInputFile: (dockingInputFile: DockingInputFile) => void
+  clearPocketReceptorResultInputFileList: () => void
   // Ligand
   pocketLigandUploadFileList: FileItem[]
   setPocketLigandUploadFileList: (receptorFileList: FileItem[]) => void
@@ -22,6 +23,7 @@ type InputContextType = {
   deletePocketLigandUploadResultFile: (id: string) => void
   clearPocketLigandUploadResultFileList: () => void
   addPocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => void
+  clearPocketLigandResultInputFileList: () => void
   // Strategy 模式选择
   StrategyMap: StrategyMapType
   strategy: DockingStrategyEnum
@@ -46,6 +48,8 @@ export const InputContext = createContext<InputContextType>({
   setCenterPosition: () => {},
   addPocketLigandUploadResultFile: (file: DockingResultFile) => {},
   addPocketLigandResultInputFile: (dockingInputFile: DockingInputFile) => {},
+  clearPocketReceptorResultInputFileList: () => {},
+  clearPocketLigandResultInputFileList: () => {},
   StrategyMap,
   strategy: DockingStrategyEnum.global,
   setStrategy: (strategy: DockingStrategyEnum) => {},

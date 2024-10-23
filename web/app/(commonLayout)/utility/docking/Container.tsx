@@ -183,6 +183,8 @@ const Container = () => {
   const handlePocketSubmit = async (data: FieldValues) => {
     setSubmitLoading(true)
     setResult('')
+    clearCropReceptorResultList()
+    clearCropRecepResultInputFileList()
     try {
       const res: any = await submitDockingTask(data)
       setResult(res.result)
@@ -275,6 +277,7 @@ const Container = () => {
           deletePocketReceptorUploadResultFile,
           clearPocketReceptorUploadResultFileList,
           addPocketReceptorResultInputFile,
+          clearPocketReceptorResultInputFileList,
 
           pocketLigandUploadFileList,
           setPocketLigandUploadFileList,
@@ -282,6 +285,7 @@ const Container = () => {
           deletePocketLigandUploadResultFile,
           clearPocketLigandUploadResultFileList,
           addPocketLigandResultInputFile,
+          clearPocketLigandResultInputFileList,
 
           setStrategy,
           strategy,
