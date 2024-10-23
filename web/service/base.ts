@@ -348,17 +348,14 @@ const baseFetch = <T>(
       }, TIME_OUT)
     }),
     new Promise((resolve, reject) => {
-      console.log('223344')
       globalThis.fetch(urlWithPrefix, options as RequestInit)
         .then((res) => {
-          console.log(res)
           const resClone = res.clone()
-          console.log(resClone)
+
           // Error handler
           if (!/^(2|3)\d{2}$/.test(String(res.status))) {
-            console.log(334455)
             const bodyJson = res.json()
-            console.log(bodyJson)
+
             switch (res.status) {
               case 401: {
                 if (isPublicAPI) {
@@ -427,7 +424,6 @@ const baseFetch = <T>(
           else resolve(needAllResponseContent ? resClone : res.json())
         })
         .catch((err) => {
-          console.log(err)
           if (!silent)
             Toast.notify({ type: 'error', message: err })
           reject(err)
