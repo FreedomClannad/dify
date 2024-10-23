@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useContext as useContext1 } from 'use-context-selector'
 import type { FieldValues } from 'react-hook-form'
@@ -80,6 +80,7 @@ const Container = () => {
     addPocketReceptorResultInputFile,
     updatePocketReceptorResultInputFile,
     pocketReceptorResultInputFileList,
+    clearPocketReceptorResultInputFileList,
   } = usePocketReceptor()
 
   const {
@@ -93,6 +94,7 @@ const Container = () => {
     pocketLigandResultInputFileList,
     addPocketLigandResultInputFile,
     updatePocketLigandResultInputFile,
+    clearPocketLigandResultInputFileList,
   } = usePocketLigand()
 
   // Pocket Receptor Crop
@@ -104,6 +106,7 @@ const Container = () => {
     cropRecepResultInputList,
     addCropRecepResultInputFile,
     updateCropRecepResultInputFile,
+    clearCropRecepResultInputFileList,
   } = useCropReceptor()
 
   // 全局对接提交
@@ -202,14 +205,26 @@ const Container = () => {
     }
   }
   const handleReset = () => {
+    // 清除画布
     clear()
+    // 清除Pocket的数据
     clearPocketReceptorUploadFileList()
+    clearPocketReceptorUploadResultFileList()
+    clearPocketReceptorResultInputFileList()
     clearPocketLigandUploadFileList()
+    clearPocketLigandUploadResultFileList()
+    clearPocketLigandResultInputFileList()
     clearCropReceptorResultList()
+    clearCropRecepResultInputFileList()
     setResult('')
 
+    // 清除Global的数据
     clearGlobalReceptorFileList()
+    clearGlobalReceptorUploadResultList()
+    clearGlobalReceptorResultInputFile()
     clearGlobalLigandFileList()
+    clearGlobalLigandUploadResultFileList()
+    clearGlobalLigandResultInputFile()
     setGlobalResult('')
   }
   const Content = () => {
@@ -310,6 +325,27 @@ const Container = () => {
 
     return false
   }, [strategy, globalResult, result])
+
+  useEffect(() => {
+    if (strategy === DockingStrategyEnum.global) {
+      clearGlobalReceptorFileList()
+      clearGlobalReceptorUploadResultList()
+      clearGlobalReceptorResultInputFile()
+      clearGlobalLigandFileList()
+      clearGlobalLigandUploadResultFileList()
+      clearGlobalLigandResultInputFile()
+    }
+    if (strategy === DockingStrategyEnum.pocket) {
+      clearPocketReceptorUploadFileList()
+      clearPocketReceptorUploadResultFileList()
+      clearPocketReceptorResultInputFileList()
+      clearPocketLigandUploadFileList()
+      clearPocketLigandUploadResultFileList()
+      clearPocketLigandResultInputFileList()
+      clearCropReceptorResultList()
+      clearCropRecepResultInputFileList()
+    }
+  }, [strategy])
   return (<>
     <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">
       <div className="flex flex-col w-fit sm:w-[410px] shrink-0 border-gray-550 border-r h-full">

@@ -70,7 +70,7 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset, submitLoading = fa
             {contentList.map((content, index) => <div key={`Global-input-form-${index}`} className="mt-4">{content}</div>)}
           </GlobalFormContext.Provider>
         </div>
-        <SubmitButton onReset={() => {
+        <SubmitButton className="pb-3" onReset={() => {
           reset()
           onReset()
         }} runLoading={submitLoading}/>

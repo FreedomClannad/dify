@@ -74,7 +74,7 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
             {contentList.map((content, index) => <div key={`inputForm-${index}`} className="mt-4">{content}</div>)}
           </FormContext.Provider>
         </div>
-        <SubmitButton runLoading={submitLoading} onReset={() => {
+        <SubmitButton className="pb-3" runLoading={submitLoading} onReset={() => {
           reset()
           onReset()
         }} />
