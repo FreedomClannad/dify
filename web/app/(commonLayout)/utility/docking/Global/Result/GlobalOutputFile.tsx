@@ -2,10 +2,14 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 import { useContext, useEffect, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 // import { data } from './data'
+import { DocumentArrowDownIcon } from '@heroicons/react/24/outline'
+import { saveAs } from 'file-saver'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getUUID } from '@/utils'
 import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalOutputContext'
+import Tooltip from '@/app/components/base/tooltip'
+import { downloadGlobalFile } from '@/service/docking'
 export type TableType = {
   id: string
   mode: number
@@ -36,7 +40,7 @@ const initTable = (data: any[]): TableType[] => {
 
 const GlobalOutputFile = () => {
   const [table, setTable] = useState<TableType[]>([])
-  const { resultData } = useContext(GlobalResultContext)
+  const { resultData, resultID } = useContext(GlobalResultContext)
   const { addStructure, loadStructureFromData, setStructureVisibility } = useContext(MolstarContext)
   useEffect(() => {
     try {
@@ -71,7 +75,17 @@ const GlobalOutputFile = () => {
     })
     setTable(n_list)
   }
-  return <VerticalTitleCard title="Global docking output file">
+
+  const handleDownloadClick = async () => {
+    const data = await downloadGlobalFile(resultID, 'all')
+    if (data)
+      saveAs(data, `${resultID}.zip`)
+  }
+
+  return <VerticalTitleCard
+    title="Global docking output file"
+    right={<Tooltip popupContent="Download"><div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}><DocumentArrowDownIcon/></div></Tooltip>}
+  >
     <>
       {
         table.length === 0

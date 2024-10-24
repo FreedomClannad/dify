@@ -2,6 +2,7 @@ import { createContext } from 'react'
 import type { DockingInputFile, DockingResultFile } from '@/types/docking'
 type GlobalOutputContextType = {
   resultData: string
+  resultID: string
   globalLigandFilesIds: string
   globalReceptorResultInputFileList: DockingInputFile[]
   globalLigandResultInputFileList: DockingInputFile[]
@@ -11,6 +12,7 @@ type GlobalOutputContextType = {
 
 export const GlobalResultContext = createContext <GlobalOutputContextType> ({
   resultData: '',
+  resultID: '',
   globalLigandFilesIds: '',
   globalReceptorResultInputFileList: [],
   globalLigandResultInputFileList: [],

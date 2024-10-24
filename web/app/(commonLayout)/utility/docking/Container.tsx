@@ -79,6 +79,7 @@ const Container = () => {
   } = useGlobalLigand()
   const [globalSubmitLoading, setGlobalSubmitLoading] = useState<boolean>(false)
   const [globalResult, setGlobalResult] = useState<string>('')
+  const [globalResultId, setGlobalResultId] = useState<string>('')
 
   // Pocket
   const [result, setResult] = useState<string>('')
@@ -190,6 +191,9 @@ const Container = () => {
     try {
       const res: any = await submitGlobalDockingTask(submit_data)
       setGlobalResult(res.result)
+      const resId = res.id
+      if (resId)
+        setGlobalResultId(resId)
       setGlobalSubmitLoading(false)
       notify({ type: 'success', message: 'Task parsing successful' })
       if (res.result)
@@ -305,6 +309,7 @@ const Container = () => {
         <GlobalResultContext.Provider value={
           {
             resultData: globalResult,
+            resultID: globalResultId,
             globalLigandFilesIds,
             globalReceptorResultInputFileList,
             globalLigandResultInputFileList,

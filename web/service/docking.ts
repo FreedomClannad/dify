@@ -39,3 +39,15 @@ export const downloadPocketFile = (id: string, range: string) => {
     },
   })
 }
+
+export const downloadGlobalFile = (task_id: string, range: string) => {
+  return get<Blob>('/global-docking/download', {
+    headers: new Headers({
+      'Content-Type': 'application/octet-stream',
+    }),
+    params: {
+      task_id,
+      range,
+    },
+  })
+}

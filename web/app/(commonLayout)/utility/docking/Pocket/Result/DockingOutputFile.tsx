@@ -79,7 +79,9 @@ const DockingOutputFile = () => {
     if (data)
       saveAs(data, `${resultID}.sdf`)
   }
-  return <VerticalTitleCard title="Pocket docking output file" right={<Tooltip popupContent="Download"><div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}><DocumentArrowDownIcon/></div></Tooltip>}>
+  return <VerticalTitleCard
+    title="Pocket docking output file"
+    right={<Tooltip popupContent="Download"><div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}><DocumentArrowDownIcon/></div></Tooltip>}>
     <>
       {
         table.length === 0
