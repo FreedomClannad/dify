@@ -1,15 +1,15 @@
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
+import { Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useContext, useEffect, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import { DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import { saveAs } from 'file-saver'
 import Tooltip from '@/app/components/base/tooltip'
-// import { data } from './data'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getUUID } from '@/utils'
 import { downloadPocketFile } from '@/service/docking'
+
 export type TableType = {
   id: string
   mode: number
@@ -19,34 +19,31 @@ export type TableType = {
   cnnAffinity: number
   visible: boolean
 }
+
 const initTable = (data: any[]): TableType[] => {
-  const n_data: TableType[] = []
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    const visible = i === 0
-    n_data.push({
-      id: getUUID(),
-      mode: item.mode,
-      mol: item.mol,
-      score: item['CNN pose score'],
-      affinity: item['affinity(kcal/mol)'],
-      cnnAffinity: item['CNN affinity'],
-      visible,
-    })
-  }
-  return n_data
+  return data.map((item, index) => ({
+    id: getUUID(),
+    mode: item.mode,
+    mol: item.mol,
+    score: item['CNN pose score'],
+    affinity: item['affinity(kcal/mol)'],
+    cnnAffinity: item['CNN affinity'],
+    visible: index === 0,
+  }))
 }
 
 const DockingOutputFile = () => {
   const [table, setTable] = useState<TableType[]>([])
+  const [selected, setSelected] = useState<Set<string>>(new Set())
   const { resultData, resultID } = useContext(ResultContext)
   const { addStructure, loadStructureFromData, setStructureVisibility } = useContext(MolstarContext)
+
   useEffect(() => {
     try {
       const t_data = JSON.parse(resultData)
-      const table = initTable(t_data)
-      setTable(table)
-      table.forEach((item) => {
+      const tableData = initTable(t_data)
+      setTable(tableData)
+      tableData.forEach((item) => {
         if (item.visible) {
           loadStructureFromData(item.mol, 'mol')
           addStructure({ id: item.id, visible: item.visible })
@@ -57,8 +54,9 @@ const DockingOutputFile = () => {
       setTable([])
     }
   }, [resultData])
+
   const handleVisible = (tableItem: TableType) => {
-    const n_list = table.map((item) => {
+    const updatedTable = table.map((item) => {
       if (item.id === tableItem.id) {
         const visible = !item.visible
         setStructureVisibility({
@@ -69,44 +67,96 @@ const DockingOutputFile = () => {
         })
         return { ...item, visible }
       }
-
       return item
     })
-    setTable(n_list)
+    setTable(updatedTable)
   }
+
   const handleDownloadClick = async () => {
     const data = await downloadPocketFile(resultID, 'all')
     if (data)
       saveAs(data, `${resultID}.sdf`)
   }
-  return <VerticalTitleCard title="Pocket docking output file" right={<Tooltip popupContent="Download"><div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}><DocumentArrowDownIcon/></div></Tooltip>}>
-    <>
-      {
-        table.length === 0
-          ? <div className="w-full flex justify-center items-center rounded h-[200px] leading-[40px] shadow-md"><span>No data</span></div>
-          : <Table aria-label="Example static collection table">
+
+  const handleRowSelection = (id: string) => {
+    setSelected((prev) => {
+      const newSelected = new Set(prev)
+      if (newSelected.has(id))
+        newSelected.delete(id)
+      else
+        newSelected.add(id)
+
+      return newSelected
+    })
+  }
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const allIds = new Set(table.map(item => item.id))
+      setSelected(allIds)
+    }
+    else {
+      setSelected(new Set())
+    }
+  }
+
+  return (
+    <VerticalTitleCard
+      title="Pocket docking output file"
+      right={
+        <Tooltip popupContent="Download">
+          <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}>
+            <DocumentArrowDownIcon />
+          </div>
+        </Tooltip>
+      }
+    >
+      {table.length === 0
+        ? (
+          <div className="w-full flex justify-center items-center rounded h-[200px] leading-[40px] shadow-md">
+            <span>No data</span>
+          </div>
+        )
+        : (
+          <Table aria-label="Docking output table">
             <TableHeader>
+              <TableColumn>
+                <Checkbox
+                  checked={table.length > 0 && selected.size === table.length}
+                  onChange={e => handleSelectAll(e.target.checked)}
+                />
+              </TableColumn>
               <TableColumn>Mode</TableColumn>
               <TableColumn>Score</TableColumn>
-              <TableColumn>affinity</TableColumn>
-              <TableColumn>CNN affinity</TableColumn>
-              <TableColumn><></></TableColumn>
+              <TableColumn>Affinity</TableColumn>
+              <TableColumn>CNN Affinity</TableColumn>
+              <TableColumn>Visibility</TableColumn>
             </TableHeader>
             <TableBody>
-              {table.map((item, index) => {
-                return <TableRow key={index}>
+              {table.map(item => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selected.has(item.id)}
+                      onChange={() => handleRowSelection(item.id)}
+                    />
+                  </TableCell>
                   <TableCell>{item.mode}</TableCell>
-                  <TableCell>{item.score}</TableCell>
-                  <TableCell>{item.affinity}</TableCell>
-                  <TableCell>{item.cnnAffinity}</TableCell>
-                  <TableCell><div className="cursor-pointer text-xs flex items-center" onClick={() => { handleVisible(item) }}>{item.visible ? <RiEyeLine className="w-4 h-4"/> : <RiEyeOffLine className="w-4 h-4"/>}</div></TableCell>
+                  <TableCell>{item.score.toFixed(2)}</TableCell>
+                  <TableCell>{item.affinity.toFixed(2)}</TableCell>
+                  <TableCell>{item.cnnAffinity.toFixed(2)}</TableCell>
+                  <TableCell>
+                    <div className="cursor-pointer text-xs flex items-center" onClick={() => handleVisible(item)}>
+                      {item.visible ? <RiEyeLine className="w-4 h-4" /> : <RiEyeOffLine className="w-4 h-4" />}
+                    </div>
+                  </TableCell>
                 </TableRow>
-              })}
-
+              ))}
             </TableBody>
           </Table>
-      }
-    </>
-  </VerticalTitleCard>
+        )}
+    </VerticalTitleCard>
+  )
 }
+
 export default DockingOutputFile
