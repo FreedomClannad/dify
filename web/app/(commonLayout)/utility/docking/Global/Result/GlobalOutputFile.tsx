@@ -79,9 +79,18 @@ const GlobalOutputFile = () => {
   }
 
   const handleDownloadClick = async () => {
-    const data = await downloadGlobalFile(resultID, 'all')
-    if (data)
-      saveAs(data, `${resultID}.zip`)
+    if (selected.size > 0) {
+      const selectedItems = table.filter(item => selected.has(item.id))
+      const selectedData = selectedItems.map(item => item.mode).join(',')
+      const data = await downloadGlobalFile(resultID, selectedData)
+      if (data)
+        saveAs(data, `${resultID}_selected.zip`)
+    }
+    else {
+      const data = await downloadGlobalFile(resultID, 'all')
+      if (data)
+        saveAs(data, `${resultID}.zip`)
+    }
   }
 
   // 处理单行选择/取消选择

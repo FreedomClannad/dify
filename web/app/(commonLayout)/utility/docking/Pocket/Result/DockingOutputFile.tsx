@@ -73,9 +73,18 @@ const DockingOutputFile = () => {
   }
 
   const handleDownloadClick = async () => {
-    const data = await downloadPocketFile(resultID, 'all')
-    if (data)
-      saveAs(data, `${resultID}.sdf`)
+    if (selected.size > 0) {
+      const selectedItems = table.filter(item => selected.has(item.id))
+      const selectedData = selectedItems.map(item => item.mode).join(',')
+      const data = await downloadPocketFile(resultID, selectedData)
+      if (data)
+        saveAs(data, `${resultID}_selected.sdf`)
+    }
+    else {
+      const data = await downloadPocketFile(resultID, 'all')
+      if (data)
+        saveAs(data, `${resultID}.sdf`)
+    }
   }
 
   const handleRowSelection = (id: string) => {
