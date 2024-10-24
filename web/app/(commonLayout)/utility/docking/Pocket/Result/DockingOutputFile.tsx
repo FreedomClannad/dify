@@ -137,7 +137,7 @@ const DockingOutputFile = () => {
                 <TableRow key={item.id}>
                   <TableCell>
                     <Checkbox
-                      checked={selected.has(item.id)}
+                      isSelected={selected.has(item.id)}
                       onChange={() => handleRowSelection(item.id)}
                     />
                   </TableCell>
