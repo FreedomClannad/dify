@@ -8,6 +8,8 @@ const useGlobalLigand = () => {
   const [globalLigandUploadResultFileList, setGlobalLigandUploadResultFileList] = useState<DockingResultFile[]>([])
   // 控制显示Result Input File显示
   const [globalLigandResultInputFileList, setGlobalLigandResultInputFileList] = useState<DockingInputFile[]>([])
+  // LigandFilesIds
+  const [globalLigandFilesIds, setGlobalLigandFilesIds] = useState<string>('')
   // 上传文件内容
   const clearGlobalLigandFileList = () => {
     setGlobalLigandUploadFileList([])
@@ -85,6 +87,14 @@ const useGlobalLigand = () => {
     )
     setGlobalLigandResultInputFileList(newList)
   }
+  // LigandFilesIds
+  const updateGlobalLigandFilesIds = (ids: string) => {
+    setGlobalLigandFilesIds(ids)
+  }
+
+  const clearGlobalLigandFilesIds = () => {
+    setGlobalLigandFilesIds('')
+  }
   return {
     // 上传文件内容
     globalLigandUploadFileList,
@@ -102,7 +112,10 @@ const useGlobalLigand = () => {
     addGlobalLigandResultInputFile,
     clearGlobalLigandResultInputFile,
     visibleGlobalLigandResultInputFile,
-
+    // LigandFilesIds
+    globalLigandFilesIds,
+    updateGlobalLigandFilesIds,
+    clearGlobalLigandFilesIds,
   }
 }
 
