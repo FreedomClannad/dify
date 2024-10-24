@@ -100,6 +100,20 @@ const DockingOutputFile = () => {
     }
   }
 
+  const isIndeterminate = () => {
+    return selected.size > 0 && selected.size < table.length
+  }
+
+  const isAllSelected = () => {
+    return selected.size === table.length
+  }
+
+  useEffect(() => {
+    // Check if all rows are selected to update the select all checkbox
+    if (isAllSelected())
+      setSelected(new Set(table.map(item => item.id))) // Ensure all are selected
+  }, [selected, table.length]) // Re-run this effect when selected changes
+
   return (
     <VerticalTitleCard
       title="Pocket docking output file"
@@ -122,7 +136,8 @@ const DockingOutputFile = () => {
             <TableHeader>
               <TableColumn>
                 <Checkbox
-                  checked={table.length > 0 && selected.size === table.length}
+                  isSelected={isAllSelected()}
+                  isIndeterminate={isIndeterminate()}
                   onChange={e => handleSelectAll(e.target.checked)}
                 />
               </TableColumn>
@@ -138,7 +153,20 @@ const DockingOutputFile = () => {
                   <TableCell>
                     <Checkbox
                       isSelected={selected.has(item.id)}
-                      onChange={() => handleRowSelection(item.id)}
+                      onChange={() => {
+                        handleRowSelection(item.id)
+                        // Check if all rows are selected after this change
+                        if (selected.has(item.id)) {
+                          // If already selected, we just need to handle deselection
+                          if (selected.size === table.length)
+                            handleSelectAll(false)
+                        }
+                        else {
+                          // If not selected, we need to check if all are selected
+                          if (selected.size === table.length - 1)
+                            handleSelectAll(true)
+                        }
+                      }}
                     />
                   </TableCell>
                   <TableCell>{item.mode}</TableCell>
