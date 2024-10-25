@@ -1,19 +1,21 @@
 import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import HistoryTable from './components/HistoryTable'
-import { getHistoryData } from '@/app/(commonLayout)/utility/history/DemoData.'
 import type { UtilityHistory, UtilityHistoryState } from '@/types/utility'
+import { getHistoryList } from '@/service/history'
 
 const initTableData = (data: any) => {
   const n_list: UtilityHistory[] = []
   data.forEach((item: any) => {
     n_list.push({
       id: item.id,
+      task_id: item.task_id,
+      task_type: item.task_type,
       label: item.label,
-      title: item.title,
-      createDate: item.createDate,
-      updateDate: item.updateDate,
-      state: item.state as UtilityHistoryState,
+      title: item.task_names,
+      createDate: item.created_at,
+      updateDate: item.updated_at,
+      state: item.status as UtilityHistoryState,
       action: () => {},
     })
   })
@@ -22,10 +24,24 @@ const initTableData = (data: any) => {
 
 const History = () => {
   const [tableData, setTableData] = useState<UtilityHistory[]>([])
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
+  const [total, setTotal] = useState<number>(0)
+  const getData = async () => {
+    const res = await getHistoryList({ page, page_size: pageSize })
+    const { total, data } = res
+    const n_data = initTableData(data)
+    setTotal(total)
+    setTableData(n_data)
+    console.log(n_data)
+    console.log(res)
+  }
   useEffect(() => {
-    const data = getHistoryData()
-    const n_tableData = initTableData(data)
-    setTableData(n_tableData)
+    getData().then()
+  }, [page, pageSize])
+
+  useEffect(() => {
+    getData().then()
   }, [])
   return <>
     <div>
@@ -36,7 +52,7 @@ const History = () => {
         </Breadcrumbs>
       </div>
       <div className="px-12 pt-2 pb-4">
-        <HistoryTable data={tableData}/>
+        <HistoryTable total={total} data={tableData} page={page} onPageChange={setPage} pageSize={pageSize} onPageSize={setPageSize}/>
       </div>
     </div>
   </>

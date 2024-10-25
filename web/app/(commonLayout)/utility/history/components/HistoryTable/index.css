@@ -1,0 +1,8 @@
+.history-table-base {
+    max-height: calc(100vh - 140px);
+    gap: 2rem;
+}
+
+.history-table-body {
+    min-height: calc(100vh - 240px);
+}

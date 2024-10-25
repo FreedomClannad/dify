@@ -7,6 +7,8 @@ export enum UtilityHistoryState {
 
 export type UtilityHistory = {
   id: string
+  task_id: string
+  task_type: string
   label: string
   title: string
   createDate: string

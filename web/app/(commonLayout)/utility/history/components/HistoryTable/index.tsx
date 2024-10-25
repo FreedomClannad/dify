@@ -1,14 +1,25 @@
-import { Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
-import { useCallback } from 'react'
+import { Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
+import { useCallback, useMemo } from 'react'
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { HistoryTableColumns } from '@/app/(commonLayout)/utility/history/table'
 import type { UtilityHistory, UtilityHistoryKey } from '@/types/utility'
 import { UtilityHistoryState } from '@/types/utility'
-// arrow-left-end-on-rectangle
+import cn from '@/utils/classnames'
+import './index.css'
+const pageSizeOptions = [10, 20, 50, 100]
 type Props = {
+  total: number
   data: UtilityHistory[]
+  page: number
+  pageSize: number
+  onPageChange: (page: number) => void
+  onPageSize: (pageSize: number) => void
 }
-const HistoryTable = ({ data }: Props) => {
+const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }: Props) => {
+  const pages = useMemo(() => {
+    return total ? Math.ceil(total / pageSize) : 0
+  }, [total, pageSize])
+
   const renderCell = useCallback((utilityHistory: UtilityHistory, columnKey: keyof UtilityHistory) => {
     const cellValue = utilityHistory[columnKey]
 
@@ -99,12 +110,41 @@ const HistoryTable = ({ data }: Props) => {
       }
     }
   }, [])
+
+  const bottomContent = useMemo(() => {
+    console.log(pages)
+    if (pages === 0)
+      return null
+    return (<div className="flex w-full justify-center">
+
+      <Pagination
+        className="ml-3"
+        isCompact
+        showControls
+        showShadow
+        color="primary"
+        page={page}
+        total={pages}
+        onChange={page => onPageChange(page)}
+      />
+    </div>)
+  }, [total, page, pageSize, data])
+
   return <>
-    <Table>
+    <Table
+      isHeaderSticky
+      bottomContent={bottomContent}
+      bottomContentPlacement="outside"
+      classNames={{
+        base: cn('history-table-base'),
+        table: 'history-table-body',
+      }}
+
+    >
       <TableHeader columns={HistoryTableColumns}>
         { column => <TableColumn key={column.key} align={column.key === 'action' ? 'center' : 'start'}>{column.label} </TableColumn>}
       </TableHeader>
-      <TableBody items={data}>
+      <TableBody emptyContent={'No Data'} items={data}>
         {item => (
           <TableRow key={item.id}>
             {columnKey => <TableCell>{renderCell(item, columnKey as UtilityHistoryKey)}</TableCell>}
