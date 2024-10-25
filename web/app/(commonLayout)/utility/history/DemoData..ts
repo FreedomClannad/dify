@@ -21,11 +21,13 @@ export const getHistoryData = () => {
   for (let i = 0; i < 50; i++) {
     n_list.push({
       id: i.toString(),
+      task_id: i.toString(),
+      task_type: i.toString(),
       label: `Title ${i}`,
-      title: `Content ${i}`,
-      createDate: formatDate(new Date()),
-      updateDate: formatDate(new Date()),
-      state: getRandomStatus(),
+      task_names: `Content ${i}`,
+      created_at: formatDate(new Date()),
+      updated_at: formatDate(new Date()),
+      status: getRandomStatus(),
     })
   }
   return n_list

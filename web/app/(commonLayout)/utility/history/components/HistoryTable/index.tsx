@@ -112,7 +112,6 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
   }, [])
 
   const bottomContent = useMemo(() => {
-    console.log(pages)
     if (pages === 0)
       return null
     return (<div className="flex w-full justify-center">
