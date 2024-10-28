@@ -1,5 +1,5 @@
 import { Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import { DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import { saveAs } from 'file-saver'
@@ -109,17 +109,17 @@ const DockingOutputFile = () => {
     }
   }
 
-  const isIndeterminate = () => {
+  const isIndeterminate = useMemo(() => {
     return selected.size > 0 && selected.size < table.length
-  }
+  }, [selected, table])
 
-  const isAllSelected = () => {
+  const isAllSelected = useMemo(() => {
     return selected.size === table.length
-  }
+  }, [selected, table])
 
   useEffect(() => {
     // Check if all rows are selected to update the select all checkbox
-    if (isAllSelected())
+    if (isAllSelected)
       setSelected(new Set(table.map(item => item.id))) // Ensure all are selected
   }, [selected, table.length]) // Re-run this effect when selected changes
 
@@ -145,8 +145,8 @@ const DockingOutputFile = () => {
             <TableHeader>
               <TableColumn>
                 <Checkbox
-                  isSelected={isAllSelected()}
-                  isIndeterminate={isIndeterminate()}
+                  isSelected={isAllSelected}
+                  isIndeterminate={isIndeterminate}
                   onChange={e => handleSelectAll(e.target.checked)}
                 />
               </TableColumn>
@@ -164,17 +164,6 @@ const DockingOutputFile = () => {
                       isSelected={selected.has(item.id)}
                       onChange={() => {
                         handleRowSelection(item.id)
-                        // Check if all rows are selected after this change
-                        if (selected.has(item.id)) {
-                          // If already selected, we just need to handle deselection
-                          if (selected.size === table.length)
-                            handleSelectAll(false)
-                        }
-                        else {
-                          // If not selected, we need to check if all are selected
-                          if (selected.size === table.length - 1)
-                            handleSelectAll(true)
-                        }
                       }}
                     />
                   </TableCell>

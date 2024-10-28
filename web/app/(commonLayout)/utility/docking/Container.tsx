@@ -60,6 +60,9 @@ const Container = () => {
     clearGlobalReceptorUploadResultList,
     addGlobalReceptorResultInputFile,
     clearGlobalReceptorResultInputFile,
+    globalReceptorFilesIds,
+    updateGlobalReceptorFilesIds,
+    clearGlobalReceptorFilesIds,
   } = useGlobalReceptor()
   const {
     globalLigandUploadFileList,
@@ -143,8 +146,9 @@ const Container = () => {
         // 遍历数组，将id拼接成字符串
         submit_data.fasta_file_id = receptorList.map((item: any) => {
           const { id, name, mime_type, extension } = item
+          updateGlobalReceptorFilesIds(id)
           addGlobalReceptorUploadResult({ id, mime_type, extension, name, fileID: id })
-          addGlobalReceptorResultInputFile({ id, name, visible: true, display: false })
+          addGlobalReceptorResultInputFile({ id, name, visible: true, display: true })
           return item.id
         }).join(',')
       }
@@ -154,7 +158,8 @@ const Container = () => {
       const dockingResultFile = getGlobalReceptorUploadResultFile(fasta_file_id)
       if (dockingResultFile) {
         const { id, name = '' } = dockingResultFile
-        addGlobalReceptorResultInputFile({ id, name, visible: true, display: false })
+        updateGlobalReceptorFilesIds(id)
+        addGlobalReceptorResultInputFile({ id, name, visible: true, display: true })
       }
     }
     // ligand 为输入模式
@@ -275,6 +280,7 @@ const Container = () => {
     clearGlobalReceptorFileList()
     clearGlobalReceptorUploadResultList()
     clearGlobalReceptorResultInputFile()
+    clearGlobalReceptorFilesIds()
     clearGlobalLigandFileList()
     clearGlobalLigandUploadResultFileList()
     clearGlobalLigandResultInputFile()
@@ -310,6 +316,7 @@ const Container = () => {
           {
             resultData: globalResult,
             resultID: globalResultId,
+            globalReceptorFilesIds,
             globalLigandFilesIds,
             globalReceptorResultInputFileList,
             globalLigandResultInputFileList,
@@ -391,6 +398,7 @@ const Container = () => {
       clearGlobalReceptorFileList()
       clearGlobalReceptorUploadResultList()
       clearGlobalReceptorResultInputFile()
+      clearGlobalReceptorFilesIds()
       clearGlobalLigandFileList()
       clearGlobalLigandUploadResultFileList()
       clearGlobalLigandResultInputFile()

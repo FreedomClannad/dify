@@ -23,6 +23,11 @@ export const submitGlobalDockingTask = (data: any) => {
   return post('/global-docking/task', { body: data })
 }
 
+export const getGlobalReceptorFileContent = (params: { file_id: string }) => {
+  return get<{ file_content: string }>('/global-docking/files/read', {
+    params,
+  })
+}
 // 获取ligand file图片渲染
 export const getLigandFileRenderList = (id: string) => {
   return get<string[]>(`/molecular-docking/files/rendering?file_id=${id}`)

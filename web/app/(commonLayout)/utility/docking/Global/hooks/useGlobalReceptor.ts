@@ -8,7 +8,8 @@ const useGlobalReceptor = () => {
   const [globalReceptorUploadResultList, setGlobalReceptorUploadResultList] = useState<DockingResultFile[]>([])
   // 控制显示Result Input File显示
   const [globalReceptorResultInputFileList, setGlobalReceptorResultInputFileList] = useState<DockingInputFile[]>([])
-
+  // ReceptorFilesId
+  const [globalReceptorFilesIds, setGlobalReceptorFilesIds] = useState<string>('')
   const clearGlobalReceptorFileList = () => {
     setGlobalReceptorUploadFileList([])
   }
@@ -84,6 +85,14 @@ const useGlobalReceptor = () => {
     )
     setGlobalReceptorResultInputFileList(newList)
   }
+
+  // ReceptorFilesId
+  const updateGlobalReceptorFilesIds = (id: string) => {
+    setGlobalReceptorFilesIds(id)
+  }
+  const clearGlobalReceptorFilesIds = () => {
+    setGlobalReceptorFilesIds('')
+  }
   return {
     globalReceptorUploadFileList,
     setGlobalReceptorUploadFileList,
@@ -101,7 +110,10 @@ const useGlobalReceptor = () => {
     updateGlobalReceptorResultInputFile,
     clearGlobalReceptorResultInputFile,
     visibleGlobalReceptorResultInputFile,
-
+    // ReceptorFilesId
+    globalReceptorFilesIds,
+    updateGlobalReceptorFilesIds,
+    clearGlobalReceptorFilesIds,
   }
 }
 

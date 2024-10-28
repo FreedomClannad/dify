@@ -1,5 +1,5 @@
 import { Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import { DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import { saveAs } from 'file-saver'
@@ -116,8 +116,13 @@ const GlobalOutputFile = () => {
   }
 
   // 判断是否为全选或部分选
-  const isIndeterminate = () => selected.size > 0 && selected.size < table.length
-  const isAllSelected = () => selected.size === table.length
+  const isIndeterminate = useMemo(() => {
+    return selected.size > 0 && selected.size < table.length
+  }, [selected, table])
+
+  const isAllSelected = useMemo(() => {
+    return selected.size === table.length
+  }, [selected, table])
 
   return (
     <VerticalTitleCard
@@ -141,8 +146,8 @@ const GlobalOutputFile = () => {
             <TableHeader>
               <TableColumn>
                 <Checkbox
-                  isSelected={isAllSelected()}
-                  isIndeterminate={isIndeterminate()}
+                  isSelected={isAllSelected}
+                  isIndeterminate={isIndeterminate}
                   onChange={e => handleSelectAll(e.target.checked)}
                 />
               </TableColumn>

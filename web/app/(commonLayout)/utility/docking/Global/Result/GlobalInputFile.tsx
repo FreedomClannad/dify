@@ -7,8 +7,9 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
 import Tooltip from '@/app/components/base/tooltip'
 import ModalImage from '@/app/(commonLayout)/utility/docking/components/ModalImage'
+import ModalText from '@/app/(commonLayout)/utility/docking/components/ModalText'
 import type { SVGPreview } from '@/types/docking'
-import { getLigandFileRenderList } from '@/service/docking'
+import { getGlobalReceptorFileContent, getLigandFileRenderList } from '@/service/docking'
 
 const GlobalInputFile = () => {
   const {
@@ -16,13 +17,19 @@ const GlobalInputFile = () => {
     globalLigandResultInputFileList,
     getGlobalLigandUploadResultFile,
     updateGlobalLigandResultInputFile,
+    globalReceptorFilesIds,
     globalLigandFilesIds,
   } = useContext(GlobalResultContext)
   const { setStructureVisibility, loadStructureFromUrl } = useContext(MolstarContext)
   const [previewData, setPreviewData] = useState<SVGPreview[]>([])
   const [isShow, setIsShow] = useState<boolean>(false)
   const [ligandIdStorage, setLigandIdStorage] = useState<string>('')
-  const [modalLoading, setModalLoading] = useState<boolean>(false)
+  const [imgLoading, setImgLoading] = useState<boolean>(false)
+
+  const [receptorText, setReceptorText] = useState<string>('')
+  const [isTextShow, setIsTextShow] = useState<boolean>(false)
+  const [receptorIdStorage, setReceptorIdStorage] = useState<string>('')
+  const [textLoading, setTextLoading] = useState<boolean>(false)
 
   // const receptorList: DockingInputFile[] = useMemo(() => {
   //   const newList: DockingInputFile[] = []
@@ -44,6 +51,23 @@ const GlobalInputFile = () => {
   //     })
   //   }
   // }
+
+  const handleReceptorClick = async () => {
+    if (globalReceptorFilesIds && globalReceptorFilesIds === receptorIdStorage) {
+      setIsTextShow(true)
+      return
+    }
+    if (globalReceptorFilesIds && globalReceptorFilesIds !== receptorIdStorage) {
+      setTextLoading(true)
+      setIsTextShow(true)
+      const data = await getGlobalReceptorFileContent({ file_id: globalReceptorFilesIds })
+      const { file_content } = data
+      setReceptorText(file_content)
+      setReceptorIdStorage(globalReceptorFilesIds)
+      setTextLoading(false)
+    }
+  }
+
   const handleLigandClick = async () => {
     if (globalLigandFilesIds && globalLigandFilesIds === ligandIdStorage) {
       setIsShow(true)
@@ -51,7 +75,7 @@ const GlobalInputFile = () => {
     }
 
     if (globalLigandFilesIds && globalLigandFilesIds !== ligandIdStorage) {
-      setModalLoading(true)
+      setImgLoading(true)
       setIsShow(true)
       const data = await getLigandFileRenderList(globalLigandFilesIds)
       const newList: SVGPreview[] = []
@@ -63,7 +87,7 @@ const GlobalInputFile = () => {
       })
       setPreviewData(newList)
       setLigandIdStorage(globalLigandFilesIds)
-      setModalLoading(false)
+      setImgLoading(false)
     }
   }
   return <>
@@ -79,7 +103,11 @@ const GlobalInputFile = () => {
             : <>
               {
                 globalReceptorResultInputFileList.map((item, index) => {
-                  return <CardLine key={`receptro-${index}`} {...item}/>
+                  return <CardLine
+                    key={`receptro-${index}`}
+                    {...item}
+                    icon={globalLigandFilesIds ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleReceptorClick}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
+                  />
                 })
               }
               {
@@ -96,7 +124,8 @@ const GlobalInputFile = () => {
 
       </div>
     </VerticalTitleCard>
-    <ModalImage isShow={isShow} onClose={() => { setIsShow(false) }} title="Preview" data={previewData} loading={modalLoading} />
+    <ModalImage isShow={isShow} onClose={() => { setIsShow(false) }} title="Preview" data={previewData} loading={imgLoading} />
+    <ModalText isShow={isTextShow} onClose={() => { setIsTextShow(false) }} title="Preview" text= {receptorText} loading={textLoading} rows={21}/>
   </>
 }
 
