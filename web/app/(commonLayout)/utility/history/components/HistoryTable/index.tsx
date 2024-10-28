@@ -1,6 +1,6 @@
+import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useCallback, useMemo } from 'react'
-import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { HistoryTableColumns } from '@/app/(commonLayout)/utility/history/table'
 import type { UtilityHistory, UtilityHistoryKey } from '@/types/utility'
 import { UtilityHistoryState } from '@/types/utility'
@@ -55,24 +55,28 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
         }
         return ''
       }
-      case 'action':
-        return (
-          <Chip radius="sm" color="primary" className="cursor-pointer" startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><ArrowLeftOnRectangleIcon /></div>}>
-            <div className="flex items-center">
-              <span>Enter</span>
-            </div>
-          </Chip>
-        )
+      case 'action': {
+        if (typeof cellValue === 'function') {
+          return <>
+            <Chip radius="sm" color="primary" className="cursor-pointer" onClick={() => { cellValue(utilityHistory) }} startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><ArrowLeftOnRectangleIcon /></div>}>
+              <div className="flex items-center">
+                <span>Enter</span>
+              </div>
+            </Chip>
+          </>
+        }
+        return ''
+      }
       default:
         return typeof cellValue === 'string' ? <span>{cellValue}</span> : ''
     }
   }, [])
 
-  const currentData = useMemo(() => {
-    const start = (page - 1) * pageSize
-    const end = start + pageSize
-    return data.slice(start, end)
-  }, [data, page, pageSize])
+  // const currentData = useMemo(() => {
+  //   const start = (page - 1) * pageSize
+  //   const end = start + pageSize
+  //   return data.slice(start, end)
+  // }, [data, page, pageSize])
 
   const handlePageSizeChange = (newPageSize: number) => {
     const newPages = Math.ceil(total / newPageSize)
@@ -100,7 +104,7 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
         </div>
         <div>
           <select
-            className="border border-primary p-2 rounded outline-none focus:border-blue-500 focus:ring-0"
+            className="border border-primary p-2 rounded-md outline-none focus:border-blue-500 focus:ring-0"
             value={pageSize}
             onChange={e => handlePageSizeChange(Number(e.target.value))}
           >
@@ -113,7 +117,7 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
         </div>
       </div>
     )
-  }, [pages, page, pageSize, onPageChange, total])
+  }, [pages, page, pageSize, total])
 
   return (
     <>
@@ -133,7 +137,7 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={'No Data'} items={currentData}>
+        <TableBody emptyContent={'No Data'} items={data}>
           {item => (
             <TableRow key={item.id}>
               {columnKey => (

@@ -14,7 +14,7 @@ export type UtilityHistory = {
   createDate: string
   updateDate: string
   state: UtilityHistoryState
-  action: () => void
+  action: (utilityHistory: UtilityHistory) => void
 }
 
 export type UtilityHistoryKey = keyof UtilityHistory

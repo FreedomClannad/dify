@@ -1,5 +1,5 @@
 .history-table-base {
-    max-height: calc(100vh - 140px);
+    max-height: calc(100vh - 130px);
     gap: 2rem;
 }
 
