@@ -6,7 +6,9 @@ import type { UtilityHistory, UtilityHistoryKey } from '@/types/utility'
 import { UtilityHistoryState } from '@/types/utility'
 import cn from '@/utils/classnames'
 import './index.css'
+
 const pageSizeOptions = [10, 20, 50, 100]
+
 type Props = {
   total: number
   data: UtilityHistory[]
@@ -15,6 +17,7 @@ type Props = {
   onPageChange: (page: number) => void
   onPageSize: (pageSize: number) => void
 }
+
 const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }: Props) => {
   const pages = useMemo(() => {
     return total ? Math.ceil(total / pageSize) : 0
@@ -24,134 +27,124 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
     const cellValue = utilityHistory[columnKey]
 
     switch (columnKey) {
-      case 'label': {
-        if (typeof cellValue === 'string') {
-          return (
-            <span>{cellValue}</span>
-          )
-        }
-        return ''
-      }
-
-      case 'title': {
-        if (typeof cellValue === 'string') {
-          return (
-            <span>{cellValue}</span>
-          )
-        }
-        return ''
-      }
-      case 'createDate': {
-        if (typeof cellValue === 'string') {
-          return (
-            <span>{cellValue}</span>
-          )
-        }
-        return ''
-      }
+      case 'label':
+      case 'title':
+      case 'createDate':
       case 'updateDate': {
-        if (typeof cellValue === 'string') {
-          return (
-            <span>{cellValue}</span>
-          )
-        }
+        if (typeof cellValue === 'string')
+          return <span>{cellValue}</span>
+
         return ''
       }
       case 'state': {
         if (typeof cellValue === 'string') {
-          if (cellValue === UtilityHistoryState.PENDING) {
-            return (
-              <Chip color="secondary" radius="sm">
-                <div className="w-[75px] flex justify-center"><span>Pending</span></div>
-              </Chip>
-            )
+          const stateColors: { [key in UtilityHistoryState]: 'secondary' | 'primary' | 'success' | 'danger' } = {
+            [UtilityHistoryState.PENDING]: 'secondary',
+            [UtilityHistoryState.PROCESSING]: 'primary',
+            [UtilityHistoryState.SUCCESS]: 'success',
+            [UtilityHistoryState.FAILURE]: 'danger',
           }
-          if (cellValue === UtilityHistoryState.PROCESSING) {
-            return (
-              <Chip color="primary" radius="sm">
-                <div className="w-[75px] flex justify-center"> <span>Processing</span></div>
-              </Chip>
-            )
-          }
-          if (cellValue === UtilityHistoryState.SUCCESS) {
-            return (
-              <Chip color="success" radius="sm">
-                <div className="w-[75px] flex justify-center"><span>Success</span></div>
-              </Chip>
-            )
-          }
-          if (cellValue === UtilityHistoryState.FAILURE) {
-            return (
-              <Chip color="danger" radius="sm">
-                <div className="w-[75px] flex justify-center"><span>Failure</span></div>
-              </Chip>
-            )
-          }
-        }
-        return ''
-      }
-      case 'action':
-        return (<div>
-          <Chip radius="sm" color="primary" className="cursor-pointer" startContent={<div className="ml-2 w-4 h-4 cursor-pointer">
-            <ArrowLeftOnRectangleIcon/></div>}>
-            <div className="flex items-center">
-              <span>Enter</span>
-            </div>
-          </Chip>
 
-        </div>)
-      default: {
-        if (typeof cellValue === 'string') {
+          const color = stateColors[cellValue as UtilityHistoryState] as 'secondary' | 'primary' | 'success' | 'danger'
+
           return (
-            <span>{cellValue}</span>
+            <Chip color={color} radius="sm">
+              <div className="w-[75px] flex justify-center"><span>{cellValue}</span></div>
+            </Chip>
           )
         }
         return ''
       }
+      case 'action':
+        return (
+          <Chip radius="sm" color="primary" className="cursor-pointer" startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><ArrowLeftOnRectangleIcon /></div>}>
+            <div className="flex items-center">
+              <span>Enter</span>
+            </div>
+          </Chip>
+        )
+      default:
+        return typeof cellValue === 'string' ? <span>{cellValue}</span> : ''
     }
   }, [])
+
+  const currentData = useMemo(() => {
+    const start = (page - 1) * pageSize
+    const end = start + pageSize
+    return data.slice(start, end)
+  }, [data, page, pageSize])
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    const newPages = Math.ceil(total / newPageSize)
+    if (page > newPages)
+      onPageChange(newPages) // Adjust current page to match new total pages
+
+    onPageSize(newPageSize)
+  }
 
   const bottomContent = useMemo(() => {
     if (pages === 0)
       return null
-    return (<div className="flex w-full justify-center">
+    return (
+      <div className="flex w-full justify-center items-center">
+        <div className="mr-3">
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={onPageChange}
+          />
+        </div>
+        <div>
+          <select
+            className="border border-primary p-2 rounded outline-none focus:border-blue-500 focus:ring-0"
+            value={pageSize}
+            onChange={e => handlePageSizeChange(Number(e.target.value))}
+          >
+            {pageSizeOptions.map(size => (
+              <option key={size} value={size}>
+                {size} / page
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    )
+  }, [pages, page, pageSize, onPageChange, total])
 
-      <Pagination
-        className="ml-3"
-        isCompact
-        showControls
-        showShadow
-        color="primary"
-        page={page}
-        total={pages}
-        onChange={page => onPageChange(page)}
-      />
-    </div>)
-  }, [total, page, pageSize, data])
-
-  return <>
-    <Table
-      isHeaderSticky
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      classNames={{
-        base: cn('history-table-base'),
-        table: 'history-table-body',
-      }}
-
-    >
-      <TableHeader columns={HistoryTableColumns}>
-        { column => <TableColumn key={column.key} align={column.key === 'action' ? 'center' : 'start'}>{column.label} </TableColumn>}
-      </TableHeader>
-      <TableBody emptyContent={'No Data'} items={data}>
-        {item => (
-          <TableRow key={item.id}>
-            {columnKey => <TableCell>{renderCell(item, columnKey as UtilityHistoryKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  </>
+  return (
+    <>
+      <Table
+        isHeaderSticky
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        classNames={{
+          base: cn('history-table-base'),
+          table: 'history-table-body',
+        }}
+      >
+        <TableHeader columns={HistoryTableColumns}>
+          {column => (
+            <TableColumn key={column.key} align={column.key === 'action' ? 'center' : 'start'}>
+              {column.label}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={'No Data'} items={currentData}>
+          {item => (
+            <TableRow key={item.id}>
+              {columnKey => (
+                <TableCell>{renderCell(item, columnKey as UtilityHistoryKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
+  )
 }
 
 export default HistoryTable
