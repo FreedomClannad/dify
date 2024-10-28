@@ -106,7 +106,7 @@ const GlobalInputFile = () => {
                   return <CardLine
                     key={`receptro-${index}`}
                     {...item}
-                    icon={globalLigandFilesIds ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleReceptorClick}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
+                    icon={globalReceptorFilesIds ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleReceptorClick}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
                   />
                 })
               }

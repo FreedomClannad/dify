@@ -18,3 +18,14 @@ export type UtilityHistory = {
 }
 
 export type UtilityHistoryKey = keyof UtilityHistory
+
+// History
+
+export type HistoryFile = {
+  file_id: string
+}
+
+export type HistoryTask = {
+  task_id: string
+  task_type: string
+}

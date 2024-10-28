@@ -10,13 +10,13 @@ export type useHistoryRouterType = {
 const useHistoryRouter = (): useHistoryRouterType => {
   const router = useRouter()
   const GLOBAL_DOCKING = (utilityHistory: UtilityHistory) => {
-    const { id, task_type } = utilityHistory
-    router.push(`/utility/history/result/global?id=${id}&type=${task_type}`)
+    const { task_id, task_type } = utilityHistory
+    router.push(`/utility/history/result/global?id=${task_id}&type=${task_type}`)
   }
 
   const POCKET_DOCKING = (utilityHistory: UtilityHistory) => {
-    const { id, task_type } = utilityHistory
-    router.push(`/utility/history/result/global?id=${id}&type=${task_type}`)
+    const { task_id, task_type } = utilityHistory
+    router.push(`/utility/history/result/pocket?id=${task_id}&type=${task_type}`)
   }
   return {
     GLOBAL_DOCKING,
