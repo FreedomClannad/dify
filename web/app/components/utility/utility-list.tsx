@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { RiCloseLine } from '@remixicon/react'
 import LabelFilter from './labels/filter'
-import ContributeCard from './provider/contribute'
 import CustomCreateCard from './provider/custom-create-card'
 import ProviderCard from './provider/card'
 import ProviderDetail from './provider/detail'
@@ -18,6 +17,7 @@ import cn from '@/utils/classnames'
 import TabSliderNew from '@/app/components/base/tab-slider-new'
 import SearchInput from '@/app/components/base/search-input'
 import { fetchCollectionList } from '@/service/tools'
+import HistoryButton from '@/app/components/utility/labels/history-button'
 
 const UtilityList = () => {
   const { t } = useTranslation()
@@ -87,6 +87,7 @@ const UtilityList = () => {
             options={options}
           />
           <div className='flex items-center gap-2'>
+            <HistoryButton />
             <LabelFilter value={tagFilterValue} onChange={handleTagsChange} />
             <SearchInput className='w-[200px]' value={keywords} onChange={handleKeywordsChange} />
           </div>
@@ -95,7 +96,7 @@ const UtilityList = () => {
           'relative grid content-start grid-cols-1 gap-4 px-12 pt-2 pb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grow shrink-0',
           currentProvider && 'pr-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
         )}>
-          {activeTab === 'builtin' && <ContributeCard />}
+          {/* {activeTab === 'builtin' && <ContributeCard />} */}
           {activeTab === 'api' && <CustomCreateCard onRefreshData={getProviderList} />}
           {filteredCollectionList.map(collection => (
             <ProviderCard
