@@ -78,12 +78,12 @@ const DockingOutputFile = () => {
       const selectedData = selectedItems.map(item => item.mode).join(',')
       const data = await downloadPocketFile(resultID, selectedData)
       if (data)
-        saveAs(data, `${resultID}_selected.sdf`)
+        saveAs(data, `${resultID}_selected.zip`)
     }
     else {
       const data = await downloadPocketFile(resultID, 'all')
       if (data)
-        saveAs(data, `${resultID}.sdf`)
+        saveAs(data, `${resultID}.zip`)
     }
   }
 

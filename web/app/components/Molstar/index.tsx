@@ -11,6 +11,7 @@ import { MolstarPubSub } from '@/pubsub'
 type Props = {
   id?: string
   onFocusCenter?: (center: { x: number; y: number; z: number; num: string; chain: string; label: string }) => void
+  onLoad?: () => void
 }
 
 export type MolstarHandle = {
@@ -21,7 +22,7 @@ export type MolstarHandle = {
   clear: () => void
 }
 // let ViewerStart = null;
-const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFocusCenter }, ref) => {
+const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFocusCenter, onLoad }, ref) => {
   const molstart = useRef<Viewer | null>(null)
 
   const getCenter = async () => {
@@ -56,8 +57,9 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       volumeStreamingServer: 'https://maps.rcsb.org',
     },
     ).then((res) => {
-      console.log(res)
       molstart.current = res
+      onLoad?.()
+
       // ViewerStart = res;
     })
   }, [])

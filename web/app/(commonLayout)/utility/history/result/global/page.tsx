@@ -26,6 +26,7 @@ const Page = () => {
     loadStructureFromUrl,
     loadStructureFromData,
     setStructureVisibility,
+    setIsMolstarMounted,
   } = useMolstar()
 
   // Global
@@ -84,7 +85,6 @@ const Page = () => {
     // Output 数据结果
     setGlobalResultId(id)
     setGlobalResult(result)
-    console.log(data)
   }
   useEffect(() => {
     const id = searchParams.get('id') || ''
@@ -92,8 +92,6 @@ const Page = () => {
     setGlobalId(id)
     setGlobalType(type)
     initData({ task_id: id, task_type: type }).then()
-    console.log(id)
-    console.log(type)
   }, [])
 
   const Content = () => {
@@ -120,7 +118,7 @@ const Page = () => {
           </MolstarContext.Provider>
         </div>
       </div>
-      <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarRef} /></div>
+      <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarRef} onLoad={() => { setIsMolstarMounted(true) }} /></div>
     </div>
   </>)
 }

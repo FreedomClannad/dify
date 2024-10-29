@@ -14,6 +14,7 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
 import type { HistoryTask } from '@/types/utility'
 import { getFileInfo, getPocketHistory } from '@/service/utility'
+import { getDockingFileURL } from '@/service/docking'
 
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
@@ -29,9 +30,10 @@ const Container = () => {
     loadStructureFromData,
     setStructureVisibility,
     clear,
+    setIsMolstarMounted,
   } = useMolstar()
-  const [globalId, setGlobalId] = useState<string>('')
-  const [globalType, setGlobalType] = useState<string>('')
+  const [pocketId, setPocketId] = useState<string>('')
+  const [pocketType, setPocketType] = useState<string>('')
   const searchParams = useSearchParams()
 
   // Pocke
@@ -39,34 +41,20 @@ const Container = () => {
   const [pocketResultId, setPocketResultId] = useState<string>('')
 
   const {
-    pocketReceptorUploadFileList,
-    setPocketReceptorUploadFileList,
-    clearPocketReceptorUploadFileList,
     addPocketReceptorUploadResultFile,
     getPocketReceptorUploadResultFile,
-    deletePocketReceptorUploadResultFile,
-    clearPocketReceptorUploadResultFileList,
     addPocketReceptorResultInputFile,
     updatePocketReceptorResultInputFile,
     pocketReceptorResultInputFileList,
-    clearPocketReceptorResultInputFileList,
   } = usePocketReceptor()
 
   const {
-    pocketLigandUploadFileList,
-    setPocketLigandUploadFileList,
-    clearPocketLigandUploadFileList,
-    addPocketLigandUploadResultFile,
     getPocketLigandUploadResultFile,
-    deletePocketLigandUploadResultFile,
-    clearPocketLigandUploadResultFileList,
     pocketLigandResultInputFileList,
     addPocketLigandResultInputFile,
     updatePocketLigandResultInputFile,
-    clearPocketLigandResultInputFileList,
     pocketLigandFilesIds,
     updatePocketLigandFilesIds,
-    clearPocketLigandFilesIds,
   } = usePocketLigand()
 
   // Pocket Receptor Crop
@@ -74,11 +62,9 @@ const Container = () => {
     cropReceptorResultList,
     addCropReceptorResult,
     getCropReceptorResult,
-    clearCropReceptorResultList,
     cropRecepResultInputList,
     addCropRecepResultInputFile,
     updateCropRecepResultInputFile,
-    clearCropRecepResultInputFileList,
   } = useCropReceptor()
 
   const initData = async (query: HistoryTask) => {
@@ -92,6 +78,8 @@ const Container = () => {
       const { id, name, mime_type, extension } = res
       addPocketReceptorUploadResultFile({ id, mime_type, extension: extension as BuiltInTrajectoryFormat, name, fileID: id })
       addPocketReceptorResultInputFile({ id, name, visible: true, display: true })
+      loadStructureFromUrl(getDockingFileURL({ id, mime_type }), extension as BuiltInTrajectoryFormat)
+      addStructure({ id, visible: true })
     })
 
     // Ligand 数据集结果
@@ -121,11 +109,9 @@ const Container = () => {
   useEffect(() => {
     const id = searchParams.get('id') || ''
     const type = searchParams.get('type') || ''
-    setGlobalId(id)
-    setGlobalType(type)
+    setPocketId(id)
+    setPocketType(type)
     initData({ task_id: id, task_type: type }).then()
-    console.log(id)
-    console.log(type)
   }, [])
 
   const Content = () => {
@@ -161,7 +147,7 @@ const Container = () => {
           </MolstarContext.Provider>
         </div>
       </div>
-      <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarRef}/></div>
+      <div className="grow relative w-full h-full"><Molstar wrapperRef={MolstarRef} onLoad={() => { setIsMolstarMounted(true) }}/></div>
     </div>
   </>)
 }

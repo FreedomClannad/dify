@@ -1,11 +1,33 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import type { MolstarHandle } from '@/app/components/Molstar'
 import type { DockingMolstar } from '@/types/docking'
 
+enum RenderType {
+  'URL' = 'URL',
+  'DATA' = 'DATA',
+}
+
+type RenderBuffer = {
+  data: string | number[]
+  formats: BuiltInTrajectoryFormat
+  type: RenderType
+}
 const useMolstar = () => {
   const MolstarRef = useRef<MolstarHandle>(null)
   const [dockingMolstarList, setDockingMolstarList] = useState<DockingMolstar[]>([])
+  const [renderBufferData, setRenderBufferData] = useState<RenderBuffer[]>([])
+  const [isMolstarMounted, setIsMolstarMounted] = useState(false)
+  // 添加渲染缓存数据
+  const addRenderBufferData = (buffer: RenderBuffer) => {
+    setRenderBufferData([...renderBufferData, buffer])
+  }
+
+  // 清空缓存数据
+  const clearRenderBufferData = () => {
+    setRenderBufferData([])
+  }
+
   // 添加分子/蛋白质
   const addStructure = (dockingMolstar: DockingMolstar) => {
     setDockingMolstarList([...dockingMolstarList, dockingMolstar])
@@ -23,6 +45,9 @@ const useMolstar = () => {
         formats as BuiltInTrajectoryFormat,
       )
     }
+    else {
+      addRenderBufferData({ data: url, formats, type: RenderType.URL })
+    }
   }
   // 根据数据直接渲染
   const loadStructureFromData = (data: string | number[], formats: BuiltInTrajectoryFormat) => {
@@ -31,6 +56,9 @@ const useMolstar = () => {
         data,
         formats as BuiltInTrajectoryFormat,
       )
+    }
+    else {
+      addRenderBufferData({ data, formats, type: RenderType.DATA })
     }
   }
   // 设置分子/蛋白质显隐
@@ -70,12 +98,38 @@ const useMolstar = () => {
       setDockingMolstarList([])
     }
   }
+
+  const RenderBuffer = () => {
+    if (renderBufferData.length > 0) {
+      renderBufferData.forEach((buffer) => {
+        if (buffer.type === RenderType.URL) {
+          const url = buffer.data.toString()
+          loadStructureFromUrl(url, buffer.formats)
+        }
+        else if (buffer.type === RenderType.DATA) {
+          const data = buffer.data
+          loadStructureFromData(data, buffer.formats)
+        }
+      })
+      clearRenderBufferData()
+    }
+  }
+
   const getCenter = () => {
     if (MolstarRef.current) {
       const center = MolstarRef.current.getCenter()
       console.log(`获取中心点坐标:${center}`)
     }
   }
+
+  useEffect(() => {
+    console.log(MolstarRef.current)
+    if (MolstarRef.current && isMolstarMounted) {
+      console.log('渲染数据112233')
+      RenderBuffer()
+    }
+  }, [isMolstarMounted])
+
   return {
     MolstarRef,
     dockingMolstarList,
@@ -85,6 +139,7 @@ const useMolstar = () => {
     loadStructureFromData,
     setStructureVisibility,
     clear,
+    setIsMolstarMounted,
   }
 }
 
