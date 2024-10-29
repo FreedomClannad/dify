@@ -29,3 +29,27 @@ type GlobalHistoryResult = {
 export const getGlobalHistory = (data: HistoryTask) => {
   return post<GlobalHistoryResult>('/history_task/detail', { body: data })
 }
+
+type PocketHistoryResult = {
+  center_x: number
+  center_y: number
+  center_z: number
+  created_at: string
+  created_by: string
+  id: string
+  ligand_file_ids: string[]
+  out_pose_num: number
+  pdb_file_id: string
+  remove_ligand_file_id: string
+  result: string
+  size_x: number
+  size_y: number
+  size_z: number
+  status: string
+  task_name: string
+  updated_at: string
+}
+
+export const getPocketHistory = (data: HistoryTask) => {
+  return post<PocketHistoryResult>('/history_task/detail', { body: data })
+}

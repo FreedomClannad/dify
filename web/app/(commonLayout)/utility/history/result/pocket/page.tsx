@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useContext as useContext1 } from 'use-context-selector'
 import { useSearchParams } from 'next/navigation'
+import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import Result from '@/app/(commonLayout)/utility/docking/Pocket/Result'
 import { ToastContext } from '@/app/components/base/toast'
 import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
@@ -11,6 +12,8 @@ import usePocketLigand from '@/app/(commonLayout)/utility/docking/Pocket/hooks/u
 import useCropReceptor from '@/app/(commonLayout)/utility/docking/Pocket/hooks/useCropReceptor'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
+import type { HistoryTask } from '@/types/utility'
+import { getFileInfo, getPocketHistory } from '@/service/utility'
 
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
@@ -78,16 +81,49 @@ const Container = () => {
     clearCropRecepResultInputFileList,
   } = useCropReceptor()
 
-  const initData = () => {
+  const initData = async (query: HistoryTask) => {
     // 这里编写向后端请求数据
-    console.log('初始化数据')
+    const data = await getPocketHistory(query)
+    const { id, pdb_file_id, result, ligand_file_ids, remove_ligand_file_id } = data
+
+    // Input 数据结果
+    // Receptor
+    getFileInfo({ file_id: pdb_file_id }).then((res) => {
+      const { id, name, mime_type, extension } = res
+      addPocketReceptorUploadResultFile({ id, mime_type, extension: extension as BuiltInTrajectoryFormat, name, fileID: id })
+      addPocketReceptorResultInputFile({ id, name, visible: true, display: true })
+    })
+
+    // Ligand 数据集结果
+    const promise = ligand_file_ids.map(id => getFileInfo({ file_id: id }))
+    Promise.all(promise).then((res) => {
+      const ids = res.map((item) => {
+        const { id, name } = item
+        addPocketLigandResultInputFile({ id, name, visible: false, display: true })
+        return id
+      }).join(',')
+      updatePocketLigandFilesIds(ids)
+    })
+
+    // remove_ligand
+    if (remove_ligand_file_id) {
+      getFileInfo({ file_id: remove_ligand_file_id }).then((res) => {
+        const { id, name, mime_type, extension } = res
+        addCropReceptorResult({ fileID: id, id, extension: extension as BuiltInTrajectoryFormat, name, mime_type })
+        addCropRecepResultInputFile({ id, name, visible: false, display: true })
+      })
+    }
+
+    // Output 数据结果
+    setPocketResultId(id)
+    setResult(result)
   }
   useEffect(() => {
     const id = searchParams.get('id') || ''
     const type = searchParams.get('type') || ''
     setGlobalId(id)
     setGlobalType(type)
-    initData()
+    initData({ task_id: id, task_type: type }).then()
     console.log(id)
     console.log(type)
   }, [])
