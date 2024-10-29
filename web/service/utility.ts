@@ -1,5 +1,6 @@
 import { get, post } from './base'
 import type { HistoryFile, HistoryTask } from '@/types/utility'
+import type { Collection } from '@/app/components/tools/types'
 
 type HistoryFileInfo = {
   created_at: number
@@ -52,4 +53,8 @@ type PocketHistoryResult = {
 
 export const getPocketHistory = (data: HistoryTask) => {
   return post<PocketHistoryResult>('/history_task/detail', { body: data })
+}
+
+export const fetchUtilityCollectionList = () => {
+  return get<Collection[]>('/sciminer/tools')
 }

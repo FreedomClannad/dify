@@ -18,6 +18,7 @@ import TabSliderNew from '@/app/components/base/tab-slider-new'
 import SearchInput from '@/app/components/base/search-input'
 import { fetchCollectionList } from '@/service/tools'
 import HistoryButton from '@/app/components/utility/labels/history-button'
+import { fetchUtilityCollectionList } from '@/service/utility'
 
 const UtilityList = () => {
   const { t } = useTranslation()
@@ -56,7 +57,10 @@ const UtilityList = () => {
   }, [activeTab, tagFilterValue, keywords, collectionList])
   const getProviderList = async () => {
     const list = await fetchCollectionList()
+    console.log(list)
     setCollectionList([...list])
+    const n_list = await fetchUtilityCollectionList()
+    console.log(n_list)
   }
   useEffect(() => {
     getProviderList()
