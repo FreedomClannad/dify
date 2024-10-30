@@ -14,6 +14,14 @@ const withMDX = require('@next/mdx')({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/ws',
+        destination: 'http://192.168.1.144:5002/ws',
+      },
+    ]
+  },
   webpack: (config, { dev, isServer }) => {
     config.plugins.push(codeInspectorPlugin({ bundler: 'webpack' }))
     config.resolve.fallback = { fs: false }

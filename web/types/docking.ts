@@ -61,3 +61,8 @@ export type SVGPreview = {
   id: string
   svg: string
 }
+
+export type DockingWebSockingData = {
+  id: string
+  data: any
+}

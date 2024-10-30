@@ -121,7 +121,7 @@ const DockingOutputFile = () => {
     // Check if all rows are selected to update the select all checkbox
     if (isAllSelected)
       setSelected(new Set(table.map(item => item.id))) // Ensure all are selected
-  }, [selected, table.length]) // Re-run this effect when selected changes
+  }, [isAllSelected]) // Re-run this effect when selected changes
 
   return (
     <VerticalTitleCard

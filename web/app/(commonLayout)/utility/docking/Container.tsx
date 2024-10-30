@@ -5,7 +5,7 @@ import type { FieldValues } from 'react-hook-form'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import style from './Container.module.css'
 import Result from '@/app/(commonLayout)/utility/docking/Pocket/Result'
-import type { CenterPosition } from '@/types/docking'
+import type { CenterPosition, DockingWebSockingData } from '@/types/docking'
 import { DockingModeEnum, DockingStrategyEnum } from '@/types/docking'
 import cn from '@/utils/classnames'
 import { ToastContext } from '@/app/components/base/toast'
@@ -26,6 +26,8 @@ import useGlobalLigand from '@/app/(commonLayout)/utility/docking/Global/hooks/u
 import GlobalResult from '@/app/(commonLayout)/utility/docking/Global/Result'
 import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalOutputContext'
 import { formats } from '@/app/(commonLayout)/utility/docking/Pocket/Input/commin'
+import useMemory from '@/app/(commonLayout)/utility/docking/hooks/useMemory'
+import { DockingPubSub } from '@/pubsub'
 
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
@@ -131,6 +133,9 @@ const Container = () => {
     clearCropRecepResultInputFileList,
   } = useCropReceptor()
 
+  // 提交的缓存数据
+  const { addSubmitMemory, getSubmitMemory } = useMemory()
+
   // 全局对接提交
   const handleGlobalSubmit = async (data: FieldValues) => {
     const submit_data = Object.assign({}, data)
@@ -209,22 +214,21 @@ const Container = () => {
       setGlobalSubmitLoading(false)
     }
   }
-  // 口袋对决提交
-  const handlePocketSubmit = async (data: FieldValues) => {
-    setSubmitLoading(true)
-    setResult('')
-    clearCropReceptorResultList()
-    clearCropRecepResultInputFileList()
-    try {
-      const res: any = await submitDockingTask(data)
-      setResult(res.result)
-      const resId = res.id
+
+  // 口袋对接数据整理
+  const pocketDataCollating = (pocketData: DockingWebSockingData) => {
+    const { id, data } = pocketData
+    const memory = getSubmitMemory(id)
+    if (memory) {
+      const { values } = memory
+      setResult(data.result)
+      const resId = data.id
       if (resId)
         setPocketResultId(resId)
 
       setSubmitLoading(false)
       notify({ type: 'success', message: 'Task parsing successful' })
-      const { ligand_file_ids, pdb_file_id } = data
+      const { ligand_file_ids, pdb_file_id } = values
       if (pdb_file_id) {
         const id = pdb_file_id
         const dockingResultFile = getPocketReceptorUploadResultFile(id)
@@ -245,16 +249,78 @@ const Container = () => {
         }
       }
 
-      if (res.result)
+      if (data.result) {
         setMode(DockingModeEnum.result)
-      if (res.remove_ligand_file && res.remove_ligand_file.id) {
-        const id = res.remove_ligand_file.id
-        const extension = res.remove_ligand_file.extension
-        const mime_type = res.remove_ligand_file.mime_type
-        const name = res.remove_ligand_file.name
+        setStrategy(DockingStrategyEnum.pocket)
+      }
+
+      if (data.remove_ligand_file && data.remove_ligand_file.id) {
+        const id = data.remove_ligand_file.id
+        const extension = data.remove_ligand_file.extension
+        const mime_type = data.remove_ligand_file.mime_type
+        const name = data.remove_ligand_file.name
         addCropReceptorResult({ fileID: id, id, extension, mime_type, name })
         addCropRecepResultInputFile({ id, name, visible: false, display: true })
       }
+    }
+  }
+
+  useEffect(() => {
+    DockingPubSub.subscribe('pocket', pocketDataCollating)
+    return () => {
+      DockingPubSub.unsubscribe('pocket', pocketDataCollating)
+    }
+  }, [])
+
+  // 口袋对决提交
+  const handlePocketSubmit = async (data: FieldValues) => {
+    setSubmitLoading(true)
+    setResult('')
+    clearCropReceptorResultList()
+    clearCropRecepResultInputFileList()
+    try {
+      const res: any = await submitDockingTask(data)
+      const { id } = res
+      addSubmitMemory({ id, values: data })
+      // 以下部分是正常的Http请求流程
+      // setResult(res.result)
+      // const resId = res.id
+      // if (resId)
+      //   setPocketResultId(resId)
+      //
+      // setSubmitLoading(false)
+      // notify({ type: 'success', message: 'Task parsing successful' })
+      // const { ligand_file_ids, pdb_file_id } = data
+      // if (pdb_file_id) {
+      //   const id = pdb_file_id
+      //   const dockingResultFile = getPocketReceptorUploadResultFile(id)
+      //   const dockingMolstar = getStructure(id)
+      //   if (dockingResultFile && dockingMolstar) {
+      //     const { name = '' } = dockingResultFile
+      //     const { visible } = dockingMolstar
+      //     addPocketReceptorResultInputFile({ id, name, visible, display: true })
+      //   }
+      // }
+      // if (ligand_file_ids) {
+      //   updatePocketLigandFilesIds(ligand_file_ids)
+      //   const id = ligand_file_ids
+      //   const dockingResultFile = getPocketLigandUploadResultFile(id)
+      //   if (dockingResultFile) {
+      //     const { name = '' } = dockingResultFile
+      //     addPocketLigandResultInputFile({ id, name, visible: false, display: true })
+      //   }
+      // }
+      //
+      // if (res.result)
+      //   setMode(DockingModeEnum.result)
+      // if (res.remove_ligand_file && res.remove_ligand_file.id) {
+      //   const id = res.remove_ligand_file.id
+      //   const extension = res.remove_ligand_file.extension
+      //   const mime_type = res.remove_ligand_file.mime_type
+      //   const name = res.remove_ligand_file.name
+      //   addCropReceptorResult({ fileID: id, id, extension, mime_type, name })
+      //   addCropRecepResultInputFile({ id, name, visible: false, display: true })
+      // }
     }
     catch (error) {
       setResult('')
