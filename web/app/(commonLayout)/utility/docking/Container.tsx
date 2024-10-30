@@ -134,7 +134,35 @@ const Container = () => {
   } = useCropReceptor()
 
   // 提交的缓存数据
-  const { addSubmitMemory, getSubmitMemory } = useMemory()
+  const { addSubmitMemory, getSubmitMemory, clearSubmitMemory } = useMemory()
+
+  const GlobalDataCollating = (globalData: DockingWebSockingData) => {
+    try {
+      const { id, data } = globalData
+      console.log(globalData)
+      const memory = getSubmitMemory(id)
+      if (memory) {
+        setGlobalResult(data.result)
+        const resId = data.id
+        if (resId)
+          setGlobalResultId(resId)
+        setGlobalSubmitLoading(false)
+        notify({ type: 'success', message: 'Task parsing successful' })
+        if (data.result) {
+          setMode(DockingModeEnum.result)
+          setStrategy(DockingStrategyEnum.global)
+        }
+      }
+      else {
+        const { data } = globalData
+        const { task_name } = data
+        notify({ type: 'success', message: `${task_name} task parsing successful` })
+      }
+    }
+    catch (error) {
+      setGlobalSubmitLoading(false)
+    }
+  }
 
   // 全局对接提交
   const handleGlobalSubmit = async (data: FieldValues) => {
@@ -200,14 +228,8 @@ const Container = () => {
     setGlobalSubmitLoading(true)
     try {
       const res: any = await submitGlobalDockingTask(submit_data)
-      setGlobalResult(res.result)
-      const resId = res.id
-      if (resId)
-        setGlobalResultId(resId)
-      setGlobalSubmitLoading(false)
-      notify({ type: 'success', message: 'Task parsing successful' })
-      if (res.result)
-        setMode(DockingModeEnum.result)
+      const { id } = res
+      addSubmitMemory({ id, values: data })
     }
     catch (error) {
       setGlobalResult('')
@@ -216,61 +238,68 @@ const Container = () => {
   }
 
   // 口袋对接数据整理
-  const pocketDataCollating = (pocketData: DockingWebSockingData) => {
-    const { id, data } = pocketData
-    const memory = getSubmitMemory(id)
-    if (memory) {
-      const { values } = memory
-      setResult(data.result)
-      const resId = data.id
-      if (resId)
-        setPocketResultId(resId)
+  const PocketDataCollating = (pocketData: DockingWebSockingData) => {
+    try {
+      const { id, data } = pocketData
+      const memory = getSubmitMemory(id)
+      if (memory) {
+        const { values } = memory
+        console.log(values)
+        setResult(data.result)
+        const resId = data.id
+        if (resId)
+          setPocketResultId(resId)
 
+        setSubmitLoading(false)
+        notify({ type: 'success', message: 'Task parsing successful' })
+        const { ligand_file_ids, pdb_file_id } = values
+        if (pdb_file_id) {
+          const id = pdb_file_id
+          const dockingResultFile = getPocketReceptorUploadResultFile(id)
+          console.log(dockingResultFile)
+
+          const dockingMolstar = getStructure(id)
+          console.log(dockingMolstar)
+          if (dockingResultFile && dockingMolstar) {
+            const { name = '' } = dockingResultFile
+            const { visible } = dockingMolstar
+            addPocketReceptorResultInputFile({ id, name, visible, display: true })
+          }
+        }
+        if (ligand_file_ids) {
+          updatePocketLigandFilesIds(ligand_file_ids)
+          const id = ligand_file_ids
+          const dockingResultFile = getPocketLigandUploadResultFile(id)
+          if (dockingResultFile) {
+            const { name = '' } = dockingResultFile
+            addPocketLigandResultInputFile({ id, name, visible: false, display: true })
+          }
+        }
+
+        if (data.result) {
+          setMode(DockingModeEnum.result)
+          setStrategy(DockingStrategyEnum.pocket)
+        }
+
+        if (data.remove_ligand_file && data.remove_ligand_file.id) {
+          const id = data.remove_ligand_file.id
+          const extension = data.remove_ligand_file.extension
+          const mime_type = data.remove_ligand_file.mime_type
+          const name = data.remove_ligand_file.name
+          addCropReceptorResult({ fileID: id, id, extension, mime_type, name })
+          addCropRecepResultInputFile({ id, name, visible: false, display: true })
+        }
+      }
+      else {
+        const { data } = pocketData
+        const { task_name } = data
+        notify({ type: 'success', message: `${task_name} task parsing successful` })
+      }
+    }
+    catch (error) {
       setSubmitLoading(false)
-      notify({ type: 'success', message: 'Task parsing successful' })
-      const { ligand_file_ids, pdb_file_id } = values
-      if (pdb_file_id) {
-        const id = pdb_file_id
-        const dockingResultFile = getPocketReceptorUploadResultFile(id)
-        const dockingMolstar = getStructure(id)
-        if (dockingResultFile && dockingMolstar) {
-          const { name = '' } = dockingResultFile
-          const { visible } = dockingMolstar
-          addPocketReceptorResultInputFile({ id, name, visible, display: true })
-        }
-      }
-      if (ligand_file_ids) {
-        updatePocketLigandFilesIds(ligand_file_ids)
-        const id = ligand_file_ids
-        const dockingResultFile = getPocketLigandUploadResultFile(id)
-        if (dockingResultFile) {
-          const { name = '' } = dockingResultFile
-          addPocketLigandResultInputFile({ id, name, visible: false, display: true })
-        }
-      }
-
-      if (data.result) {
-        setMode(DockingModeEnum.result)
-        setStrategy(DockingStrategyEnum.pocket)
-      }
-
-      if (data.remove_ligand_file && data.remove_ligand_file.id) {
-        const id = data.remove_ligand_file.id
-        const extension = data.remove_ligand_file.extension
-        const mime_type = data.remove_ligand_file.mime_type
-        const name = data.remove_ligand_file.name
-        addCropReceptorResult({ fileID: id, id, extension, mime_type, name })
-        addCropRecepResultInputFile({ id, name, visible: false, display: true })
-      }
     }
   }
-
-  useEffect(() => {
-    DockingPubSub.subscribe('pocket', pocketDataCollating)
-    return () => {
-      DockingPubSub.unsubscribe('pocket', pocketDataCollating)
-    }
-  }, [])
 
   // 口袋对决提交
   const handlePocketSubmit = async (data: FieldValues) => {
@@ -327,6 +356,16 @@ const Container = () => {
       setSubmitLoading(false)
     }
   }
+
+  useEffect(() => {
+    DockingPubSub.subscribe('PocketResult', PocketDataCollating)
+    DockingPubSub.subscribe('GlobalResult', GlobalDataCollating)
+    return () => {
+      DockingPubSub.unsubscribe('PocketResult', PocketDataCollating)
+      DockingPubSub.unsubscribe('GlobalResult', GlobalDataCollating)
+    }
+  }, [])
+
   const handleReset = () => {
     // 清除画布
     clear()
@@ -352,6 +391,10 @@ const Container = () => {
     clearGlobalLigandResultInputFile()
     clearGlobalLigandFilesIds()
     setGlobalResult('')
+
+    // 任务提交
+    setSubmitLoading(false)
+    clearSubmitMemory()
   }
   const Content = () => {
     if (strategy === DockingStrategyEnum.global) {

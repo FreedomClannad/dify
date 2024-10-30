@@ -92,6 +92,7 @@ const PocketInputFile = () => {
         dockingMolstar: { id, visible: n_visible },
         addCallback: () => {
           const { id, mime_type, extension } = dockingResultFile
+          console.log(id, mime_type, extension)
           loadStructureFromUrl(getDockingFileURL({ id, mime_type }), extension)
         },
       })

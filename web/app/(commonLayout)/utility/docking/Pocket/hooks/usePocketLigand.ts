@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FileItem } from '@/models/datasets'
 import type { DockingInputFile, DockingResultFile } from '@/types/docking'
 const usePocketLigand = () => {
@@ -10,6 +10,11 @@ const usePocketLigand = () => {
   const [pocketLigandResultInputFileList, setPocketLigandResultInputFileList] = useState<DockingInputFile[]>([])
   // LigandFilesIds
   const [pocketLigandFilesIds, setPocketLigandFilesIds] = useState<string>('')
+
+  const pocketLigandUploadResultFileListRef = useRef(pocketLigandUploadResultFileList)
+  useEffect(() => {
+    pocketLigandUploadResultFileListRef.current = pocketLigandUploadResultFileList
+  }, [pocketLigandUploadResultFileList])
 
   // 上传文件内容
   const clearPocketLigandUploadFileList = () => {
@@ -35,7 +40,8 @@ const usePocketLigand = () => {
      * 根据传入的id来获取Receptor结果对应的对象
      */
   const getPocketLigandUploadResultFile = (id: string): DockingResultFile | undefined => {
-    return pocketLigandUploadResultFileList.find(item => item.fileID === id)
+    // return pocketLigandUploadResultFileList.find(item => item.fileID === id)
+    return pocketLigandUploadResultFileListRef.current.find(item => item.fileID === id)
   }
 
   /**

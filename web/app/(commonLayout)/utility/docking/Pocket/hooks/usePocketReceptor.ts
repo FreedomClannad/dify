@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import type { FileItem } from '@/models/datasets'
+import { useEffect, useRef, useState } from 'react'
 import type { DockingInputFile, DockingResultFile } from '@/types/docking'
+import type { FileItem } from '@/models/datasets'
 const usePocketReceptor = () => {
   // 上传文件内容
   const [pocketReceptorUploadFileList, setPocketReceptorUploadFileList] = useState<FileItem[]>([])
@@ -8,6 +8,10 @@ const usePocketReceptor = () => {
   const [pocketReceptorUploadResultList, setPocketReceptorUploadResultList] = useState<DockingResultFile[]>([])
   // 控制显示Result Input File显示
   const [pocketReceptorResultInputFileList, setPocketReceptorResultInputFileList] = useState<DockingInputFile[]>([])
+  const pocketReceptorUploadResultListRef = useRef(pocketReceptorUploadResultList)
+  useEffect(() => {
+    pocketReceptorUploadResultListRef.current = pocketReceptorUploadResultList
+  }, [pocketReceptorUploadResultList])
   // 上传文件内容
   const clearPocketReceptorUploadFileList = () => {
     setPocketReceptorUploadFileList([])
@@ -24,15 +28,13 @@ const usePocketReceptor = () => {
 
       return [...prev]
     })
-    setTimeout(() => {
-      console.log(pocketReceptorUploadResultList)
-    }, 500)
   }
   /**
      * 根据传入的id来获取Receptor结果对应的对象
      */
   const getPocketReceptorUploadResultFile = (id: string): DockingResultFile | undefined => {
-    return pocketReceptorUploadResultList.find(item => item.fileID === id)
+    // return pocketReceptorUploadResultList.find(item => item.fileID === id)
+    return pocketReceptorUploadResultListRef.current.find(item => item.fileID === id)
   }
   /**
      * 删除指定对象结果
