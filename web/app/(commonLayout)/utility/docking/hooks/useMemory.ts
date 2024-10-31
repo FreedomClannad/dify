@@ -1,5 +1,5 @@
 import type { FieldValues } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type SubmitMemory = {
   id: string
@@ -8,6 +8,10 @@ type SubmitMemory = {
 
 const useMemory = () => {
   const [submitMemoryList, setSubmitMemoryList] = useState<SubmitMemory[]>([])
+  const submitMemoryListRef = useRef(submitMemoryList)
+  useEffect(() => {
+    submitMemoryListRef.current = submitMemoryList
+  }, [submitMemoryList])
 
   // 新增提交数据
   const addSubmitMemory = (memory: SubmitMemory) => {
@@ -25,12 +29,14 @@ const useMemory = () => {
 
   // 根据id找到对应提交数据
   const getSubmitMemory = (id: string) => {
-    return submitMemoryList.find(item => item.id === id)
+    // return submitMemoryList.find(item => item.id === id)
+    return submitMemoryListRef.current.find(item => item.id === id)
   }
 
   // 根据id判断是否存在该数组中
   const isExistSubmitMemory = (id: string) => {
-    return submitMemoryList.some(item => item.id === id)
+    // return submitMemoryList.some(item => item.id === id)
+    return submitMemoryListRef.current.some(item => item.id === id)
   }
 
   // 清除数据
