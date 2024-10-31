@@ -244,7 +244,6 @@ const Container = () => {
       const memory = getSubmitMemory(id)
       if (memory) {
         const { values } = memory
-        console.log(values)
         setResult(data.result)
         const resId = data.id
         if (resId)
@@ -256,10 +255,8 @@ const Container = () => {
         if (pdb_file_id) {
           const id = pdb_file_id
           const dockingResultFile = getPocketReceptorUploadResultFile(id)
-          console.log(dockingResultFile)
 
           const dockingMolstar = getStructure(id)
-          console.log(dockingMolstar)
           if (dockingResultFile && dockingMolstar) {
             const { name = '' } = dockingResultFile
             const { visible } = dockingMolstar
@@ -393,6 +390,7 @@ const Container = () => {
     setGlobalResult('')
 
     // 任务提交
+    setGlobalSubmitLoading(false)
     setSubmitLoading(false)
     clearSubmitMemory()
   }
@@ -512,6 +510,8 @@ const Container = () => {
       clearGlobalLigandUploadResultFileList()
       clearGlobalLigandResultInputFile()
       clearGlobalLigandFilesIds()
+      setGlobalResult('')
+      setGlobalSubmitLoading(false)
     }
     if (strategy === DockingStrategyEnum.pocket) {
       clearPocketReceptorUploadFileList()
@@ -523,7 +523,11 @@ const Container = () => {
       clearCropReceptorResultList()
       clearCropRecepResultInputFileList()
       clearPocketLigandFilesIds()
+      setResult('')
+      setSubmitLoading(false)
     }
+    clear()
+    clearSubmitMemory()
   }, [strategy])
   return (<>
     <div className="flex h-full bg-white border-t border-gray-200 overflow-hidden">

@@ -117,11 +117,11 @@ const DockingOutputFile = () => {
     return selected.size === table.length
   }, [selected, table])
 
-  useEffect(() => {
-    // Check if all rows are selected to update the select all checkbox
-    if (isAllSelected)
-      setSelected(new Set(table.map(item => item.id))) // Ensure all are selected
-  }, [isAllSelected]) // Re-run this effect when selected changes
+  // useEffect(() => {
+  //   // Check if all rows are selected to update the select all checkbox
+  //   if (isAllSelected)
+  //     setSelected(new Set(table.map(item => item.id))) // Ensure all are selected
+  // }, [isAllSelected]) // Re-run this effect when selected changes
 
   return (
     <VerticalTitleCard
