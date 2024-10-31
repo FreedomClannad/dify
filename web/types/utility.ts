@@ -1,3 +1,10 @@
+export enum UtilityTaskState {
+  PENDING = 'PENDING', // 等待中
+  PROCESSING = 'PROCESSING', // 处理中
+  SUCCESS = 'SUCCESS', // 成功
+  FAILURE = 'FAILURE', // 失败
+}
+
 export enum UtilityHistoryState {
   PENDING = 'PENDING', // 等待中
   PROCESSING = 'PROCESSING', // 处理中

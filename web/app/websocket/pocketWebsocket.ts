@@ -3,11 +3,7 @@ import { DockingPubSub } from '@/pubsub'
 export const PocketWebsocket = (obj: any) => {
   console.log('PocketWebsocket', obj)
   let id = ''
-  let status = ''
   if ('id' in obj)
     id = obj.id
-  if ('status' in obj)
-    status = obj.status
-  if (status === 'SUCCESS')
-    DockingPubSub.publish('PocketResult', { id, data: obj })
+  DockingPubSub.publish('PocketResult', { id, data: obj })
 }

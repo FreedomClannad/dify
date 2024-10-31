@@ -29,6 +29,7 @@ import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global
 import { formats } from '@/app/(commonLayout)/utility/docking/Pocket/Input/commin'
 import useMemory from '@/app/(commonLayout)/utility/docking/hooks/useMemory'
 import { DockingPubSub } from '@/pubsub'
+import { UtilityTaskState } from '@/types/utility'
 
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
@@ -152,24 +153,33 @@ const Container = () => {
   const GlobalDataCollating = (globalData: DockingWebSockingData) => {
     try {
       const { id, data } = globalData
-      console.log(globalData)
       const memory = getSubmitMemory(id)
       if (memory) {
-        setGlobalResult(data.result)
-        const resId = data.id
-        if (resId)
-          setGlobalResultId(resId)
-        setGlobalSubmitLoading(false)
-        notify({ type: 'success', message: 'Task parsing successful' })
-        if (data.result) {
-          setMode(DockingModeEnum.result)
-          setStrategy(DockingStrategyEnum.global)
+        const { status, result } = data
+        if (status === UtilityTaskState.SUCCESS) {
+          setGlobalResult(result)
+          const resId = data.id
+          if (resId)
+            setGlobalResultId(resId)
+          setGlobalSubmitLoading(false)
+          notify({ type: 'success', message: 'Task parsing successful' })
+          if (result) {
+            setMode(DockingModeEnum.result)
+            setStrategy(DockingStrategyEnum.global)
+          }
+        }
+        else if (status === UtilityTaskState.FAILURE) {
+          setGlobalSubmitLoading(false)
+          notify({ type: 'error', message: `Task parsing failed, reason: ${result}` })
         }
       }
       else {
         const { data } = globalData
-        const { task_name } = data
-        notify({ type: 'success', message: `${task_name} task parsing successful` })
+        const { task_name, status, result } = data
+        if (status === UtilityTaskState.SUCCESS)
+          notify({ type: 'success', message: `${task_name} task parsing successful` })
+        else if (status === UtilityTaskState.FAILURE)
+          notify({ type: 'error', message: `${task_name} task parsing failed, reason: ${result}` })
       }
     }
     catch (error) {
@@ -257,53 +267,63 @@ const Container = () => {
       const memory = getSubmitMemory(id)
       if (memory) {
         const { values } = memory
-        setResult(data.result)
-        const resId = data.id
-        if (resId)
-          setPocketResultId(resId)
+        const { status, result } = data
+        if (status === UtilityTaskState.SUCCESS) {
+          setResult(result)
+          const resId = data.id
+          if (resId)
+            setPocketResultId(resId)
 
-        setSubmitLoading(false)
-        notify({ type: 'success', message: 'Task parsing successful' })
-        const { ligand_file_ids, pdb_file_id } = values
-        if (pdb_file_id) {
-          const id = pdb_file_id
-          const dockingResultFile = getPocketReceptorUploadResultFile(id)
+          setSubmitLoading(false)
+          notify({ type: 'success', message: 'Task parsing successful' })
+          const { ligand_file_ids, pdb_file_id } = values
+          if (pdb_file_id) {
+            const id = pdb_file_id
+            const dockingResultFile = getPocketReceptorUploadResultFile(id)
 
-          const dockingMolstar = getStructure(id)
-          if (dockingResultFile && dockingMolstar) {
-            const { name = '' } = dockingResultFile
-            const { visible } = dockingMolstar
-            addPocketReceptorResultInputFile({ id, name, visible, display: true })
+            const dockingMolstar = getStructure(id)
+            if (dockingResultFile && dockingMolstar) {
+              const { name = '' } = dockingResultFile
+              const { visible } = dockingMolstar
+              addPocketReceptorResultInputFile({ id, name, visible, display: true })
+            }
+          }
+          if (ligand_file_ids) {
+            updatePocketLigandFilesIds(ligand_file_ids)
+            const id = ligand_file_ids
+            const dockingResultFile = getPocketLigandUploadResultFile(id)
+            if (dockingResultFile) {
+              const { name = '' } = dockingResultFile
+              addPocketLigandResultInputFile({ id, name, visible: false, display: true })
+            }
+          }
+
+          if (data.result) {
+            setMode(DockingModeEnum.result)
+            setStrategy(DockingStrategyEnum.pocket)
+          }
+
+          if (data.remove_ligand_file && data.remove_ligand_file.id) {
+            const id = data.remove_ligand_file.id
+            const extension = data.remove_ligand_file.extension
+            const mime_type = data.remove_ligand_file.mime_type
+            const name = data.remove_ligand_file.name
+            addCropReceptorResult({ fileID: id, id, extension, mime_type, name })
+            addCropRecepResultInputFile({ id, name, visible: false, display: true })
           }
         }
-        if (ligand_file_ids) {
-          updatePocketLigandFilesIds(ligand_file_ids)
-          const id = ligand_file_ids
-          const dockingResultFile = getPocketLigandUploadResultFile(id)
-          if (dockingResultFile) {
-            const { name = '' } = dockingResultFile
-            addPocketLigandResultInputFile({ id, name, visible: false, display: true })
-          }
-        }
-
-        if (data.result) {
-          setMode(DockingModeEnum.result)
-          setStrategy(DockingStrategyEnum.pocket)
-        }
-
-        if (data.remove_ligand_file && data.remove_ligand_file.id) {
-          const id = data.remove_ligand_file.id
-          const extension = data.remove_ligand_file.extension
-          const mime_type = data.remove_ligand_file.mime_type
-          const name = data.remove_ligand_file.name
-          addCropReceptorResult({ fileID: id, id, extension, mime_type, name })
-          addCropRecepResultInputFile({ id, name, visible: false, display: true })
+        else if (status === UtilityTaskState.FAILURE) {
+          setSubmitLoading(false)
+          notify({ type: 'error', message: `Task parsing failed, reason: ${result}` })
         }
       }
       else {
         const { data } = pocketData
-        const { task_name } = data
-        notify({ type: 'success', message: `${task_name} task parsing successful` })
+        const { task_name, status, result } = data
+        if (status === UtilityTaskState.SUCCESS)
+          notify({ type: 'success', message: `${task_name} task parsing successful` })
+        else if (status === UtilityTaskState.FAILURE)
+          notify({ type: 'error', message: `${task_name} task parsing failed, reason: ${result}` })
       }
     }
     catch (error) {
