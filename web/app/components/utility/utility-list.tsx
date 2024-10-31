@@ -58,9 +58,14 @@ const UtilityList = () => {
   const getProviderList = async () => {
     const list = await fetchCollectionList()
     console.log(list)
-    setCollectionList([...list])
+    list.forEach((item) => {
+      if (item.author === 'Richards Tu')
+        console.log(item)
+    })
+    // setCollectionList([...list])
     const n_list = await fetchUtilityCollectionList()
     console.log(n_list)
+    setCollectionList([...n_list])
   }
   useEffect(() => {
     getProviderList()

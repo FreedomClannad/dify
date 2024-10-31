@@ -58,7 +58,7 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
       case 'action': {
         if (typeof cellValue === 'function') {
           return <>
-            <Chip radius="sm" color="primary" className="cursor-pointer" onClick={() => { cellValue(utilityHistory) }} startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><ArrowLeftOnRectangleIcon /></div>}>
+            <Chip radius="sm" color="primary" className="cursor-pointer" isDisabled={!(utilityHistory.state === UtilityHistoryState.SUCCESS)} onClick={() => { cellValue(utilityHistory) }} startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><ArrowLeftOnRectangleIcon /></div>}>
               <div className="flex items-center">
                 <span>Enter</span>
               </div>

@@ -47,6 +47,7 @@ export type Collection = {
   is_team_authorization: boolean
   allow_delete: boolean
   labels: string[]
+  frontend_url: string
 }
 
 export type ToolParameter = {

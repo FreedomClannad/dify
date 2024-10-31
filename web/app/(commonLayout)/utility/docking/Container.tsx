@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { useContext as useContext1 } from 'use-context-selector'
 import type { FieldValues } from 'react-hook-form'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
+import { useSearchParams } from 'next/navigation'
 import style from './Container.module.css'
 import Result from '@/app/(commonLayout)/utility/docking/Pocket/Result'
 import type { CenterPosition, DockingWebSockingData } from '@/types/docking'
@@ -49,6 +50,18 @@ const Container = () => {
   } = useMolstar()
 
   const { StrategyMap, strategy, setStrategy } = useStrategy()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const strategy = searchParams.get('strategy') || ''
+    if (strategy) {
+      if (strategy === 'pocket')
+        setStrategy(DockingStrategyEnum.pocket)
+      else if (strategy === 'global')
+        setStrategy(DockingStrategyEnum.global)
+    }
+  }, [])
+
   const [centerPosition, setCenterPosition] = useState<CenterPosition>({})
   // Global
   const {

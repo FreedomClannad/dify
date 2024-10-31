@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 import { useContext } from 'use-context-selector'
 import { useTranslation } from 'react-i18next'
+import { useMount } from 'ahooks'
 import type { Collection } from '../types'
 import cn from '@/utils/classnames'
 import AppIcon from '@/app/components/base/app-icon'
@@ -9,6 +10,7 @@ import { Tag01 } from '@/app/components/base/icons/src/vender/line/financeAndECo
 import I18n from '@/context/i18n'
 import { getLanguage } from '@/i18n/language'
 import { useStore as useLabelStore } from '@/app/components/tools/labels/store'
+import { fetchLabelList } from '@/service/tools'
 
 type Props = {
   active: boolean
@@ -25,7 +27,6 @@ const ProviderCard = ({
   const { locale } = useContext(I18n)
   const language = getLanguage(locale)
   const labelList = useLabelStore(s => s.labelList)
-
   const labelContent = useMemo(() => {
     if (!collection.labels)
       return ''
@@ -34,6 +35,14 @@ const ProviderCard = ({
       return label?.label[language]
     }).filter(Boolean).join(', ')
   }, [collection.labels, labelList, language])
+
+  const setLabelList = useLabelStore(s => s.setLabelList)
+
+  useMount(() => {
+    fetchLabelList().then((res) => {
+      setLabelList(res)
+    })
+  })
 
   return (
     <div className={cn('group col-span-1 bg-white border-2 border-solid border-transparent rounded-xl shadow-sm min-h-[160px] flex flex-col transition-all duration-200 ease-in-out cursor-pointer hover:shadow-lg', active && '!border-primary-400')} onClick={onSelect}>

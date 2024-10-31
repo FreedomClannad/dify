@@ -42,8 +42,11 @@ const WebSocketHook = () => {
 
   // 连接地址
   const getURL = () => {
-    const token = localStorage.getItem('console_token') || ''
-    return `${getWSURL()}?token=Bearer ${token}`
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      const token = localStorage.getItem('console_token') || ''
+      return `${getWSURL()}?token=Bearer ${token}`
+    }
+    return ''
   }
   /**
      * webSocket连接成功回调

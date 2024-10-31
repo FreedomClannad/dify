@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useContext } from 'use-context-selector'
+import { useRouter } from 'next/navigation'
 import { AuthHeaderPrefix, AuthType, CollectionType } from '../types'
 import type { Collection, CustomCollectionBackend, Tool, WorkflowToolProviderRequest, WorkflowToolProviderResponse } from '../types'
 import ToolItem from './tool-item'
@@ -19,7 +20,6 @@ import WorkflowToolModal from '@/app/components/tools/workflow-tool'
 import Toast from '@/app/components/base/toast'
 import {
   deleteWorkflowTool,
-  fetchBuiltInToolList,
   fetchCustomCollection,
   fetchCustomToolList,
   fetchModelToolList,
@@ -61,6 +61,9 @@ const ProviderDetail = ({
   const [showSettingAuth, setShowSettingAuth] = useState(false)
   const { setShowModelModal } = useModalContext()
   const { modelProviders: providers } = useProviderContext()
+
+  const route = useRouter()
+
   const showSettingAuthModal = () => {
     if (isModel) {
       const provider = providers.find(item => item.provider === collection?.id)
@@ -121,7 +124,7 @@ const ProviderDetail = ({
   // workflow provider
   const [isShowEditWorkflowToolModal, setIsShowEditWorkflowToolModal] = useState(false)
   const getWorkflowToolProvider = useCallback(async () => {
-    setIsDetailLoading(true)
+    // setIsDetailLoading(true)
     const res = await fetchWorkflowToolDetail(collection.id)
     const payload = {
       ...res,
@@ -185,8 +188,8 @@ const ProviderDetail = ({
     setIsDetailLoading(true)
     try {
       if (collection.type === CollectionType.builtIn) {
-        const list = await fetchBuiltInToolList(collection.name)
-        setToolList(list)
+        // const list = await fetchBuiltInToolList(collection.name)
+        // setToolList(list)
       }
       else if (collection.type === CollectionType.model) {
         const list = await fetchModelToolList(collection.name)
@@ -240,14 +243,19 @@ const ProviderDetail = ({
             variant={isAuthed ? 'secondary' : 'primary'}
             className={cn('shrink-0 my-3 w-full', isAuthed && 'bg-white')}
             onClick={() => {
-              if (collection.type === CollectionType.builtIn || collection.type === CollectionType.model)
-                showSettingAuthModal()
+              if (collection.type === CollectionType.builtIn || collection.type === CollectionType.model) {
+                console.log(collection.frontend_url)
+                route.push(collection.frontend_url)
+              }
+
+              // showSettingAuthModal()
             }}
             disabled={!isCurrentWorkspaceManager}
           >
             {isAuthed && <Indicator className='mr-2' color={'green'} />}
             <div className={cn('text-white leading-[18px] text-[13px] font-medium', isAuthed && '!text-gray-700')}>
-              {isAuthed ? t('tools.auth.authorized') : t('tools.auth.unauthorized')}
+              {/* {isAuthed ? t('tools.auth.authorized') : t('tools.auth.unauthorized')} */}
+              跳转界面
             </div>
           </Button>
         )}
@@ -284,17 +292,17 @@ const ProviderDetail = ({
       {/* Tools */}
       <div className='pt-3'>
         {isDetailLoading && <div className='flex h-[200px]'><Loading type='app' /></div>}
-        {!isDetailLoading && (
-          <div className='text-xs font-medium leading-6 text-gray-500'>
-            {collection.type === CollectionType.workflow && <span className=''>{t('tools.createTool.toolInput.title').toLocaleUpperCase()}</span>}
-            {collection.type !== CollectionType.workflow && <span className=''>{t('tools.includeToolNum', { num: toolList.length }).toLocaleUpperCase()}</span>}
-            {needAuth && (isBuiltIn || isModel) && !isAuthed && (
-              <>
-                <span className='px-1'>·</span>
-                <span className='text-[#DC6803]'>{t('tools.auth.setup').toLocaleUpperCase()}</span>
-              </>
-            )}
-          </div>
+        {!isDetailLoading && (<></>
+        // <div className='text-xs font-medium leading-6 text-gray-500'>
+        //   {collection.type === CollectionType.workflow && <span className=''>{t('tools.createTool.toolInput.title').toLocaleUpperCase()}</span>}
+        //   {collection.type !== CollectionType.workflow && <span className=''>{t('tools.includeToolNum', { num: toolList.length }).toLocaleUpperCase()}</span>}
+        //   {needAuth && (isBuiltIn || isModel) && !isAuthed && (
+        //     <>
+        //       <span className='px-1'>·</span>
+        //       <span className='text-[#DC6803]'>{t('tools.auth.setup').toLocaleUpperCase()}</span>
+        //     </>
+        //   )}
+        // </div>
         )}
         {!isDetailLoading && (
           <div className='mt-1'>

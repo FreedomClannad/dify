@@ -18,10 +18,10 @@ const DockingNav = ({
   console.log(currentPath) // '/tools/docking'
   const segments = currentPath.split('/')
   const currentSegment = segments[segments.length - 1]
-  const activated = currentSegment === 'docking'
+  const activated = currentSegment === 'utility'
 
   return (
-    <Link href="/utility/docking" className={classNames(
+    <Link href="/utility" className={classNames(
       className, 'group',
       activated && 'bg-white shadow-md',
       activated ? 'text-primary-600' : 'text-gray-500 hover:bg-gray-200',
@@ -31,7 +31,7 @@ const DockingNav = ({
           ? <RiPuzzle2Fill className='mr-2 w-4 h-4' />
           : <RiPuzzle2Line className='mr-2 w-4 h-4' />
       }
-      Utility / Molecular Docking
+      Utility
     </Link>
   )
 }
