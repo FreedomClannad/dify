@@ -15,7 +15,6 @@ const DockingNav = ({
   className,
 }: ToolsNavProps) => {
   const currentPath = usePathname()
-  console.log(currentPath) // '/tools/docking'
   const segments = currentPath.split('/')
   const currentSegment = segments[segments.length - 1]
   const activated = currentSegment === 'utility'

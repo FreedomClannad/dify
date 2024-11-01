@@ -50,12 +50,14 @@ const History = () => {
     pollingWhenHidden: false,
   })
   useEffect(() => {
+    console.log(page)
+    console.log(pageSize)
     refresh()
   }, [page, pageSize])
 
   useEffect(() => {
-    getData().then()
-    run()
+    // getData().then()
+    // run()
 
     return () => {
       cancel()
