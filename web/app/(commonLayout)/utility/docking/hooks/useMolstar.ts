@@ -19,9 +19,14 @@ const useMolstar = () => {
   const [renderBufferData, setRenderBufferData] = useState<RenderBuffer[]>([])
   const [isMolstarMounted, setIsMolstarMounted] = useState(false)
   const dockingMolstarListRef = useRef(dockingMolstarList)
+  const renderBufferDataRef = useRef(renderBufferData)
   useEffect(() => {
     dockingMolstarListRef.current = dockingMolstarList
   }, [dockingMolstarList])
+
+  useEffect(() => {
+    renderBufferDataRef.current = renderBufferData
+  }, [renderBufferData])
   // 添加渲染缓存数据
   const addRenderBufferData = (buffer: RenderBuffer) => {
     setRenderBufferData((renderBuffer) => {
@@ -115,8 +120,8 @@ const useMolstar = () => {
   const RenderBuffer = () => {
     console.log(renderBufferData)
     console.log(renderBufferData.length)
-    if (renderBufferData.length > 0) {
-      renderBufferData.forEach((buffer) => {
+    if (renderBufferDataRef.current && renderBufferDataRef.current.length > 0) {
+      renderBufferDataRef.current.forEach((buffer) => {
         if (buffer.type === RenderType.URL) {
           const url = buffer.data.toString()
           loadStructureFromUrl(url, buffer.formats)
