@@ -89,17 +89,13 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   }
   // 根据传入的data来进行渲染数据
   const loadStructureFromData = (data: string | number[], format: BuiltInTrajectoryFormat) => {
-    if (molstart && molstart.current) {
-      console.log(molstart)
+    if (molstart && molstart.current)
       molstart.current.loadStructureFromData(data, format)
-    }
   }
   // 控制分子/蛋白质显隐
   const setStructureVisibility = (index: number, visible: boolean) => {
     if (molstart && molstart.current) {
       console.log(molstart.current?.plugin.managers.structure.hierarchy.current.structures)
-      console.log(index)
-      console.log(visible)
       const data = molstart.current?.plugin.state.data
       const ref = molstart.current?.plugin.managers.structure.hierarchy.current.structures[Number(index)].cell.transform.ref
       molstart.current.setStructureVisibility(data, ref, !visible)

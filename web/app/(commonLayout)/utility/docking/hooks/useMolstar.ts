@@ -46,7 +46,6 @@ const useMolstar = () => {
   }
   // 根据URL进行下载并渲染
   const loadStructureFromUrl = (url: string, formats: BuiltInTrajectoryFormat) => {
-    console.log('分子根据Data渲染:', url, formats)
     if (MolstarRef.current && MolstarRef.current.isLoad()) {
       MolstarRef.current.loadStructureFromUrl(
         url,
@@ -59,8 +58,6 @@ const useMolstar = () => {
   }
   // 根据数据直接渲染
   const loadStructureFromData = (data: string | number[], formats: BuiltInTrajectoryFormat) => {
-    console.log('分子根据Data渲染:', data, formats)
-    console.log(MolstarRef.current)
     if (MolstarRef.current && MolstarRef.current.isLoad()) {
       MolstarRef.current.loadStructureFromData(
         data,
@@ -74,11 +71,9 @@ const useMolstar = () => {
   // 设置分子/蛋白质显隐
   const setStructureVisibility = ({ dockingMolstar, addCallback }: { dockingMolstar: DockingMolstar; addCallback?: () => void }) => {
     if (MolstarRef.current) {
-      console.log(dockingMolstar)
       const index = dockingMolstarList.findIndex(
         item => item.id === dockingMolstar.id,
       )
-      console.log(index)
       if (index === -1) {
         addStructure(dockingMolstar)
         addCallback?.()
@@ -114,8 +109,6 @@ const useMolstar = () => {
   }
 
   const RenderBuffer = () => {
-    console.log(renderBufferData)
-    console.log(renderBufferData.length)
     if (renderBufferData.length > 0) {
       renderBufferData.forEach((buffer) => {
         if (buffer.type === RenderType.URL) {
@@ -139,7 +132,6 @@ const useMolstar = () => {
   }
 
   useEffect(() => {
-    console.log(MolstarRef.current)
     if (MolstarRef.current && isMolstarMounted) {
       console.log('渲染使用缓存')
       RenderBuffer()
