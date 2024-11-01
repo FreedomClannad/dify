@@ -47,7 +47,7 @@ const useMolstar = () => {
   // 根据URL进行下载并渲染
   const loadStructureFromUrl = (url: string, formats: BuiltInTrajectoryFormat) => {
     console.log('分子根据Data渲染:', url, formats)
-    if (MolstarRef.current) {
+    if (MolstarRef.current && MolstarRef.current.isLoad()) {
       MolstarRef.current.loadStructureFromUrl(
         url,
         formats as BuiltInTrajectoryFormat,
@@ -61,7 +61,7 @@ const useMolstar = () => {
   const loadStructureFromData = (data: string | number[], formats: BuiltInTrajectoryFormat) => {
     console.log('分子根据Data渲染:', data, formats)
     console.log(MolstarRef.current)
-    if (MolstarRef.current) {
+    if (MolstarRef.current && MolstarRef.current.isLoad()) {
       MolstarRef.current.loadStructureFromData(
         data,
         formats as BuiltInTrajectoryFormat,

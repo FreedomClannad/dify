@@ -20,6 +20,7 @@ export type MolstarHandle = {
   setStructureVisibility: (index: number, visible: boolean) => void
   getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string; label: string } | null | undefined>
   clear: () => void
+  isLoad: () => boolean
 }
 // let ViewerStart = null;
 const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFocusCenter, onLoad }, ref) => {
@@ -109,6 +110,10 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     if (molstart && molstart.current)
       molstart.current.plugin.clear()
   }
+
+  const isLoad = () => {
+    return !!(molstart && molstart.current)
+  }
   useImperativeHandle(ref, () => {
     return {
       loadStructureFromUrl,
@@ -116,6 +121,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       setStructureVisibility,
       getCenter,
       clear,
+      isLoad,
     }
   }, [])
   return <div style={{ width: '100%', height: '100%' }} id={id}></div>
