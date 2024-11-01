@@ -19,14 +19,9 @@ const useMolstar = () => {
   const [renderBufferData, setRenderBufferData] = useState<RenderBuffer[]>([])
   const [isMolstarMounted, setIsMolstarMounted] = useState(false)
   const dockingMolstarListRef = useRef(dockingMolstarList)
-  const renderBufferDataRef = useRef(renderBufferData)
   useEffect(() => {
     dockingMolstarListRef.current = dockingMolstarList
   }, [dockingMolstarList])
-
-  useEffect(() => {
-    renderBufferDataRef.current = renderBufferData
-  }, [renderBufferData])
   // 添加渲染缓存数据
   const addRenderBufferData = (buffer: RenderBuffer) => {
     setRenderBufferData((renderBuffer) => {
@@ -65,6 +60,7 @@ const useMolstar = () => {
   // 根据数据直接渲染
   const loadStructureFromData = (data: string | number[], formats: BuiltInTrajectoryFormat) => {
     console.log('分子根据Data渲染:', data, formats)
+    console.log(MolstarRef.current)
     if (MolstarRef.current) {
       MolstarRef.current.loadStructureFromData(
         data,
@@ -120,8 +116,8 @@ const useMolstar = () => {
   const RenderBuffer = () => {
     console.log(renderBufferData)
     console.log(renderBufferData.length)
-    if (renderBufferDataRef.current && renderBufferDataRef.current.length > 0) {
-      renderBufferDataRef.current.forEach((buffer) => {
+    if (renderBufferData.length > 0) {
+      renderBufferData.forEach((buffer) => {
         if (buffer.type === RenderType.URL) {
           const url = buffer.data.toString()
           loadStructureFromUrl(url, buffer.formats)
