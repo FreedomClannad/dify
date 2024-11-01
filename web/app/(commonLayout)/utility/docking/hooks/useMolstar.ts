@@ -24,7 +24,9 @@ const useMolstar = () => {
   }, [dockingMolstarList])
   // 添加渲染缓存数据
   const addRenderBufferData = (buffer: RenderBuffer) => {
-    setRenderBufferData([...renderBufferData, buffer])
+    setRenderBufferData((renderBuffer) => {
+      return [...renderBuffer, buffer]
+    })
   }
 
   // 清空缓存数据
@@ -44,6 +46,7 @@ const useMolstar = () => {
   }
   // 根据URL进行下载并渲染
   const loadStructureFromUrl = (url: string, formats: BuiltInTrajectoryFormat) => {
+    console.log('分子根据Data渲染:', url, formats)
     if (MolstarRef.current) {
       MolstarRef.current.loadStructureFromUrl(
         url,
@@ -56,6 +59,7 @@ const useMolstar = () => {
   }
   // 根据数据直接渲染
   const loadStructureFromData = (data: string | number[], formats: BuiltInTrajectoryFormat) => {
+    console.log('分子根据Data渲染:', data, formats)
     if (MolstarRef.current) {
       MolstarRef.current.loadStructureFromData(
         data,
