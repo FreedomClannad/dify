@@ -58,7 +58,9 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     },
     ).then((res) => {
       molstart.current = res
-      onLoad?.()
+      setTimeout(() => {
+        onLoad?.()
+      }, 500)
 
       // ViewerStart = res;
     })

@@ -1,5 +1,6 @@
 import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
+import { useRequest } from 'ahooks'
 import HistoryTable from './components/HistoryTable'
 import type { UtilityHistory, UtilityHistoryState } from '@/types/utility'
 import { getHistoryList } from '@/service/history'
@@ -40,20 +41,25 @@ const History = () => {
 
     const { total, data } = res
 
-    // const data = getHistoryData()
-    // const n_data = initTableData(data)
     const n_data = initTableData(data)
-    // setTotal(n_data.length)
     setTotal(total)
     setTableData(n_data)
-    console.log(n_data)
   }
+  const { run, cancel, refresh } = useRequest(getData, {
+    pollingInterval: 10000,
+    pollingWhenHidden: false,
+  })
   useEffect(() => {
-    getData().then()
+    refresh()
   }, [page, pageSize])
 
   useEffect(() => {
     getData().then()
+    run()
+
+    return () => {
+      cancel()
+    }
   }, [])
   return <>
     <div>
