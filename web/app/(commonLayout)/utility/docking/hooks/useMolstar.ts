@@ -109,6 +109,8 @@ const useMolstar = () => {
   }
 
   const RenderBuffer = () => {
+    console.log(renderBufferData)
+    console.log(renderBufferData.length)
     if (renderBufferData.length > 0) {
       renderBufferData.forEach((buffer) => {
         if (buffer.type === RenderType.URL) {
@@ -134,7 +136,7 @@ const useMolstar = () => {
   useEffect(() => {
     console.log(MolstarRef.current)
     if (MolstarRef.current && isMolstarMounted) {
-      console.log('渲染数据112233')
+      console.log('渲染使用缓存')
       RenderBuffer()
     }
   }, [isMolstarMounted])
