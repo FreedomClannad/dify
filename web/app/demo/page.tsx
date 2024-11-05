@@ -1,13 +1,14 @@
 'use client'
-import { memo, useRef } from 'react'
+import { memo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { Switch } from '@nextui-org/react'
 import type { MolstarHandle } from '@/app/components/Molstar'
-
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
 const Demo = () => {
   const MolstarCompRef = useRef<MolstarHandle>(null)
+  const [IonicIsShown, setIonicIsShown] = useState<boolean>(false)
   const handleClick = () => {
     if (MolstarCompRef.current) {
       MolstarCompRef.current.loadStructureFromUrl(
@@ -16,9 +17,24 @@ const Demo = () => {
       )
     }
   }
+  const TestButton = () => {
+    if (MolstarCompRef.current)
+      MolstarCompRef.current.test()
+  }
   return <div>
-    <button onClick={handleClick} className="bg-stone-200">Render</button>
-    <div className="w-[400px] h-[400px]">
+    <div className="flex">
+      <button onClick={handleClick} className="bg-stone-200">Render</button>
+      <button onClick={TestButton} className="ml-3 bg-stone-200">test</button>
+
+      <Switch isSelected={IonicIsShown} aria-label="Ionic" onValueChange={(value) => {
+        if (MolstarCompRef.current)
+          MolstarCompRef.current.setInteraction(value)
+
+        setIonicIsShown(value)
+      }}/>
+    </div>
+
+    <div className="w-full h-[800px] relative mt-3">
       <Molstar wrapperRef={MolstarCompRef}/>
     </div>
   </div>

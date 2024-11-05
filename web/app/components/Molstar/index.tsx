@@ -1,12 +1,16 @@
 'use client'
 import type { LegacyRef } from 'react'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import { Viewer } from './viewer'
 import { getShortId } from '@/utils'
 import 'molstar/build/viewer/molstar.css'
 import './styles.css'
 import { MolstarPubSub } from '@/pubsub'
+import InteractionBox from '@/app/components/Molstar/components/interaction'
+import type { interactions, interactionsKeys } from '@/types/docking'
+import { InteractionsEnum } from '@/types/docking'
+import { initOptions } from '@/app/components/Molstar/function'
 
 type Props = {
   id?: string
@@ -21,11 +25,15 @@ export type MolstarHandle = {
   getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string; label: string } | null | undefined>
   clear: () => void
   isLoad: () => boolean
+  test: () => void
+  setInteraction: (ionic: boolean) => void
 }
 // let ViewerStart = null;
 const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFocusCenter, onLoad }, ref) => {
   const molstart = useRef<Viewer | null>(null)
-
+  const [isMolLoad, setIsMolLoad] = useState<boolean>(false)
+  // 通过控制boolean来刷新组件
+  const [isRefresh, setIsRefresh] = useState<boolean>(false)
   const getCenter = async () => {
     if (molstart && molstart.current) {
       const center = molstart.current.getFocusedResidueCenter()
@@ -46,8 +54,8 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       layoutShowRemoteState: false,
       layoutShowSequence: true,
       layoutShowLog: false,
-      layoutShowLeftPanel: false,
-      layoutShowRightPanel: false,
+      layoutShowLeftPanel: true,
+      layoutShowRightPanel: true,
 
       viewportShowExpand: false,
       viewportShowSelectionMode: false,
@@ -59,8 +67,10 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     },
     ).then((res) => {
       molstart.current = res
+      console.log(res)
       setTimeout(() => {
         onLoad?.()
+        setIsMolLoad(true)
       }, 500)
 
       // ViewerStart = res;
@@ -106,9 +116,83 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     if (molstart && molstart.current)
       molstart.current.plugin.clear()
   }
-
+  // 判断mol是否加载完成
   const isLoad = () => {
     return !!(molstart && molstart.current)
+  }
+
+  // 获取相互作用参数
+  const interactionData = useMemo(() => {
+    const interactionsObj: interactions = {
+      'cation-pi': InteractionsEnum.off,
+      'halogen-bonds': InteractionsEnum.off,
+      'hydrogen-bonds': InteractionsEnum.off,
+      'hydrophobic': InteractionsEnum.off,
+      'ionic': InteractionsEnum.off,
+      'metal-coordination': InteractionsEnum.off,
+      'pi-stacking': InteractionsEnum.off,
+      'weak-hydrogen-bonds': InteractionsEnum.off,
+    }
+    if (molstart && molstart.current) {
+      const interactionsOptions = molstart.current?.plugin.managers.structure.component.state.options.interactions.providers
+
+      if (interactionsOptions) {
+        const keys = Object.keys(interactionsOptions)
+        keys.forEach((key) => {
+          interactionsObj[key as interactionsKeys] = interactionsOptions[key].name as interactionsEnum
+        })
+      }
+    }
+    console.log(interactionsObj)
+    return interactionsObj
+  }, [isMolLoad, isRefresh])
+
+  const handleInteractionBoxClick = (key: interactionsKeys, value: InteractionsEnum) => {
+    if (molstart && molstart.current) {
+      const options = molstart.current?.plugin.managers.structure.component.state.options
+      const n_options = initOptions(options, key, value)
+      molstart.current.plugin.managers.structure.component.setOptions(n_options)
+      setTimeout(() => {
+        molstart.current?.plugin.canvas3d?.update()
+        setIsRefresh(!isRefresh)
+      })
+    }
+  }
+
+  // 相互作用设置
+  const setInteraction = (ionic: boolean) => {
+    if (molstart && molstart.current) {
+      console.log(molstart.current?.plugin.managers.structure.component)
+      const options = molstart.current?.plugin.managers.structure.component.state.options
+      console.log(options)
+      const n_options = { ...options }
+
+      if (ionic) {
+        n_options.interactions.providers.ionic = {
+          name: 'on',
+          params: {
+            distanceMax: 5,
+          },
+        }
+      }
+
+      else {
+        n_options.interactions.providers.ionic = {
+          name: 'off',
+          params: {},
+        }
+      }
+      console.log(n_options)
+      molstart.current.plugin.managers.structure.component.setOptions(n_options)
+      setTimeout(() => {
+        molstart.current?.plugin.canvas3d?.update()
+      })
+    }
+  }
+
+  const test = () => {
+    if (molstart && molstart.current)
+      console.log(molstart.current)
   }
   useImperativeHandle(ref, () => {
     return {
@@ -118,9 +202,15 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       getCenter,
       clear,
       isLoad,
+      test,
+      setInteraction,
     }
   }, [])
-  return <div style={{ width: '100%', height: '100%' }} id={id}></div>
+  return <>
+    <div style={{ width: '100%', height: '100%' }} id={id}></div>
+    {isMolLoad && <InteractionBox interactionsData={interactionData} onClick={handleInteractionBoxClick}/>}
+
+  </>
 })
 MolstarComp.displayName = 'MolstarComp'
 const MolstarWrapper = ({ wrapperRef, ...props }: { wrapperRef: LegacyRef<MolstarHandle> } & Props) => {
