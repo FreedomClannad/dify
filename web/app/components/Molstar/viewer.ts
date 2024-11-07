@@ -55,6 +55,7 @@ import { ObjectKeys } from 'molstar/lib/mol-util/type-helpers'
 import type { StateTransform } from 'molstar/lib/commonjs/mol-state/transform'
 import { setSubtreeVisibility } from 'molstar/lib/mol-plugin/behavior/static/state'
 import type { ElementIndex } from 'molstar/lib/mol-model/structure/model/indexing'
+import type { StructureHierarchyRef } from 'molstar/lib/mol-plugin-state/manager/structure/hierarchy-state'
 import { MesoFocusLoci } from './behavior/camera'
 
 export { PLUGIN_VERSION as version } from 'molstar/lib/mol-plugin/version'
@@ -276,7 +277,7 @@ export class Viewer {
           format: format as any,
           isBinary,
           label: options?.label,
-          options: { ...params.source.params.options, representationParams: options?.representationParams as any },
+          options: { ...params.source.params.options, representationParams: options?.representationParams as any, type: 'model' },
         },
       },
     }))
@@ -709,6 +710,14 @@ export class Viewer {
       }
     }
     return ''
+  }
+
+  remove(refs: (StructureHierarchyRef | string)[], canUndo?: boolean) {
+    if (refs.length === 0)
+      return
+    const deletes = this.plugin.state.data.build()
+    for (const r of refs) deletes.delete(typeof r === 'string' ? r : r.cell.transform.ref)
+    return deletes.commit({ canUndo: canUndo ? 'Remove' : false })
   }
 
   dispose() {

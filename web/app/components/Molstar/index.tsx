@@ -2,6 +2,7 @@
 import type { LegacyRef } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
+import type { StructureHierarchyRef } from 'molstar/lib/mol-plugin-state/manager/structure/hierarchy-state'
 import { Viewer } from './viewer'
 import { getShortId } from '@/utils'
 import 'molstar/build/viewer/molstar.css'
@@ -27,6 +28,7 @@ export type MolstarHandle = {
   isLoad: () => boolean
   test: () => void
   setInteraction: (ionic: boolean) => void
+  getDeleteData: () => void
 }
 // let ViewerStart = null;
 const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFocusCenter, onLoad }, ref) => {
@@ -92,6 +94,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   const loadStructureFromUrl = (url: string, formate: BuiltInTrajectoryFormat) => {
     if (molstart && molstart.current)
       molstart.current.loadStructureFromUrl(url, formate)
+      // molstart.current.loadAllModelsOrAssemblyFromUrl(url, formate)
 
     // if (ViewerStart) {
     //     ViewerStart.loadStructureFromUrl(url, formate);
@@ -100,6 +103,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   // 根据传入的data来进行渲染数据
   const loadStructureFromData = (data: string | number[], format: BuiltInTrajectoryFormat) => {
     if (molstart && molstart.current)
+      // molstart.current.loadStructureFromData(data, format)
       molstart.current.loadStructureFromData(data, format)
   }
   // 控制分子/蛋白质显隐
@@ -139,7 +143,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       if (interactionsOptions) {
         const keys = Object.keys(interactionsOptions)
         keys.forEach((key) => {
-          interactionsObj[key as interactionsKeys] = interactionsOptions[key].name as interactionsEnum
+          interactionsObj[key as interactionsKeys] = interactionsOptions[key].name as InteractionsEnum
         })
       }
     }
@@ -190,10 +194,57 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     }
   }
 
-  const test = () => {
-    if (molstart && molstart.current)
-      console.log(molstart.current)
+  // 删除不需要的分子结构
+  const removed = (ref: StructureHierarchyRef | string[], canUndo?: boolean) => {
+    if (molstart && molstart.current) {
+      const refsArray = Array.isArray(ref) ? ref : [ref]
+      if (molstart && molstart.current) {
+        const remove_structre = molstart.current.remove(refsArray, canUndo)
+        if (remove_structre)
+          return remove_structre
+      }
+
+      return undefined
+    }
   }
+
+  const test = () => {
+    if (molstart && molstart.current) {
+      console.log(molstart.current)
+      const root = molstart.current.plugin.state.data.build()
+      console.log(root)
+    }
+  }
+
+  const getDeleteData = async () => {
+    if (molstart && molstart.current) {
+      const plugin = molstart.current.plugin
+      const structure = plugin.managers.structure.hierarchy.current.structures[0]
+      console.log(plugin.managers.structure.hierarchy)
+      // 获取选择器
+      const selection = plugin.managers.structure.selection
+      console.log(selection)
+      // 获取未被删除的原子的索引
+      const remaining = selection.getLoci('current')
+      console.log(remaining)
+      // 基于选择创建新结构
+      const filtered = structure.builder().createStructure(remaining)
+
+      // 导出为 mmCIF 格式(或其他需要的格式)
+      const writer = plugin.builders.data.createWriter({ format: 'mmcif' })
+      const data = await writer.getData(filtered)
+
+      // 下载处理
+      const blob = new Blob([data], { type: 'chemical/x-mmcif' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'filtered_structure.cif'
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+  }
+
   useImperativeHandle(ref, () => {
     return {
       loadStructureFromUrl,
@@ -202,8 +253,9 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       getCenter,
       clear,
       isLoad,
-      test,
       setInteraction,
+      test,
+      getDeleteData,
     }
   }, [])
   return <>

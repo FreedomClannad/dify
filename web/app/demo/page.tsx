@@ -12,8 +12,8 @@ const Demo = () => {
   const handleClick = () => {
     if (MolstarCompRef.current) {
       MolstarCompRef.current.loadStructureFromUrl(
-        'http://127.0.0.1:5500/ligand-dock.sdf',
-        'sdf',
+        'http://127.0.0.1:5500/5v3x.pdb',
+        'pdb',
       )
     }
   }
@@ -21,10 +21,15 @@ const Demo = () => {
     if (MolstarCompRef.current)
       MolstarCompRef.current.test()
   }
+  const handleDeleteData = () => {
+    if (MolstarCompRef.current)
+      MolstarCompRef.current.getDeleteData()
+  }
   return <div>
     <div className="flex">
       <button onClick={handleClick} className="bg-stone-200">Render</button>
       <button onClick={TestButton} className="ml-3 bg-stone-200">test</button>
+      <button onClick={handleDeleteData} className="ml-3 bg-stone-200">获取删除后的数据</button>
 
       <Switch isSelected={IonicIsShown} aria-label="Ionic" onValueChange={(value) => {
         if (MolstarCompRef.current)
