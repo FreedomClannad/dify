@@ -570,13 +570,13 @@ const Container = () => {
             <div className={cn(mode === DockingModeEnum.input && style.mode, 'h-[44px] flex items-center justify-center cursor-pointer relative px-4 after:bg-primary-1001')} onClick={() => {
               setMode(DockingModeEnum.input)
             }}>
-              <span>Inputs</span>
+              <span>Input</span>
             </div>
             <div className={cn(mode === DockingModeEnum.result && style.mode, 'ml-10 h-[44px] flex items-center justify-center cursor-not-allowed text-gray-1003 relative px-4 after:bg-primary-1001', resultVisible && 'cursor-pointer text-gray-950')} onClick={() => {
               if (resultVisible)
                 setMode(DockingModeEnum.result)
             }}>
-              <span>Results</span>
+              <span>Output</span>
             </div>
           </div>
         </div>
