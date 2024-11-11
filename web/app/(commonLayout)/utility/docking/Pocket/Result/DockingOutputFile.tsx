@@ -21,15 +21,37 @@ export type TableType = {
 }
 
 const initTable = (data: any[]): TableType[] => {
-  return data.map((item, index) => ({
-    id: getUUID(),
-    mode: item.mode,
-    mol: item.mol,
-    score: item['CNN pose score'],
-    affinity: item['affinity(kcal/mol)'],
-    cnnAffinity: item['CNN affinity'],
-    visible: index === 0,
-  }))
+  // return data.map((item, index) => ({
+  //   id: getUUID(),
+  //   mode: item.mode,
+  //   mol: item.mol,
+  //   score: item['CNN pose score'],
+  //   affinity: item['affinity(kcal/mol)'],
+  //   cnnAffinity: item['CNN affinity'],
+  //   visible: index === 0,
+  // }))
+  const list: TableType[] = []
+  data.forEach((item, index) => {
+    list.push({
+      id: getUUID(),
+      mode: item.mode,
+      mol: item.mol,
+      score: item['CNN pose score'],
+      affinity: item['affinity(kcal/mol)'],
+      cnnAffinity: item['CNN affinity'],
+      visible: index === 0,
+    })
+    list.push({
+      id: getUUID(),
+      mode: item.mode,
+      mol: item.mol,
+      score: item['CNN pose score'],
+      affinity: item['affinity(kcal/mol)'],
+      cnnAffinity: item['CNN affinity'],
+      visible: index === 0,
+    })
+  })
+  return list
 }
 
 const DockingOutputFile = () => {
@@ -141,26 +163,28 @@ const DockingOutputFile = () => {
           </div>
         )
         : (
-          <Table aria-label="Docking output table">
+          <Table aria-label="Docking output table" className="docking-table-body">
             <TableHeader>
-              <TableColumn>
+              <TableColumn align='center'>
                 <Checkbox
+                  className="docking-table-select"
                   isSelected={isAllSelected}
                   isIndeterminate={isIndeterminate}
                   onChange={e => handleSelectAll(e.target.checked)}
                 />
               </TableColumn>
-              <TableColumn>Mode</TableColumn>
-              <TableColumn>Score</TableColumn>
-              <TableColumn>Affinity</TableColumn>
-              <TableColumn>CNN Affinity</TableColumn>
-              <TableColumn>Visibility</TableColumn>
+              <TableColumn align='center'>Mode</TableColumn>
+              <TableColumn align='center'>Score</TableColumn>
+              <TableColumn align='center'>Affinity</TableColumn>
+              <TableColumn align='center'>CNN Affinity</TableColumn>
+              <TableColumn align='center' className="docking-table-visibility docking-table-visibility-header docking-table-visibility-first">Visibility</TableColumn>
             </TableHeader>
             <TableBody>
               {table.map(item => (
                 <TableRow key={item.id}>
                   <TableCell>
                     <Checkbox
+                      className="docking-table-select"
                       isSelected={selected.has(item.id)}
                       onChange={() => {
                         handleRowSelection(item.id)
@@ -171,8 +195,8 @@ const DockingOutputFile = () => {
                   <TableCell>{item.score.toFixed(2)}</TableCell>
                   <TableCell>{item.affinity.toFixed(2)}</TableCell>
                   <TableCell>{item.cnnAffinity.toFixed(2)}</TableCell>
-                  <TableCell>
-                    <div className="cursor-pointer text-xs flex items-center" onClick={() => handleVisible(item)}>
+                  <TableCell className="docking-table-visibility docking-table-visibility-row docking-table-visibility-first">
+                    <div className="cursor-pointer text-xs flex items-center justify-center" onClick={() => handleVisible(item)}>
                       {item.visible ? <RiEyeLine className="w-4 h-4" /> : <RiEyeOffLine className="w-4 h-4" />}
                     </div>
                   </TableCell>
