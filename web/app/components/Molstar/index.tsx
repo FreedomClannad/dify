@@ -22,6 +22,7 @@ type Props = {
 export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
+  loadStructuresFromUrlsAndMerge: () => void
   setStructureVisibility: (index: number, visible: boolean) => void
   getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string; label: string } | null | undefined>
   clear: () => void
@@ -99,6 +100,11 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     // if (ViewerStart) {
     //     ViewerStart.loadStructureFromUrl(url, formate);
     // }
+  }
+  // 加载合并模型
+  const loadStructuresFromUrlsAndMerge = () => {
+    if (molstart && molstart.current)
+      molstart.current.loadStructuresFromUrlsAndMerge()
   }
   // 根据传入的data来进行渲染数据
   const loadStructureFromData = (data: string | number[], format: BuiltInTrajectoryFormat) => {
@@ -248,6 +254,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   useImperativeHandle(ref, () => {
     return {
       loadStructureFromUrl,
+      loadStructuresFromUrlsAndMerge,
       loadStructureFromData,
       setStructureVisibility,
       getCenter,

@@ -3,6 +3,7 @@ import { memo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Switch } from '@nextui-org/react'
 import type { MolstarHandle } from '@/app/components/Molstar'
+
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -12,8 +13,8 @@ const Demo = () => {
   const handleClick = () => {
     if (MolstarCompRef.current) {
       MolstarCompRef.current.loadStructureFromUrl(
-        'http://127.0.0.1:5500/5v3x.pdb',
-        'pdb',
+        'http://127.0.0.1:5501/ace2-hit.mol2',
+        'mol2',
       )
     }
   }
@@ -25,11 +26,16 @@ const Demo = () => {
     if (MolstarCompRef.current)
       MolstarCompRef.current.getDeleteData()
   }
+  const MergeStructure = () => {
+    if (MolstarCompRef.current)
+      MolstarCompRef.current.loadStructuresFromUrlsAndMerge()
+  }
   return <div>
     <div className="flex">
       <button onClick={handleClick} className="bg-stone-200">Render</button>
       <button onClick={TestButton} className="ml-3 bg-stone-200">test</button>
       <button onClick={handleDeleteData} className="ml-3 bg-stone-200">获取删除后的数据</button>
+      <button onClick={MergeStructure} className="ml-3 bg-stone-200">合并结构</button>
 
       <Switch isSelected={IonicIsShown} aria-label="Ionic" onValueChange={(value) => {
         if (MolstarCompRef.current)
