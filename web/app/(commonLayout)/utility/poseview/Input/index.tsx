@@ -6,11 +6,12 @@ import JobTitle from './JobTitle'
 import SubmitButton from '@/app/(commonLayout)/utility/docking/components/SubmitButton'
 import ReceptorFile from '@/app/(commonLayout)/utility/poseview/Input/ReceptorFile'
 import { FormContext } from '@/app/(commonLayout)/utility/poseview/context'
+import LigandFile from '@/app/(commonLayout)/utility/poseview/Input/LigandFile'
 
 const FormSchema = z.object({
   task_name: z.string().min(1, { message: 'Please enter a task name' }),
   fasta_file_id: z.string().min(1, { message: 'Please upload a file' }),
-  // ligand_file_ids: z.string().min(1, { message: 'Please upload a file' }),
+  ligand_file_ids: z.string().min(1, { message: 'Please upload a file' }),
 })
 export type PoseviewFormValues = z.infer<typeof FormSchema>
 type Props = {
@@ -23,11 +24,11 @@ const PoseviewInput = ({ disabled, onSubmit }: Props) => {
     defaultValues: {
       task_name: '',
       fasta_file_id: '',
-      // ligand_file_ids: '',
+      ligand_file_ids: '',
     },
   })
   // eslint-disable-next-line react/jsx-key
-  const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>]
+  const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <LigandFile/>]
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3" style={{ display: disabled ? 'none' : 'flex' }}>
       <form className="h-full flex justify-between flex-col w-full" onSubmit={handleSubmit((data) => {

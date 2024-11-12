@@ -8,6 +8,7 @@ import InputResultRowLayout from '@/app/components/layout/input-result-row-layou
 import { LayoutModeEnum } from '@/types/components'
 import useMolstar from '@/app/(commonLayout)/utility/docking/hooks/useMolstar'
 import useReceptor from '@/app/(commonLayout)/utility/poseview/hooks/useReceptor'
+import useLigand from '@/app/(commonLayout)/utility/poseview/hooks/useLigand'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -23,6 +24,8 @@ const Poseview = () => {
   const receptorHooks = useReceptor()
   const { receptorUploadFileList } = receptorHooks
 
+  const ligandHooks = useLigand()
+
   const {
     MolstarRef,
   } = useMolstar()
@@ -33,7 +36,7 @@ const Poseview = () => {
 
   const left = () => {
     return <>
-      <PoseviewContext.Provider value={{ ...receptorHooks }}>
+      <PoseviewContext.Provider value={{ ...receptorHooks, ...ligandHooks }}>
         <PoseviewInput disabled={inputDisabled} onSubmit={handleSubmit}/>
         <PoseviewResult disabled={resultDisabled} />
       </PoseviewContext.Provider>

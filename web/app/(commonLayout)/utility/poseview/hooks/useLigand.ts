@@ -1,5 +1,7 @@
 import { useUtilityA } from '@/app/hooks/useUtility'
 
+export type useLigandType = ReturnType<typeof useLigand>
+
 const useLigand = () => {
   const {
     // 上传文件内容

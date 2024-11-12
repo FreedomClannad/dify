@@ -6,21 +6,18 @@ import { formats } from './commin'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
-import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketInputContext'
+import { FormContext, PoseviewContext } from '@/app/(commonLayout)/utility/poseview/context'
 import ModalImage from '@/app/(commonLayout)/utility/docking/components/ModalImage'
 import type { SVGPreview } from '@/types/docking'
 import { getLigandFileRenderList } from '@/service/docking'
 import Tooltip from '@/app/components/base/tooltip'
 const LigandFile = () => {
   const {
-    pocketLigandUploadFileList,
-    setPocketLigandUploadFileList,
-    addPocketLigandUploadResultFile,
-    deletePocketLigandUploadResultFile,
-    clearPocketLigandUploadResultFileList,
-    addPocketLigandResultInputFile,
-    clearPocketLigandResultInputFileList,
-  } = useContext(InputContext)
+    ligandUploadFileList,
+    setLigandUploadFileList,
+    addLigandUploadResult,
+    deleteLigandUploadResult,
+  } = useContext(PoseviewContext)
   // const { loadStructureFromUrl, addStructure } = useContext(MolstarContext)
   const { getValues, setValue, errors } = useContext(FormContext)
   const [isShow, setIsShow] = useState<boolean>(false)
@@ -69,10 +66,10 @@ const LigandFile = () => {
     <VerticalTitleCard
       title="Ligand file"
       tooltip="上传配体文件，当配体为一个时允许上传SDF，PDB和MOL格式，当配体为多个时（≤2000）只允许上传SDF格式。格式：SDF、Mol、PDB。"
-      right={pocketLigandUploadFileList.length > 0 ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleOpenPreview}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
+      right={ligandUploadFileList.length > 0 ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleOpenPreview}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
     >
       <div>
-        <UploadCard uploadURL="/molecular-docking/files/upload" accept=".pdb, .sdf, .mol, mol2" fileList={pocketLigandUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+        <UploadCard uploadURL="/poseview/files/upload?source=ligand" accept=".pdb, .sdf, .mol, mol2" fileList={ligandUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
           const n_list = list.map((item) => {
             if (item.fileID === fileItem.fileID) {
               const file = item.file
@@ -81,7 +78,7 @@ const LigandFile = () => {
               if (id && mime_type) {
                 setValue('ligand_file_ids', id)
                 const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
-                addPocketLigandUploadResultFile({ fileID: id, id, name, mime_type, extension: format })
+                addLigandUploadResult({ fileID: id, id, name, mime_type, extension: format })
                 // loadStructureFromUrl(`${process.env.NEXT_PUBLIC_API_PREFIX}/molecular-docking/files/${id}?mime_type=${mime_type}`, extension as BuiltInTrajectoryFormat || 'mmcif')
                 // addStructure({ id: fileItem.fileID, visible: true })
               }
@@ -92,19 +89,19 @@ const LigandFile = () => {
             }
             return item
           })
-          setPocketLigandUploadFileList(n_list)
+          setLigandUploadFileList(n_list)
         }} prepareFileList={(files) => {
-          setPocketLigandUploadFileList(files)
+          setLigandUploadFileList(files)
           if (files.length === 0) {
             setValue('ligand_file_ids', '')
             setLigandIdStorage('')
           }
         }}
         onUploadError={(file) => {
-          const n_list = pocketLigandUploadFileList.filter(item => item.fileID !== file.fileID)
-          setPocketLigandUploadFileList(n_list)
+          const n_list = ligandUploadFileList.filter(item => item.fileID !== file.fileID)
+          setLigandUploadFileList(n_list)
           const { id } = file.file
-          id && deletePocketLigandUploadResultFile(id)
+          id && deleteLigandUploadResult(id)
         }}/>
       </div>
       {errors.ligand_file_ids && <div className="mt-1"><span className='text-red-500 '>{errors.ligand_file_ids.message}</span></div>}
