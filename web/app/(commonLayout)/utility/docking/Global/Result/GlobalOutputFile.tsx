@@ -126,7 +126,7 @@ const GlobalOutputFile = () => {
 
   return (
     <VerticalTitleCard
-      title="Global docking output file"
+      title="Displayed Results"
       right={
         <Tooltip popupContent="Download">
           <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}>

@@ -91,7 +91,7 @@ const GlobalInputFile = () => {
     }
   }
   return <>
-    <VerticalTitleCard title="Global docking input file">
+    <VerticalTitleCard title="Uploaded Files">
       <div className="w-full docking-input-file">
         {
           (globalReceptorResultInputFileList.length === 0 && globalLigandResultInputFileList.length === 0)

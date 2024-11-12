@@ -100,8 +100,8 @@ const PocketInputFile = () => {
   }
 
   return <>
-    <VerticalTitleCard title="Pocket docking input file">
-      <div className="w-full docking-input-file">
+    <VerticalTitleCard title="Uploaded Files">
+      <div className="w-full docking-input-file rounded-large shadow-small py-2">
         {
           (pocketReceptorResultInputFileList.length === 0 && pocketLigandResultInputFileList.length === 0)
             ? <>

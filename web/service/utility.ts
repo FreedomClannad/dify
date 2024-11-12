@@ -2,6 +2,7 @@ import { get, post } from './base'
 import type { HistoryFile, HistoryTask } from '@/types/utility'
 import type { Collection } from '@/app/components/tools/types'
 
+// 这里是历史记录部分
 type HistoryFileInfo = {
   created_at: number
   created_by: string
@@ -58,3 +59,5 @@ export const getPocketHistory = (data: HistoryTask) => {
 export const fetchUtilityCollectionList = () => {
   return get<Collection[]>('/sciminer/tools')
 }
+
+// 这里是poseview的内容

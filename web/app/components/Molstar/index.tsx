@@ -57,8 +57,8 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       layoutShowRemoteState: false,
       layoutShowSequence: true,
       layoutShowLog: false,
-      layoutShowLeftPanel: true,
-      layoutShowRightPanel: true,
+      layoutShowLeftPanel: false,
+      layoutShowRightPanel: false,
 
       viewportShowExpand: false,
       viewportShowSelectionMode: false,

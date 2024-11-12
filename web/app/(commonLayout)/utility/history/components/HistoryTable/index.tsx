@@ -132,7 +132,7 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
       >
         <TableHeader columns={HistoryTableColumns}>
           {column => (
-            <TableColumn key={column.key} align={column.key === 'action' ? 'center' : 'start'}>
+            <TableColumn key={column.key} align={(column.key === 'action' || column.key === 'state') ? 'center' : 'start'}>
               {column.label}
             </TableColumn>
           )}
