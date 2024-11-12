@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import type { MolstarHandle } from '@/app/components/Molstar'
-import type { DockingMolstar } from '@/types/docking'
+import type { UtilityMolstar } from '@/types/utility'
 
 enum RenderType {
   'URL' = 'URL',
@@ -13,15 +13,17 @@ type RenderBuffer = {
   formats: BuiltInTrajectoryFormat
   type: RenderType
 }
+
+export type useMolstarType = ReturnType<typeof useMolstar>
 const useMolstar = () => {
   const MolstarRef = useRef<MolstarHandle>(null)
-  const [dockingMolstarList, setDockingMolstarList] = useState<DockingMolstar[]>([])
+  const [molstarList, setMolstarList] = useState<UtilityMolstar[]>([])
   const [renderBufferData, setRenderBufferData] = useState<RenderBuffer[]>([])
   const [isMolstarMounted, setIsMolstarMounted] = useState(false)
-  const dockingMolstarListRef = useRef(dockingMolstarList)
+  const molstarListRef = useRef(molstarList)
   useEffect(() => {
-    dockingMolstarListRef.current = dockingMolstarList
-  }, [dockingMolstarList])
+    molstarListRef.current = molstarList
+  }, [molstarList])
   // 添加渲染缓存数据
   const addRenderBufferData = (buffer: RenderBuffer) => {
     setRenderBufferData((renderBuffer) => {
@@ -35,14 +37,14 @@ const useMolstar = () => {
   }
 
   // 添加分子/蛋白质
-  const addStructure = (dockingMolstar: DockingMolstar) => {
-    setDockingMolstarList([...dockingMolstarList, dockingMolstar])
+  const addStructure = (molstar: UtilityMolstar) => {
+    setMolstarList([...molstarList, molstar])
   }
 
   // 根据id获取数据
   const getStructure = (id: string) => {
     // return dockingMolstarList.find(item => item.id === id)
-    return dockingMolstarListRef.current.find(item => item.id === id)
+    return molstarListRef.current.find(item => item.id === id)
   }
   // 根据URL进行下载并渲染
   const loadStructureFromUrl = (url: string, formats: BuiltInTrajectoryFormat) => {
@@ -69,23 +71,23 @@ const useMolstar = () => {
     }
   }
   // 设置分子/蛋白质显隐
-  const setStructureVisibility = ({ dockingMolstar, addCallback }: { dockingMolstar: DockingMolstar; addCallback?: () => void }) => {
+  const setStructureVisibility = ({ molstar, addCallback }: { molstar: UtilityMolstar; addCallback?: () => void }) => {
     if (MolstarRef.current) {
-      const index = dockingMolstarList.findIndex(
-        item => item.id === dockingMolstar.id,
+      const index = molstarList.findIndex(
+        item => item.id === molstar.id,
       )
       if (index === -1) {
-        addStructure(dockingMolstar)
+        addStructure(molstar)
         addCallback?.()
       }
       else if (index >= 0) {
-        const visible = dockingMolstar.visible
+        const visible = molstar.visible
         MolstarRef.current.setStructureVisibility(
           index,
           visible,
         )
-        const item = dockingMolstarList.map((item) => {
-          if (item.id === dockingMolstar.id) {
+        const item = molstarList.map((item) => {
+          if (item.id === molstar.id) {
             return {
               ...item,
               visible,
@@ -93,10 +95,10 @@ const useMolstar = () => {
           }
           return item
         })
-        setDockingMolstarList(item)
+        setMolstarList(item)
       }
       else {
-        console.error(`未找到id为${dockingMolstar.id}的分子/蛋白质: index`)
+        console.error(`未找到id为${molstar.id}的分子/蛋白质: index`)
       }
     }
   }
@@ -104,7 +106,7 @@ const useMolstar = () => {
   const clear = () => {
     if (MolstarRef.current) {
       MolstarRef.current.clear()
-      setDockingMolstarList([])
+      setMolstarList([])
     }
   }
 
@@ -140,7 +142,7 @@ const useMolstar = () => {
 
   return {
     MolstarRef,
-    dockingMolstarList,
+    molstarList,
     addStructure,
     getStructure,
     loadStructureFromUrl,

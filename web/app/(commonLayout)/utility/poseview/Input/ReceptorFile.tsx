@@ -4,8 +4,7 @@ import { formats } from './commin'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
-import { FormContext, PoseviewContext } from '@/app/(commonLayout)/utility/poseview/context'
-import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
+import { FormContext, MolstarContext, PoseviewContext } from '@/app/(commonLayout)/utility/poseview/context'
 import { getDockingFileURL } from '@/service/docking'
 const ReceptorFile = () => {
   const {
@@ -27,7 +26,7 @@ const ReceptorFile = () => {
               const { id, mime_type, extension, name } = file
 
               if (id && mime_type) {
-                setValue('fasta_file_id', id)
+                setValue('receptor_file_id', id)
                 const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
                 loadStructureFromUrl(getDockingFileURL({ id, mime_type }), format)
                 addReceptorUploadResult({ id, mime_type, extension: format, name, fileID: id })
@@ -49,7 +48,7 @@ const ReceptorFile = () => {
         }} prepareFileList={(files) => {
           setReceptorUploadFileList(files)
           if (files.length === 0)
-            setValue('fasta_file_id', '')
+            setValue('receptor_file_id', '')
         }}
         onUploadError={(file) => {
           const n_list = receptorUploadFileList.filter(item => item.fileID !== file.fileID)

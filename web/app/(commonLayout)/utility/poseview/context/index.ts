@@ -1,10 +1,12 @@
 import { createContext } from 'react'
 import type { FieldError, FieldValues, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
+import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import type { useReceptorType } from '@/app/(commonLayout)/utility/poseview/hooks/useReceptor'
 import type { PoseviewFormValues } from '@/app/(commonLayout)/utility/poseview/Input'
 import type { useLigandType } from '@/app/(commonLayout)/utility/poseview/hooks/useLigand'
-import type { UtilityResultShow, UtilityUploadResult } from '@/types/utility'
+import type { UtilityMolstar, UtilityResultShow, UtilityUploadResult } from '@/types/utility'
 import type { FileItem } from '@/models/datasets'
+import type { useMolstarType } from '@/app/hooks/useMolstar'
 type InputContextType = useReceptorType & useLigandType
 
 export const PoseviewContext = createContext<InputContextType>({
@@ -53,4 +55,21 @@ export const FormContext = createContext<FormContextType>(<FormContextType>{
   getValues: () => {},
   setValue: (name, value, options) => {},
   errors: {} as FieldError,
+})
+
+export const MolstarContext = createContext<useMolstarType>({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  MolstarRef: null,
+  molstarList: [],
+  addStructure(molstar: UtilityMolstar): void {},
+  clear(): void {},
+  getStructure(id: string): UtilityMolstar | undefined {
+    return undefined
+  },
+  loadStructureFromData(data: string | number[], formats: BuiltInTrajectoryFormat): void {},
+  loadStructureFromUrl(url: string, formats: BuiltInTrajectoryFormat): void {},
+
+  setIsMolstarMounted(value: ((prevState: boolean) => boolean) | boolean): void {},
+  setStructureVisibility({ molstar, addCallback }: { molstar: UtilityMolstar; addCallback?: () => void }): void {},
 })

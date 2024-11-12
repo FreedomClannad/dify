@@ -1,5 +1,5 @@
 import { get, post } from './base'
-import type { HistoryFile, HistoryTask } from '@/types/utility'
+import type { HistoryFile, HistoryTask, UtilityResult } from '@/types/utility'
 import type { Collection } from '@/app/components/tools/types'
 
 // 这里是历史记录部分
@@ -61,3 +61,6 @@ export const fetchUtilityCollectionList = () => {
 }
 
 // 这里是poseview的内容
+export const submitPoesviewTask = (data: any) => {
+  return post<UtilityResult>('/poseview/task', { body: data })
+}

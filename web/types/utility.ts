@@ -44,8 +44,26 @@ export type UtilityResultShow = {
   display?: boolean
 }
 
-// History
+export type UtilityResult = {
+  created_at: string
+  id: string
+  result: string
+  status: UtilityTaskState
+  task_name: string
+  updated_at: string
+}
 
+export type UtilityWebSockingData = {
+  id: string
+  data: any
+}
+
+export type UtilityMolstar = {
+  id: string
+  visible: boolean
+}
+
+// History
 export type HistoryFile = {
   file_id: string
 }
