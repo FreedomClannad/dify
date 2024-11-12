@@ -177,7 +177,7 @@ const DockingOutputFile = () => {
               <TableColumn align='center'>Score</TableColumn>
               <TableColumn align='center'>Affinity</TableColumn>
               <TableColumn align='center'>CNN Affinity</TableColumn>
-              <TableColumn align='center' className="docking-table-visibility docking-table-visibility-header docking-table-visibility-first">Visibility</TableColumn>
+              <TableColumn align='center' className="docking-table-visibility docking-table-visibility-header docking-table-visibility-first" >{' '}</TableColumn>
             </TableHeader>
             <TableBody>
               {table.map(item => (
