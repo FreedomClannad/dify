@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext } from 'react'
-import Strategy from '../../components/Strategy'
+// import Strategy from '../../components/Strategy'
 import SubmitButton from '../../components/SubmitButton'
 import JobTitle from '@/app/(commonLayout)/utility/docking/Pocket/Input/JobTitle'
 import ReceptorFile from '@/app/(commonLayout)/utility/docking/Pocket/Input/ReceptorFile'
@@ -44,7 +44,7 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
     resolver: zodResolver(dockingFormSchema),
     defaultValues: {
       pdb_file_id: '',
-      task_name: 'Molecular Docking',
+      task_name: 'Pocket docking demo',
       center_x: '',
       center_y: '',
       center_z: '',
@@ -62,9 +62,9 @@ const InputForm = ({ isDisabled = false, onSubmit, onReset, submitLoading = fals
   const { StrategyMap, strategy, setStrategy } = useContext(InputContext)
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3" style={{ display: isDisabled ? 'none' : 'flex' }}>
-      <div className="w-full mt-4">
+      {/* <div className="w-full mt-4">
         <Strategy strategy={strategy} StrategyMap={StrategyMap} setStrategy={setStrategy} />
-      </div>
+      </div> */}
 
       <form className="h-full flex justify-between flex-col" onSubmit={handleSubmit((data) => {
         onSubmit(data)

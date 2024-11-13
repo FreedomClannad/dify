@@ -1,9 +1,17 @@
+/*
+ * @Author: alvahao wanghao@alphama.com.cn
+ * @Date: 2024-10-23 16:12:15
+ * @LastEditors: alvahao wanghao@alphama.com.cn
+ * @LastEditTime: 2024-11-13 17:15:21
+ * @FilePath: \web\app\(commonLayout)\utility\docking\Global\Input\index.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import type { ReactNode } from 'react'
 import { useContext } from 'react'
 import { z } from 'zod'
 import { type FieldValues, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Strategy from '../../components/Strategy'
+// import Strategy from '../../components/Strategy'
 import SubmitButton from '../../components/SubmitButton'
 import {
   GlobalFormContext,
@@ -59,9 +67,9 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset, submitLoading = fa
   const contentList: ReactNode[] = [<JobTitle/>, <Receptor/>, <Ligand />]
   return <>
     <div className="px-5 flex flex-col items-center justify-between h-full pb-3" style={{ display: isDisabled ? 'none' : 'flex' }}>
-      <div className="w-full mt-4">
+      {/* <div className="w-full mt-4">
         <Strategy strategy={strategy} StrategyMap={StrategyMap} setStrategy={setStrategy}/>
-      </div>
+      </div> */}
       <form className="h-full flex justify-between flex-col w-full" onSubmit={handleSubmit((data) => {
         onSubmit(data)
       })}>
