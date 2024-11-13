@@ -16,6 +16,7 @@ import type { UtilityWebSockingData } from '@/types/utility'
 import { UtilityTaskState } from '@/types/utility'
 import { ToastContext } from '@/app/components/base/toast'
 import { UtilityPubSub } from '@/pubsub'
+import useUtilityResult from '@/app/hooks/useUtilityResult'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
@@ -23,7 +24,8 @@ const Poseview = () => {
   const { notify } = useContextSelector(ToastContext)
   const [mode, setMode] = useState<LayoutModeEnum>(LayoutModeEnum.input)
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
-  const [resultData, setResultData] = useState<string>('')
+  const utilityResultHooks = useUtilityResult()
+  const { setResultData, setResultTaskId } = utilityResultHooks
   const inputDisabled = useMemo(() => {
     return !(LayoutModeEnum.input === mode)
   }, [mode])
@@ -43,16 +45,17 @@ const Poseview = () => {
   const { addSubmitMemory, getSubmitMemory, clearSubmitMemory } = useMemory()
 
   const dataCollating = (poseview: UtilityWebSockingData) => {
-    console.log(poseview)
     try {
       const { id, data } = poseview
       const memory = getSubmitMemory(id)
       if (memory) {
         const { status, result } = data
-        console.log(status, result)
         if (status === UtilityTaskState.SUCCESS) {
           setResultData(result)
           const resId = data.id
+          if (resId)
+            setResultTaskId(resId)
+
           setSubmitLoading(false)
           notify({ type: 'success', message: 'Task parsing successful' })
 
@@ -123,7 +126,7 @@ const Poseview = () => {
       <MolstarContext.Provider value={{ ...molstartHooks }}>
         <PoseviewContext.Provider value={{ ...receptorHooks, ...ligandHooks }}>
           <PoseviewInput disabled={inputDisabled} onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading}/>
-          <OutputContext.Provider value={{ resultData }}>
+          <OutputContext.Provider value={{ ...utilityResultHooks }}>
             <PoseviewResult disabled={resultDisabled} />
           </OutputContext.Provider>
         </PoseviewContext.Provider>

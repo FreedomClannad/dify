@@ -7,6 +7,7 @@ import type { useLigandType } from '@/app/(commonLayout)/utility/poseview/hooks/
 import type { UtilityMolstar, UtilityResultShow, UtilityUploadResult } from '@/types/utility'
 import type { FileItem } from '@/models/datasets'
 import type { useMolstarType } from '@/app/hooks/useMolstar'
+import type { useUtilityResultType } from '@/app/hooks/useUtilityResult'
 type InputContextType = useReceptorType & useLigandType
 
 export const PoseviewContext = createContext<InputContextType>({
@@ -39,12 +40,13 @@ export const PoseviewContext = createContext<InputContextType>({
   visibleReceptorResultShow(id: string, visible: boolean): void {},
 })
 
-type OutputContextType = {
-  resultData: string
-}
+type OutputContextType = useUtilityResultType
 
 export const OutputContext = createContext<OutputContextType>({
   resultData: '',
+  resultTaskId: '',
+  setResultData(value: ((prevState: string) => string) | string): void {},
+  setResultTaskId(value: ((prevState: string) => string) | string): void {},
 })
 
 type FormContextType = {

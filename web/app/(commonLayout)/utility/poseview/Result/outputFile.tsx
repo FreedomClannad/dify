@@ -1,7 +1,10 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
+import { saveAs } from 'file-saver'
 import { OutputContext } from '../context'
 import { getFile } from '@/service/commonURL'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
+import DownloadTooltip from '@/app/components/download-tooltip'
+import { downloadUtilityFile } from '@/service/utility'
 
 type TableType = {
   id: string
@@ -22,7 +25,7 @@ const initData = (data: any[]) => {
 
 const OutputFile = () => {
   const [tableData, setTableData] = useState<TableType[]>([])
-  const { resultData } = useContext(OutputContext)
+  const { resultData, resultTaskId } = useContext(OutputContext)
   useEffect(() => {
     try {
       const data = JSON.parse(resultData)
@@ -36,8 +39,15 @@ const OutputFile = () => {
   const visable = useMemo(() => {
     return tableData.length > 0
   }, [tableData])
+  const handleDownload = async () => {
+    const data = await downloadUtilityFile(resultTaskId, 'all')
+    if (data)
+      saveAs(data, `${resultTaskId}.zip`)
+  }
   return (
-    <VerticalTitleCard title="Displayed Results">
+    <VerticalTitleCard title="Displayed Results"
+      right={<DownloadTooltip onClick={handleDownload}/>}
+    >
       {
         visable
           ? <>
