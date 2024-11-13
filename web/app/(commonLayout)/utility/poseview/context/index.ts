@@ -39,6 +39,14 @@ export const PoseviewContext = createContext<InputContextType>({
   visibleReceptorResultShow(id: string, visible: boolean): void {},
 })
 
+type OutputContextType = {
+  resultData: string
+}
+
+export const OutputContext = createContext<OutputContextType>({
+  resultData: '',
+})
+
 type FormContextType = {
   register: UseFormRegister<PoseviewFormValues>
   getValues: UseFormGetValues<PoseviewFormValues>
