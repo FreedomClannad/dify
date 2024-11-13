@@ -1,3 +1,5 @@
+import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
+
 export enum UtilityTaskState {
   PENDING = 'PENDING', // 等待中
   PROCESSING = 'PROCESSING', // 处理中
@@ -26,8 +28,42 @@ export type UtilityHistory = {
 
 export type UtilityHistoryKey = keyof UtilityHistory
 
-// History
+// Utility的通用结果文件
+export type UtilityUploadResult = {
+  name?: string
+  fileID: string
+  id: string
+  mime_type: string
+  extension: BuiltInTrajectoryFormat
+}
 
+export type UtilityResultShow = {
+  id: string
+  name: string
+  visible: boolean
+  display?: boolean
+}
+
+export type UtilityResult = {
+  created_at: string
+  id: string
+  result: string
+  status: UtilityTaskState
+  task_name: string
+  updated_at: string
+}
+
+export type UtilityWebSockingData = {
+  id: string
+  data: any
+}
+
+export type UtilityMolstar = {
+  id: string
+  visible: boolean
+}
+
+// History
 export type HistoryFile = {
   file_id: string
 }

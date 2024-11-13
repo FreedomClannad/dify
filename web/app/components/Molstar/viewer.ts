@@ -25,14 +25,14 @@ import { Volume } from 'molstar/lib/mol-model/volume'
 import { DownloadStructure, PdbDownloadProvider } from 'molstar/lib/mol-plugin-state/actions/structure'
 import { DownloadDensity } from 'molstar/lib/mol-plugin-state/actions/volume'
 import type { PresetTrajectoryHierarchy } from 'molstar/lib/mol-plugin-state/builder/structure/hierarchy-preset'
-import { PresetStructureRepresentations, StructureRepresentationPresetProvider } from 'molstar/lib/mol-plugin-state/builder/structure/representation-preset'
+import { PresetStructureRepresentations, StructureRepresentationPresetProvider, presetStaticComponent } from 'molstar/lib/mol-plugin-state/builder/structure/representation-preset'
 import type { BuiltInCoordinatesFormat } from 'molstar/lib/mol-plugin-state/formats/coordinates'
 import type { DataFormatProvider } from 'molstar/lib/mol-plugin-state/formats/provider'
 import type { BuiltInTopologyFormat } from 'molstar/lib/mol-plugin-state/formats/topology'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
 import type { BuildInVolumeFormat } from 'molstar/lib/mol-plugin-state/formats/volume'
 import { createVolumeRepresentationParams } from 'molstar/lib/mol-plugin-state/helpers/volume-representation-params'
-import type { PluginStateObject } from 'molstar/lib/mol-plugin-state/objects'
+import { PluginStateObject, PluginStateTransform } from 'molstar/lib/mol-plugin-state/objects'
 import { StateTransforms } from 'molstar/lib/mol-plugin-state/transforms'
 import { TrajectoryFromModelAndCoordinates } from 'molstar/lib/mol-plugin-state/transforms/model'
 import type { PluginUIContext } from 'molstar/lib/mol-plugin-ui/context'
@@ -46,15 +46,21 @@ import type { PluginLayoutControlsDisplay } from 'molstar/lib/mol-plugin/layout'
 import { PluginSpec } from 'molstar/lib/mol-plugin/spec'
 import type { PluginState } from 'molstar/lib/mol-plugin/state'
 import type { State, StateObjectSelector } from 'molstar/lib/mol-state'
-import { StateObjectRef } from 'molstar/lib/mol-state'
+import { StateObject, StateObjectRef } from 'molstar/lib/mol-state'
 import { Task } from 'molstar/lib/mol-task'
 import { Asset } from 'molstar/lib/mol-util/assets'
+
 import { Color } from 'molstar/lib/mol-util/color'
 import 'molstar/lib/mol-util/polyfill'
 import { ObjectKeys } from 'molstar/lib/mol-util/type-helpers'
 import type { StateTransform } from 'molstar/lib/commonjs/mol-state/transform'
 import { setSubtreeVisibility } from 'molstar/lib/mol-plugin/behavior/static/state'
 import type { ElementIndex } from 'molstar/lib/mol-model/structure/model/indexing'
+import type { StructureHierarchyRef } from 'molstar/lib/mol-plugin-state/manager/structure/hierarchy-state'
+import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition'
+import { Structure } from 'molstar/lib/mol-model/structure'
+import { Material } from 'molstar/lib/mol-util/material'
+import type { PluginContext } from 'molstar/lib/mol-plugin/context'
 import { MesoFocusLoci } from './behavior/camera'
 
 export { PLUGIN_VERSION as version } from 'molstar/lib/mol-plugin/version'
@@ -154,6 +160,90 @@ export const ViewerAutoPreset = StructureRepresentationPresetProvider({
       return await SbNcbrPartialChargesPreset.apply(ref, params, plugin)
     else
       return await PresetStructureRepresentations.auto.apply(ref, params, plugin)
+  },
+})
+
+function shinyStyle(plugin: PluginContext) {
+  return PluginCommands.Canvas3D.SetSettings(plugin,
+    {
+      settings: {
+        renderer: {
+          ...plugin.canvas3d!.props.renderer,
+        },
+        postprocessing: {
+          ...plugin.canvas3d!.props.postprocessing,
+          occlusion: { name: 'off', params: {} },
+          shadow: { name: 'off', params: {} },
+          outline: { name: 'off', params: {} },
+        },
+      },
+    })
+}
+
+const PresetParams = {
+  ...StructureRepresentationPresetProvider.CommonParams,
+}
+
+const CustomMaterial = Material({ roughness: 0.2, metalness: 0 })
+
+export const StructurePreset = StructureRepresentationPresetProvider({
+  id: 'preset-structure',
+  display: { name: 'Structure' },
+  params: () => PresetParams,
+  async apply(ref, params, plugin) {
+    const structureCell = StateObjectRef.resolveAndCheck(plugin.state.data, ref)
+    if (!structureCell)
+      return {}
+
+    const components = {
+      ligand: await presetStaticComponent(plugin, structureCell, 'ligand'),
+      polymer: await presetStaticComponent(plugin, structureCell, 'polymer'),
+    }
+
+    const { update, builder, typeParams } = StructureRepresentationPresetProvider.reprBuilder(plugin, params)
+    const representations = {
+      ligand: builder.buildRepresentation(update, components.ligand, { type: 'ball-and-stick', typeParams: { ...typeParams, material: CustomMaterial, sizeFactor: 0.35 }, color: 'element-symbol', colorParams: { carbonColor: { name: 'element-symbol', params: {} } } }, { tag: 'ligand' }),
+      polymer: builder.buildRepresentation(update, components.polymer, { type: 'cartoon', typeParams: { ...typeParams, material: CustomMaterial }, color: 'chain-id', colorParams: { palette: (plugin.customState as any).colorPalette } }, { tag: 'polymer' }),
+    }
+
+    await update.commit({ revertOnError: true })
+    await shinyStyle(plugin)
+    plugin.managers.interactivity.setProps({ granularity: 'residue' })
+
+    return { components, representations }
+  },
+})
+
+type MergeStructuresType = typeof MergeStructures
+const MergeStructures = PluginStateTransform.BuiltIn({
+  name: 'merge-structures',
+  display: { name: 'Merge Structures', description: 'Merge Structure' },
+  from: PluginStateObject.Root,
+  to: PluginStateObject.Molecule.Structure,
+  params: {
+    structures: PD.ObjectList({
+      ref: PD.Text(''),
+    }, ({ ref }) => ref, { isHidden: true }),
+  },
+})({
+  apply({ params, dependencies }) {
+    return Task.create('Merge Structures', async (ctx) => {
+      if (params.structures.length === 0)
+        return StateObject.Null
+
+      const first = dependencies![params.structures[0].ref].data as Structure
+      const builder = Structure.Builder({ masterModel: first.models[0] })
+      for (const { ref } of params.structures) {
+        const s = dependencies![ref].data as Structure
+        for (const unit of s.units) {
+          // TODO invariantId
+          builder.addUnit(unit.kind, unit.model, unit.conformation.operator, unit.elements, unit.traits)
+        }
+      }
+
+      const structure = builder.getStructure()
+      return new PluginStateObject.Molecule.Structure(structure, { label: 'Merged Structure' })
+    })
   },
 })
 
@@ -268,6 +358,7 @@ export class Viewer {
 
   loadStructureFromUrl(url: string, format: BuiltInTrajectoryFormat = 'mmcif', isBinary = false, options?: LoadStructureOptions & { label?: string }) {
     const params = DownloadStructure.createDefaultParams(this.plugin.state.data.root.obj!, this.plugin)
+    console.log('a', url)
     return this.plugin.runTask(this.plugin.state.data.applyAction(DownloadStructure, {
       source: {
         name: 'url',
@@ -276,7 +367,7 @@ export class Viewer {
           format: format as any,
           isBinary,
           label: options?.label,
-          options: { ...params.source.params.options, representationParams: options?.representationParams as any },
+          options: { ...params.source.params.options, representationParams: options?.representationParams as any, type: 'model' },
         },
       },
     }))
@@ -288,7 +379,7 @@ export class Viewer {
     const data = await plugin.builders.data.download({ url, isBinary }, { state: { isGhost: true } })
     const trajectory = await plugin.builders.structure.parseTrajectory(data, format)
 
-    await this.plugin.builders.structure.hierarchy.applyPreset(trajectory, 'all-models', { useDefaultIfSingleModel: true, representationPresetParams: options?.representationParams })
+    await this.plugin.builders.structure.hierarchy.applyPreset(trajectory, 'all-models', { useDefaultIfSingleModel: false, representationPresetParams: options?.representationParams })
   }
 
   async loadStructureFromData(data: string | number[], format: BuiltInTrajectoryFormat, options?: { dataLabel?: string }) {
@@ -711,8 +802,59 @@ export class Viewer {
     return ''
   }
 
+  remove(refs: (StructureHierarchyRef | string)[], canUndo?: boolean) {
+    if (refs.length === 0)
+      return
+    const deletes = this.plugin.state.data.build()
+    for (const r of refs) deletes.delete(typeof r === 'string' ? r : r.cell.transform.ref)
+    return deletes.commit({ canUndo: canUndo ? 'Remove' : false })
+  }
+
   dispose() {
     this.plugin.dispose()
+  }
+
+  async loadStructuresFromUrlsAndMerge() {
+    // console.log('aaaa', this.plugin.state.data.selectQ(q => q.ofTransformer(StateTransforms.Model.ModelFromTrajectory)))
+    // console.log('ffff', this.plugin.state.data.selectQ(q => q.rootsOfType(PluginStateObject.Molecule.Structure)))
+    // console.log('gggg', this.plugin.state.data.selectQ(q => q.rootsOfType(PluginStateObject.Molecule.Model)))
+    // console.log('hhhh', this.plugin.state.data.selectQ(q => q.rootsOfType(PluginStateObject.Molecule.Topology)))
+    // console.log('iiii', this.plugin.state.data.selectQ(q => q.ofType(PluginStateObject.Molecule.Structure)))
+    // 获取根节点
+    const rootStructCells = this.plugin.state.data.selectQ(q => q.rootsOfType(PluginStateObject.Molecule.Structure))
+    if (
+      rootStructCells[rootStructCells.length - 1].sourceRef === '-=root=-'
+      && rootStructCells[rootStructCells.length - 1].obj?.label === 'Merged Structure'
+    ) return null
+    let structures: { ref: string }[] = []
+    // const models = this.plugin.state.data.selectQ(q => q.ofTransformer(StateTransforms.Model.ModelFromTrajectory))
+    // for (let index = 0; index < models.length; index++)
+    //   structures.push({ ref: models[index].sourceRef })
+    const structCells = this.plugin.state.data.selectQ(q => q.ofType(PluginStateObject.Molecule.Structure))
+    // const astructures = rootStructCells.map(cell => cell.obj?.data).filter(struct => !!struct) as Structure[]
+    console.log('hihi', structCells)
+    structures = Array.from(structCells)
+      .filter(cell => cell.cache && Object.keys(cell.cache).length > 0)
+      .map((cell) => {
+        return { ref: cell.sourceRef }
+      })
+      .filter((value, index, self) =>
+        index === self.findIndex(t => t.ref === value.ref),
+      ) as { ref: string }[]
+    console.log('structures', structures)
+
+    // remove current structures from hierarchy as they will be merged
+    // TODO only works with using loadStructuresFromUrlsAndMerge once
+    //      need some more API metho to work with the hierarchy
+    this.plugin.managers.structure.hierarchy.updateCurrent(this.plugin.managers.structure.hierarchy.current.structures, 'remove')
+
+    const dependsOn = structures.map(({ ref }) => ref)
+    const data = this.plugin.state.data.build().toRoot().apply(MergeStructures, { structures }, { dependsOn })
+    const structure = await data.commit()
+    const structureProperties = await this.plugin.builders.structure.insertStructureProperties(structure)
+    this.plugin.behaviors.canvas3d.initialized.subscribe(async (v) => {
+      await this.plugin.builders.structure.representation.applyPreset(structureProperties || structure, StructurePreset)
+    })
   }
 }
 

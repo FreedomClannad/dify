@@ -1,0 +1,41 @@
+import { useUtilityA } from '@/app/hooks/useUtility'
+export type useReceptorType = ReturnType<typeof useReceptor>
+
+const useReceptor = () => {
+  const {
+    // 上传文件内容
+    uploadFileList,
+    setUploadFileList,
+    clearUploadFileList,
+    // 上传文件结果
+    addUploadResult,
+    getUploadResult,
+    deleteUploadResult,
+    clearUploadResult,
+    // 结果输入内容展示
+    resultShowList,
+    addResultShow,
+    uploadResultShow,
+    clearResultShow,
+    visibleResultShow,
+  } = useUtilityA()
+  return {
+    // 上传文件内容
+    receptorUploadFileList: uploadFileList,
+    setReceptorUploadFileList: setUploadFileList,
+    clearReceptorUploadFileList: clearUploadFileList,
+    // 上传文件结果
+    addReceptorUploadResult: addUploadResult,
+    getReceptorUploadResult: getUploadResult,
+    deleteReceptorUploadResult: deleteUploadResult,
+    clearReceptorUploadResult: clearUploadResult,
+    // 结果输入内容展示
+    receptorResultShowList: resultShowList,
+    addReceptorResultShow: addResultShow,
+    uploadReceptorResultShow: uploadResultShow,
+    clearReceptorResultShow: clearResultShow,
+    visibleReceptorResultShow: visibleResultShow,
+  }
+}
+
+export default useReceptor

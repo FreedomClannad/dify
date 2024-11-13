@@ -63,9 +63,13 @@ const ProviderCard = ({
           <div className='flex items-center text-sm leading-5 font-semibold text-gray-800'>
             <div className='truncate' title={collection.label[language]}>{collection.label[language]}</div>
           </div>
-          <div className='flex items-center text-[10px] leading-[18px] text-gray-500 font-medium'>
-            <div className='truncate'>{t('tools.author')}&nbsp;{collection.author}</div>
-          </div>
+          {
+            collection.author
+              && <div className='flex items-center text-[10px] leading-[18px] text-gray-500 font-medium'>
+                <div className='truncate'>{t('tools.author')}&nbsp;{collection.author}</div>
+              </div>
+          }
+
         </div>
       </div>
       <div

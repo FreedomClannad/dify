@@ -66,3 +66,20 @@ export type DockingWebSockingData = {
   id: string
   data: any
 }
+
+export enum InteractionsEnum {
+  off = 'off',
+  on = 'on',
+}
+export type interactions = {
+  'cation-pi': InteractionsEnum
+  'halogen-bonds': InteractionsEnum
+  'hydrogen-bonds': InteractionsEnum
+  'hydrophobic': InteractionsEnum
+  'ionic': InteractionsEnum
+  'metal-coordination': InteractionsEnum
+  'pi-stacking': InteractionsEnum
+  'weak-hydrogen-bonds': InteractionsEnum
+}
+
+export type interactionsKeys = keyof interactions

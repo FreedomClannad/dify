@@ -1,6 +1,7 @@
 'use client'
-import { memo, useRef } from 'react'
+import { memo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { Switch } from '@nextui-org/react'
 import type { MolstarHandle } from '@/app/components/Molstar'
 
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
@@ -8,17 +9,43 @@ const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.def
 })
 const Demo = () => {
   const MolstarCompRef = useRef<MolstarHandle>(null)
+  const [IonicIsShown, setIonicIsShown] = useState<boolean>(false)
   const handleClick = () => {
     if (MolstarCompRef.current) {
       MolstarCompRef.current.loadStructureFromUrl(
-        'http://127.0.0.1:5500/ligand-dock.sdf',
-        'sdf',
+        'http://127.0.0.1:5501/ace2-hit.mol2',
+        'mol2',
       )
     }
   }
+  const TestButton = () => {
+    if (MolstarCompRef.current)
+      MolstarCompRef.current.test()
+  }
+  const handleDeleteData = () => {
+    if (MolstarCompRef.current)
+      MolstarCompRef.current.getDeleteData()
+  }
+  const MergeStructure = () => {
+    if (MolstarCompRef.current)
+      MolstarCompRef.current.loadStructuresFromUrlsAndMerge()
+  }
   return <div>
-    <button onClick={handleClick} className="bg-stone-200">Render</button>
-    <div className="w-[400px] h-[400px]">
+    <div className="flex">
+      <button onClick={handleClick} className="bg-stone-200">Render</button>
+      <button onClick={TestButton} className="ml-3 bg-stone-200">test</button>
+      <button onClick={handleDeleteData} className="ml-3 bg-stone-200">获取删除后的数据</button>
+      <button onClick={MergeStructure} className="ml-3 bg-stone-200">合并结构</button>
+
+      <Switch isSelected={IonicIsShown} aria-label="Ionic" onValueChange={(value) => {
+        if (MolstarCompRef.current)
+          MolstarCompRef.current.setInteraction(value)
+
+        setIonicIsShown(value)
+      }}/>
+    </div>
+
+    <div className="w-full h-[800px] relative mt-3">
       <Molstar wrapperRef={MolstarCompRef}/>
     </div>
   </div>
