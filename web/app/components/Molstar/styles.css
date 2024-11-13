@@ -5,3 +5,72 @@
 .msp-plugin .msp-layout-standard {
     border: none;
 }
+
+.msp-plugin .msp-sequence {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: #ffffff;
+}
+
+.msp-plugin .msp-sequence-select {
+    position: relative;
+    height: 24px;
+    width: 100%;
+    margin-bottom: 1px;
+    background: #ffffff;
+    text-align: left;
+}
+
+.msp-plugin {
+    font-family: "Helvetica Neue","Segoe UI",Helvetica,"Source Sans Pro",Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.msp-plugin select.msp-form-control, .msp-plugin .msp-control-row select, .msp-plugin select.msp-btn {
+    background: none;
+    background-color: #ffffff;
+    background-size: 8px 12px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAUCAMAAACzvE1FAAAADFBMVEUzMzMzMzMzMzMzMzMKAG/3AAAAA3RSTlMAf4C/aSLHAAAAPElEQVR42q3NMQ4AIAgEQTn//2cLdRKppSGzBYwzVXvznNWs8C58CiussPJj8h6NwgorrKRdTvuV9v16Afn0AYFOB7aYAAAAAElFTkSuQmCC);
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 24px;
+}
+
+.msp-plugin .msp-sequence-wrapper-non-empty {
+    font-size: 85%;
+    line-height: 180%;
+    font-family: "Courier New",monospace;
+    background: #ffffff;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    top: 25px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.msp-plugin .msp-viewport {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffffff;
+}
+
+
+.msp-layout-region .msp-layout-main canvas {
+    background-color: brown !important;
+}
+
