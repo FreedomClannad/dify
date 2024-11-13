@@ -17,6 +17,12 @@ export const getFileInfo = (params: HistoryFile) => {
   return get<HistoryFileInfo>('/history_task/file', { params })
 }
 
+export const getFileInfoFunction = (params: HistoryFile, callback: (res: HistoryFileInfo) => void) => {
+  getFileInfo(params).then((res) => {
+    callback(res)
+  })
+}
+
 type GlobalHistoryResult = {
   created_at: string
   created_by: string
@@ -58,6 +64,10 @@ export const getPocketHistory = (data: HistoryTask) => {
 
 export const fetchUtilityCollectionList = () => {
   return get<Collection[]>('/sciminer/tools')
+}
+
+export const getHistoryDetailData = <T>(data: HistoryTask) => {
+  return post<T>('/history_task/detail', { body: data })
 }
 
 // 这里是poseview的内容

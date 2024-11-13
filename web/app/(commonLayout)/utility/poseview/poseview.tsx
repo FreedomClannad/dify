@@ -24,8 +24,7 @@ const Poseview = () => {
   const { notify } = useContextSelector(ToastContext)
   const [mode, setMode] = useState<LayoutModeEnum>(LayoutModeEnum.input)
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
-  const utilityResultHooks = useUtilityResult()
-  const { setResultData, setResultTaskId } = utilityResultHooks
+
   const inputDisabled = useMemo(() => {
     return !(LayoutModeEnum.input === mode)
   }, [mode])
@@ -40,6 +39,9 @@ const Poseview = () => {
   const { getLigandUploadResult, addLigandResultShow } = ligandHooks
   const molstartHooks = useMolstar()
   const { MolstarRef, getStructure } = molstartHooks
+
+  const utilityResultHooks = useUtilityResult()
+  const { setResultData, setResultTaskId } = utilityResultHooks
 
   // 提交的缓存数据
   const { addSubmitMemory, getSubmitMemory, clearSubmitMemory } = useMemory()

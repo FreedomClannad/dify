@@ -3,6 +3,7 @@ import type { UtilityHistory } from '@/types/utility'
 export enum historyRouterType {
   GLOBAL_DOCKING = 'GLOBAL_DOCKING',
   POCKET_DOCKING = 'POCKET_DOCKING',
+  POSEVIEW = 'POSEVIEW',
 }
 export type useHistoryRouterType = {
   [key in historyRouterType]: (utilityHistory: UtilityHistory) => void
@@ -18,9 +19,14 @@ const useHistoryRouter = (): useHistoryRouterType => {
     const { task_id, task_type } = utilityHistory
     router.push(`/utility/history/result/pocket?id=${task_id}&type=${task_type}`)
   }
+  const POSEVIEW = (utilityHistory: UtilityHistory) => {
+    const { task_id, task_type } = utilityHistory
+    router.push(`/utility/history/result/poseview?id=${task_id}&type=${task_type}`)
+  }
   return {
     GLOBAL_DOCKING,
     POCKET_DOCKING,
+    POSEVIEW,
   }
 }
 

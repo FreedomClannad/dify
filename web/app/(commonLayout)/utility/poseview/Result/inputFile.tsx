@@ -10,7 +10,7 @@ const InputFile = () => {
   }, [receptorResultShowList, ligandResultShowList])
   return <>
     <VerticalTitleCard title="Uploaded Files" >
-      <div className="w-full docking-input-file rounded-large shadow-small py-2">
+      <div className="w-full docking-input-file">
         {
           isShow
             ? <>
