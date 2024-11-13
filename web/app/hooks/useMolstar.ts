@@ -49,12 +49,14 @@ const useMolstar = () => {
   // 根据URL进行下载并渲染
   const loadStructureFromUrl = (url: string, formats: BuiltInTrajectoryFormat) => {
     if (MolstarRef.current && MolstarRef.current.isLoad()) {
+      console.log('直接渲染')
       MolstarRef.current.loadStructureFromUrl(
         url,
         formats as BuiltInTrajectoryFormat,
       )
     }
     else {
+      console.log('缓存渲染')
       addRenderBufferData({ data: url, formats, type: RenderType.URL })
     }
   }

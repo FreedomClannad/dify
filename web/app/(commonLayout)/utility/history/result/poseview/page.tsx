@@ -25,7 +25,7 @@ const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.def
 const Container = () => {
   const searchParams = useSearchParams()
   const molstartHooks = useMolstar()
-  const { MolstarRef, addStructure, loadStructureFromUrl } = molstartHooks
+  const { MolstarRef, addStructure, loadStructureFromUrl, setIsMolstarMounted } = molstartHooks
 
   const receptorHooks = useReceptor()
   const { addReceptorUploadResult, addReceptorResultShow } = receptorHooks
@@ -44,6 +44,7 @@ const Container = () => {
       const { id, name, mime_type, extension } = res
       addReceptorUploadResult({ id, mime_type, extension: extension as BuiltInTrajectoryFormat, name, fileID: id })
       addReceptorResultShow({ id, name, visible: true, display: true })
+      // TODO 这里后面抽取功公共部分
       loadStructureFromUrl(getDockingFileURL({ id, mime_type }), extension as BuiltInTrajectoryFormat)
       addStructure({ id, visible: true })
     })
@@ -81,7 +82,7 @@ const Container = () => {
 
   const right = () => {
     return <>
-      <Molstar wrapperRef={MolstarRef}></Molstar>
+      <Molstar wrapperRef={MolstarRef} onLoad={() => { setIsMolstarMounted(true) }}></Molstar>
     </>
   }
   return <ResultRowLayout left={left()} right={right()}></ResultRowLayout>

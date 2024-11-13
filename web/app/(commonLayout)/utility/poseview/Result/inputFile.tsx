@@ -8,6 +8,13 @@ const InputFile = () => {
   const isShow = useMemo(() => {
     return receptorResultShowList.length === 0 && ligandResultShowList.length === 0
   }, [receptorResultShowList, ligandResultShowList])
+  const handleReceptorClick = () => {
+    console.log('receptor点击事件')
+  }
+
+  const handleLigandClick = () => {
+    console.log('ligand点击事件')
+  }
   return <>
     <VerticalTitleCard title="Uploaded Files" >
       <div className="w-full docking-input-file">
@@ -20,10 +27,10 @@ const InputFile = () => {
             </>
             : <>
               {
-                receptorResultShowList.map((item, index) => <CardLine key={`receptor-${index}`} {...item}></CardLine>)
+                receptorResultShowList.map((item, index) => <CardLine key={`receptor-${index}`} {...item} onClick={handleReceptorClick}></CardLine>)
               }
               {
-                ligandResultShowList.map((item, index) => <CardLine key={`ligand-${index}`} {...item}></CardLine>)
+                ligandResultShowList.map((item, index) => <CardLine key={`ligand-${index}`} {...item} onClick={handleLigandClick}></CardLine>)
               }
             </>
         }
