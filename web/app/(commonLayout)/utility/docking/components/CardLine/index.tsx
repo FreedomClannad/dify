@@ -1,8 +1,15 @@
-import { DocumentTextIcon } from '@heroicons/react/24/outline'
-import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
-import { Tooltip } from '@nextui-org/tooltip'
+/*
+ * @Author: alvahao wanghao@alphama.com.cn
+ * @Date: 2024-10-23 16:12:15
+ * @LastEditors: alvahao wanghao@alphama.com.cn
+ * @LastEditTime: 2024-11-13 14:48:24
+ * @FilePath: \web\app\(commonLayout)\utility\docking\components\CardLine\index.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+// import { DocumentTextIcon } from '@heroicons/react/24/outline'
 import type { ReactNode } from 'react'
 import type { DockingInputFile } from '@/types/docking'
+import IconSVG from '@/app/components/iconSVG'
 
 type CardType = DockingInputFile & {
   onClick?: (dockingInputFile: DockingInputFile) => void
@@ -13,14 +20,17 @@ const CardLine = (props: CardType) => {
   return <>
     <div className="flex w-full h-[32px] justify-between text-gray-1006">
       <div className="flex items-center w-[90%]">
-        <div className='w-5 h-5 min-w-5  text-xs text-gray-1005'><DocumentTextIcon/></div>
-        <Tooltip content={name}>
+        <div className='w-4 h-4 min-w-5  text-xs text-gray-1005' style={{ marginLeft: '10px' }}><IconSVG name='DocumentIcon' className="!w-4 !h-4"></IconSVG></div>
+        <div className='ml-1 whitespace-nowrap overflow-hidden text-ellipsis'>{name}</div>
+        {/* <Tooltip content={name}>
           <div className='ml-2 whitespace-nowrap overflow-hidden text-ellipsis'>{name}</div>
-        </Tooltip>
+        </Tooltip> */}
       </div>
       {display && onClick && !icon && <div className="cursor-pointer text-xs flex items-center justify-center w-5" onClick={() => {
         onClick(props)
-      }}>{visible ? <RiEyeLine className="w-4 h-4"/> : <RiEyeOffLine className="w-4 h-4"/>}</div>}
+      }}>{visible
+          ? <IconSVG name='EyeLine'></IconSVG>
+          : <IconSVG name='EyeOffLine'></IconSVG>}</div>}
       {
         display && icon && <div className="cursor-pointer text-xs flex items-center justify-center w-5">{icon}</div>
       }
