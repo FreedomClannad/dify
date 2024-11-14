@@ -19,9 +19,16 @@ const nextConfig = {
       {
         source: '/ws',
         // 本地开发环境
-        // destination: 'http://192.168.1.144:5002/ws',
+        destination: 'http://192.168.1.183:5002/ws',
         // 线上环境
-        destination: 'http://139.9.145.237/ws',
+        // destination: 'http://139.9.145.237/ws',
+      },
+      {
+        source: '/console/api',
+        // 本地开发环境
+        destination: 'http://192.168.1.183:5002/console/api',
+        // 线上环境
+        // destination: 'http://139.9.145.237/ws',
       },
     ]
   },

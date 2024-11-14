@@ -9,7 +9,7 @@ const PoseviewResult = ({ disabled }: Props) => {
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<InputFile/>, <OutputFile />]
   return <>
-    <div className="px-5 flex flex-col items-center h-full pb-3 w-full" style={{ display: disabled ? 'none' : 'flex' }}>
+    <div className="flex flex-col items-center h-full pb-3 w-full" style={{ display: disabled ? 'none' : 'flex' }}>
       {contentList.map((content, index) => <div key={`poseview-result-${index}`} className="mt-4 w-full">{content}</div>)}
     </div>
   </>

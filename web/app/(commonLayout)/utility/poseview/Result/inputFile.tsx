@@ -60,7 +60,7 @@ const InputFile = () => {
     }
   }
   return <>
-    <VerticalTitleCard title="Uploaded Files" >
+    <VerticalTitleCard title="Uploaded Files" headerClass="px-5" contentClass="px-5">
       <div className="w-full docking-input-file">
         {
           isShow

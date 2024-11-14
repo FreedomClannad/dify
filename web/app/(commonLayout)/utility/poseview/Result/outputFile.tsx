@@ -46,29 +46,32 @@ const OutputFile = () => {
   }
   return (
     <VerticalTitleCard title="Displayed Results"
+      headerClass="px-5"
       right={<DownloadTooltip onClick={handleDownload}/>}
     >
-      {
-        visable
-          ? <>
-            <div className="flex flex-col poseview-result-output">
-              {
-                tableData.map((item, index) => (
-                  <div key={`poseview-img-${index}`} className="w-full">
-                    {/* <Image width={100} height={100} src={item.url} alt="img"></Image> */}
-                    <img src={item.url} className='w-full max-h-[300px]'/>
-                  </div>
-                ))
-              }
+      <div className="poseview-result-output-body overflow-y-auto">
+        {
+          visable
+            ? <>
+              <div className="flex flex-col poseview-result-output">
+                {
+                  tableData.map((item, index) => (
+                    <div key={`poseview-img-${index}`} className="w-full">
+                      {/* <Image width={100} height={100} src={item.url} alt="img"></Image> */}
+                      <img src={item.url} className='w-full max-h-[300px]'/>
+                    </div>
+                  ))
+                }
 
-            </div>
-          </>
-          : (
-            <div className="w-full flex justify-center items-center rounded h-[200px] leading-[40px] shadow-md">
-              <span>No data</span>
-            </div>
-          )
-      }
+              </div>
+            </>
+            : (
+              <div className="w-full flex justify-center items-center rounded h-[200px] leading-[40px] shadow-md">
+                <span>No data</span>
+              </div>
+            )
+        }
+      </div>
     </VerticalTitleCard>
   )
 }
