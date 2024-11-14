@@ -13,37 +13,37 @@
   }
 
 
-  .EyeOffLine {
-    background-image: url('./icons/EyeOffLine-02.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+.EyeOffLine {
+background-image: url('./icons/EyeOffLine-02.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
 
-  .Preview2D {
-    background-image: url('./icons/2D-01.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+.Preview2D {
+background-image: url('./icons/2D-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
 
-  .DocumentIcon {
-    background-image: url('./icons/document-01.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+.DocumentIcon {
+background-image: url('./icons/document-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
 
-  .DownloadIcon {
-    background-image: url('./icons/download-01.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+.DownloadIcon {
+background-image: url('./icons/download-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
 
-  /* .TmpIcon {
-    background-image: url('./icons/3D.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-  } */
-  .SeqIcon {
-    background-image: url('./icons/seq-01.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+/* .TmpIcon {
+background-image: url('./icons/3D.svg');
+background-position: center;
+background-repeat: no-repeat;
+} */
+.SeqIcon {
+background-image: url('./icons/seq-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
