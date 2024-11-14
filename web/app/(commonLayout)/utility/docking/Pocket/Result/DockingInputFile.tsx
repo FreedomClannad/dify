@@ -6,7 +6,7 @@ import type { DockingInputFile, SVGPreview } from '@/types/docking'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getDockingFileURL, getLigandFileRenderList } from '@/service/docking'
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
-import ModalImage from '@/app/(commonLayout)/utility/docking/components/ModalImage'
+import ModalImage from '@/app/components/ALM/ModalImage'
 import IconSVG from '@/app/components/iconSVG'
 
 const PocketInputFile = () => {

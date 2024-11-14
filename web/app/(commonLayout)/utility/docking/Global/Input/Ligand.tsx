@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { Radio, RadioGroup } from '@nextui-org/react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
-import InputUpload from '../../components/InputUpload'
+import InputUpload from '@/app/components/ALM/InputUpload'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import type { FileItem } from '@/models/datasets'
 import UploadCard from '@/app/components/upload/upload-card'

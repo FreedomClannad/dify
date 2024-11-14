@@ -12,7 +12,7 @@ import { z } from 'zod'
 import { type FieldValues, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 // import Strategy from '../../components/Strategy'
-import SubmitButton from '../../components/SubmitButton'
+import SubmitButton from '../../../../../components/ALM/SubmitButton'
 import {
   GlobalFormContext,
   GlobalInputContext,
