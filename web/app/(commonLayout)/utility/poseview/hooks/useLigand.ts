@@ -17,7 +17,7 @@ const useLigand = () => {
     // 结果输入内容展示
     resultShowList,
     addResultShow,
-    uploadResultShow,
+    updateResultShow,
     clearResultShow,
   } = useUtilityA()
 
@@ -44,7 +44,7 @@ const useLigand = () => {
     // 结果输入内容展示
     ligandResultShowList: resultShowList,
     addLigandResultShow: addResultShow,
-    uploadLigandResultShow: uploadResultShow,
+    updateLigandResultShow: updateResultShow,
     clearLigandResultShow: clearResultShow,
     // ligandIds
     ligandFilesIds,

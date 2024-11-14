@@ -1,11 +1,11 @@
 import { useContext, useMemo, useState } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
-import { PoseviewContext } from '@/app/(commonLayout)/utility/poseview/context'
+import { MolstarContext, PoseviewContext } from '@/app/(commonLayout)/utility/poseview/context'
 import CardLine from '@/app/components/ALM/CardLine'
 import { getFileRenderList } from '@/service/utility'
 import { createSVGPreviewList } from '@/utils/ALM/utility'
 import ModalImage from '@/app/components/ALM/ModalImage'
-import type { SVGPreview } from '@/types/utility'
+import type { SVGPreview, UtilityResultShow } from '@/types/utility'
 import IconSVG from '@/app/components/iconSVG'
 
 const InputFile = () => {
@@ -13,7 +13,11 @@ const InputFile = () => {
     receptorResultShowList,
     ligandResultShowList,
     ligandFilesIds,
+    getReceptorUploadResult,
+    updateReceptorResultShow,
   } = useContext(PoseviewContext)
+
+  const { setStructureVisibility } = useContext(MolstarContext)
 
   const [ligandFilesIdsStorage, setLigandFilesIdsStorage] = useState<string>('')
 
@@ -24,12 +28,20 @@ const InputFile = () => {
     return receptorResultShowList.length === 0 && ligandResultShowList.length === 0
   }, [receptorResultShowList, ligandResultShowList])
 
-  const handleReceptorClick = () => {
-    console.log('receptor点击事件')
+  const handleReceptorClick = (utilityResultShow: UtilityResultShow) => {
+    const { id, visible } = utilityResultShow
+    const utilityUploadResult = getReceptorUploadResult(id)
+    if (utilityUploadResult) {
+      const n_visible = !visible
+      const n_utilityUploadResult = { ...utilityResultShow, visible: n_visible }
+      updateReceptorResultShow(n_utilityUploadResult)
+      setStructureVisibility({
+        molstar: { id, visible: n_visible },
+      })
+    }
   }
 
   const handleLigandClick = async () => {
-    console.log('ligand点击事件')
     if (ligandFilesIds && ligandFilesIds === ligandFilesIdsStorage) {
       setIsModalOpen(true)
       return

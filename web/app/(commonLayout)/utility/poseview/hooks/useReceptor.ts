@@ -15,7 +15,7 @@ const useReceptor = () => {
     // 结果输入内容展示
     resultShowList,
     addResultShow,
-    uploadResultShow,
+    updateResultShow,
     clearResultShow,
     visibleResultShow,
   } = useUtilityA()
@@ -32,7 +32,7 @@ const useReceptor = () => {
     // 结果输入内容展示
     receptorResultShowList: resultShowList,
     addReceptorResultShow: addResultShow,
-    uploadReceptorResultShow: uploadResultShow,
+    updateReceptorResultShow: updateResultShow,
     clearReceptorResultShow: clearResultShow,
     visibleReceptorResultShow: visibleResultShow,
   }

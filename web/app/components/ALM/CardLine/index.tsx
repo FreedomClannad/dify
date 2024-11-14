@@ -12,7 +12,7 @@ import IconSVG from '@/app/components/iconSVG'
 import type { UtilityResultShow } from '@/types/utility'
 
 type CardType = UtilityResultShow & {
-  onClick?: (dockingInputFile: UtilityResultShow) => void
+  onClick?: (utilityResultShow: UtilityResultShow) => void
   icon?: ReactNode
 }
 const CardLine = (props: CardType) => {

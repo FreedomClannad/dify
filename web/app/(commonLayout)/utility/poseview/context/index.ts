@@ -38,8 +38,8 @@ export const PoseviewContext = createContext<InputContextType>({
   },
   setLigandUploadFileList(value: ((prevState: FileItem[]) => FileItem[]) | FileItem[]): void {},
   setReceptorUploadFileList(value: ((prevState: FileItem[]) => FileItem[]) | FileItem[]): void {},
-  uploadLigandResultShow(res: UtilityResultShow): void {},
-  uploadReceptorResultShow(result: UtilityResultShow): void {},
+  updateLigandResultShow(res: UtilityResultShow): void {},
+  updateReceptorResultShow(result: UtilityResultShow): void {},
   visibleReceptorResultShow(id: string, visible: boolean): void {},
 })
 
