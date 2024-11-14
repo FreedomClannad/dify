@@ -40,15 +40,6 @@ const initTable = (data: any[]): TableType[] => {
       cnnAffinity: item['CNN affinity'],
       visible: index === 0,
     })
-    list.push({
-      id: getUUID(),
-      mode: item.mode,
-      mol: item.mol,
-      score: item['CNN pose score'],
-      affinity: item['affinity(kcal/mol)'],
-      cnnAffinity: item['CNN affinity'],
-      visible: index === 0,
-    })
   })
   return list
 }
