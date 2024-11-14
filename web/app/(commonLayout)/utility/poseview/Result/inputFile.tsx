@@ -6,7 +6,7 @@ import { getFileRenderList } from '@/service/utility'
 import { createSVGPreviewList } from '@/utils/ALM/utility'
 import ModalImage from '@/app/components/ALM/ModalImage'
 import type { SVGPreview, UtilityResultShow } from '@/types/utility'
-import IconSVG from '@/app/components/iconSVG'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 const InputFile = () => {
   const {

@@ -8,7 +8,7 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 import { getDockingFileURL, getLigandFileRenderList } from '@/service/docking'
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
 import ModalImage from '@/app/components/ALM/ModalImage'
-import IconSVG from '@/app/components/iconSVG'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 const PocketInputFile = () => {
   const {

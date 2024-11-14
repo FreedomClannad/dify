@@ -9,7 +9,7 @@
 // import { DocumentTextIcon } from '@heroicons/react/24/outline'
 import type { ReactNode } from 'react'
 import type { DockingInputFile } from '@/types/docking'
-import IconSVG from '@/app/components/iconSVG'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 type CardType = DockingInputFile & {
   onClick?: (dockingInputFile: DockingInputFile) => void

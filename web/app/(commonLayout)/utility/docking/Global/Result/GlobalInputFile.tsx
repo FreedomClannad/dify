@@ -8,7 +8,7 @@ import ModalImage from '@/app/components/ALM/ModalImage'
 import ModalText from '@/app/components/ALM/ModalText'
 import type { SVGPreview } from '@/types/utility'
 import { getGlobalReceptorFileContent, getLigandFileRenderList } from '@/service/docking'
-import IconSVG from '@/app/components/iconSVG'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 const GlobalInputFile = () => {
   const {

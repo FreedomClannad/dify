@@ -8,7 +8,7 @@
  */
 // import { DocumentTextIcon } from '@heroicons/react/24/outline'
 import type { ReactNode } from 'react'
-import IconSVG from '@/app/components/iconSVG'
+import IconSVG from '@/app/components/ALM/IconSVG'
 import type { UtilityResultShow } from '@/types/utility'
 
 type CardType = UtilityResultShow & {
