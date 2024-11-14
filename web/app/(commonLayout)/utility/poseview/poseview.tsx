@@ -36,7 +36,7 @@ const Poseview = () => {
   const { getReceptorUploadResult, addReceptorResultShow } = receptorHooks
 
   const ligandHooks = useLigand()
-  const { getLigandUploadResult, addLigandResultShow } = ligandHooks
+  const { getLigandUploadResult, addLigandResultShow, updateLigandFilesIds } = ligandHooks
   const molstartHooks = useMolstar()
   const { MolstarRef, getStructure } = molstartHooks
 
@@ -75,6 +75,7 @@ const Poseview = () => {
           }
 
           if (ligand_file_ids) {
+            updateLigandFilesIds(ligand_file_ids)
             const id = ligand_file_ids
             const result = getLigandUploadResult(id)
             if (result) {

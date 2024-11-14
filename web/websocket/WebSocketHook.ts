@@ -1,6 +1,6 @@
 import { useWebSocket } from 'ahooks'
 import { useEffect } from 'react'
-import { handleWebsocketData } from '@/app/websocket/data'
+import { handleWebsocketData } from '@/websocket/data'
 
 class WebSocketShakeHands {
   private timeout = 10000 // 5秒一次心跳

@@ -1,19 +1,51 @@
-import { useContext, useMemo } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { PoseviewContext } from '@/app/(commonLayout)/utility/poseview/context'
 import CardLine from '@/app/components/ALM/CardLine'
+import { getFileRenderList } from '@/service/utility'
+import { createSVGPreviewList } from '@/utils/ALM/utility'
+import ModalImage from '@/app/components/ALM/ModalImage'
+import type { SVGPreview } from '@/types/utility'
+import IconSVG from '@/app/components/iconSVG'
 
 const InputFile = () => {
-  const { receptorResultShowList, ligandResultShowList } = useContext(PoseviewContext)
+  const {
+    receptorResultShowList,
+    ligandResultShowList,
+    ligandFilesIds,
+  } = useContext(PoseviewContext)
+
+  const [ligandFilesIdsStorage, setLigandFilesIdsStorage] = useState<string>('')
+
+  const [previewData, setPreviewData] = useState<SVGPreview[]>([])
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [modalLoading, setModalLoading] = useState<boolean>(false)
   const isShow = useMemo(() => {
     return receptorResultShowList.length === 0 && ligandResultShowList.length === 0
   }, [receptorResultShowList, ligandResultShowList])
+
   const handleReceptorClick = () => {
     console.log('receptor点击事件')
   }
 
-  const handleLigandClick = () => {
+  const handleLigandClick = async () => {
     console.log('ligand点击事件')
+    if (ligandFilesIds && ligandFilesIds === ligandFilesIdsStorage) {
+      setIsModalOpen(true)
+      return
+    }
+
+    if (ligandFilesIds && ligandFilesIds !== ligandFilesIdsStorage) {
+      setModalLoading(true)
+      setIsModalOpen(true)
+      const data = await getFileRenderList(ligandFilesIds)
+      let list: SVGPreview[] = []
+      if (data)
+        list = createSVGPreviewList(data)
+      setPreviewData(list)
+      setLigandFilesIdsStorage(ligandFilesIds)
+      setModalLoading(false)
+    }
   }
   return <>
     <VerticalTitleCard title="Uploaded Files" >
@@ -30,12 +62,17 @@ const InputFile = () => {
                 receptorResultShowList.map((item, index) => <CardLine key={`receptor-${index}`} {...item} onClick={handleReceptorClick}></CardLine>)
               }
               {
-                ligandResultShowList.map((item, index) => <CardLine key={`ligand-${index}`} {...item} onClick={handleLigandClick}></CardLine>)
+                ligandResultShowList.map((item, index) => <CardLine key={`ligand-${index}`} {...item} icon={ligandFilesIds && (
+                  <div className="text-gray-500 cursor-pointer" onClick={handleLigandClick}>
+                    <IconSVG name='Preview2D'></IconSVG>
+                  </div>
+                )}></CardLine>)
               }
             </>
         }
       </div>
     </VerticalTitleCard>
+    <ModalImage isShow={isModalOpen} onClose={() => { setIsModalOpen(false) }} title="Preview" data={previewData} loading={modalLoading} />
   </>
 }
 

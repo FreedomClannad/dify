@@ -1,6 +1,6 @@
-import { PocketData } from '@/app/websocket/data/pocket'
-import { GlobalData } from '@/app/websocket/data/global'
-import { PoseviewData } from '@/app/websocket/data/poseview'
+import { PocketData } from '@/websocket/data/pocket'
+import { GlobalData } from '@/websocket/data/global'
+import { PoseviewData } from '@/websocket/data/poseview'
 
 const data: { [key: string]: Function } = {
   molecular_docking: PocketData,

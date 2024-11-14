@@ -8,7 +8,7 @@ import UploadCard from '@/app/components/upload/upload-card'
 import type { FileItem } from '@/models/datasets'
 import { FormContext, InputContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketInputContext'
 import ModalImage from '@/app/components/ALM/ModalImage'
-import type { SVGPreview } from '@/types/docking'
+import type { SVGPreview } from '@/types/utility'
 import { getLigandFileRenderList } from '@/service/docking'
 import Tooltip from '@/app/components/base/tooltip'
 const LigandFile = () => {

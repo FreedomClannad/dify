@@ -31,7 +31,7 @@ const Container = () => {
   const { addReceptorUploadResult, addReceptorResultShow } = receptorHooks
 
   const ligandHooks = useLigand()
-  const { getLigandUploadResult, addLigandResultShow } = ligandHooks
+  const { getLigandUploadResult, addLigandResultShow, updateLigandFilesIds } = ligandHooks
 
   const utilityResultHooks = useUtilityResult()
   const { setResultData, setResultTaskId } = utilityResultHooks
@@ -56,7 +56,7 @@ const Container = () => {
         addLigandResultShow({ id, name, visible: false, display: true })
         return id
       }).join(',')
-      console.log(ids)
+      updateLigandFilesIds(ids)
     })
     setResultTaskId(id)
     setResultData(result)

@@ -6,7 +6,7 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
 import ModalImage from '@/app/components/ALM/ModalImage'
 import ModalText from '@/app/components/ALM/ModalText'
-import type { SVGPreview } from '@/types/docking'
+import type { SVGPreview } from '@/types/utility'
 import { getGlobalReceptorFileContent, getLigandFileRenderList } from '@/service/docking'
 import IconSVG from '@/app/components/iconSVG'
 

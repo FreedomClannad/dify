@@ -70,6 +70,11 @@ export const getHistoryDetailData = <T>(data: HistoryTask) => {
   return post<T>('/history_task/detail', { body: data })
 }
 
+// 获取文件渲染图片
+export const getFileRenderList = (id: string) => {
+  return get<string[]>(`/molecular-docking/files/rendering?file_id=${id}`)
+}
+
 // 这里是poseview的内容
 export const submitPoesviewTask = (data: any) => {
   return post<UtilityResult>('/poseview/task', { body: data })

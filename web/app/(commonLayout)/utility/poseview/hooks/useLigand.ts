@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useUtilityA } from '@/app/hooks/useUtility'
 
 export type useLigandType = ReturnType<typeof useLigand>
@@ -20,6 +21,16 @@ const useLigand = () => {
     clearResultShow,
   } = useUtilityA()
 
+  const [ligandFilesIds, setLigandFilesIds] = useState<string>('')
+
+  const updateLigandFilesIds = (ids: string) => {
+    setLigandFilesIds(ids)
+  }
+
+  const clearLigandFilesIds = () => {
+    setLigandFilesIds('')
+  }
+
   return {
     // 上传文件内容
     ligandUploadFileList: uploadFileList,
@@ -35,6 +46,10 @@ const useLigand = () => {
     addLigandResultShow: addResultShow,
     uploadLigandResultShow: uploadResultShow,
     clearLigandResultShow: clearResultShow,
+    // ligandIds
+    ligandFilesIds,
+    updateLigandFilesIds,
+    clearLigandFilesIds,
   }
 }
 

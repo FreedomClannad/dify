@@ -63,6 +63,11 @@ export type UtilityMolstar = {
   visible: boolean
 }
 
+export type SVGPreview = {
+  id: string
+  svg: string
+}
+
 // History
 export type HistoryFile = {
   file_id: string
