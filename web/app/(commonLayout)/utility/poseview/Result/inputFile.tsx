@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { PoseviewContext } from '@/app/(commonLayout)/utility/poseview/context'
-import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
+import CardLine from '@/app/components/ALM/CardLine'
 
 const InputFile = () => {
   const { receptorResultShowList, ligandResultShowList } = useContext(PoseviewContext)
