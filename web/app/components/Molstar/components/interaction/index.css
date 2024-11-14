@@ -1,6 +1,6 @@
 .interaction-box {
     position: absolute;
-    z-index: 10001;
+    z-index: 5;
     left: 5px;
     /*right: 10px;*/
     /*bottom: 10px;*/
