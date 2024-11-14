@@ -19,6 +19,8 @@ const useLigand = () => {
     addResultShow,
     updateResultShow,
     clearResultShow,
+    // 公共方法
+    allClear,
   } = useUtilityA()
 
   const [ligandFilesIds, setLigandFilesIds] = useState<string>('')
@@ -50,6 +52,8 @@ const useLigand = () => {
     ligandFilesIds,
     updateLigandFilesIds,
     clearLigandFilesIds,
+    // 公共方法
+    ligandAllClear: allClear,
   }
 }
 

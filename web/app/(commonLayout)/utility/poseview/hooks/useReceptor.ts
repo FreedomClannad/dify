@@ -18,6 +18,8 @@ const useReceptor = () => {
     updateResultShow,
     clearResultShow,
     visibleResultShow,
+    // 公共方法
+    allClear,
   } = useUtilityA()
   return {
     // 上传文件内容
@@ -35,6 +37,8 @@ const useReceptor = () => {
     updateReceptorResultShow: updateResultShow,
     clearReceptorResultShow: clearResultShow,
     visibleReceptorResultShow: visibleResultShow,
+    // 公共方法
+    receptorAllClear: allClear,
   }
 }
 

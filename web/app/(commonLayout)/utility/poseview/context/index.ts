@@ -8,7 +8,7 @@ import type { UtilityMolstar, UtilityResultShow, UtilityUploadResult } from '@/t
 import type { FileItem } from '@/models/datasets'
 import type { useMolstarType } from '@/app/hooks/useMolstar'
 import type { useUtilityResultType } from '@/app/hooks/useUtilityResult'
-type InputContextType = useReceptorType & useLigandType
+type InputContextType = Omit<useReceptorType, 'receptorAllClear'> & Omit<useLigandType, 'ligandAllClear'>
 
 export const PoseviewContext = createContext<InputContextType>({
   ligandResultShowList: [],
@@ -43,7 +43,7 @@ export const PoseviewContext = createContext<InputContextType>({
   visibleReceptorResultShow(id: string, visible: boolean): void {},
 })
 
-type OutputContextType = useUtilityResultType
+type OutputContextType = Omit<useUtilityResultType, 'resultAllClear'>
 
 export const OutputContext = createContext<OutputContextType>({
   resultData: '',

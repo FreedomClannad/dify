@@ -33,15 +33,15 @@ const Poseview = () => {
   }, [mode])
 
   const receptorHooks = useReceptor()
-  const { getReceptorUploadResult, addReceptorResultShow } = receptorHooks
+  const { getReceptorUploadResult, addReceptorResultShow, receptorAllClear } = receptorHooks
 
   const ligandHooks = useLigand()
-  const { getLigandUploadResult, addLigandResultShow, updateLigandFilesIds } = ligandHooks
+  const { getLigandUploadResult, addLigandResultShow, updateLigandFilesIds, ligandAllClear } = ligandHooks
   const molstartHooks = useMolstar()
-  const { MolstarRef, getStructure } = molstartHooks
+  const { MolstarRef, getStructure, clear } = molstartHooks
 
   const utilityResultHooks = useUtilityResult()
-  const { setResultData, setResultTaskId } = utilityResultHooks
+  const { setResultData, setResultTaskId, resultAllClear } = utilityResultHooks
 
   // 提交的缓存数据
   const { addSubmitMemory, getSubmitMemory, clearSubmitMemory } = useMemory()
@@ -121,7 +121,12 @@ const Poseview = () => {
 
   // 重置
   const handleReset = () => {
+    clear()
+    receptorAllClear()
+    ligandAllClear()
     clearSubmitMemory()
+    resultAllClear()
+    setSubmitLoading(false)
   }
 
   const left = () => {

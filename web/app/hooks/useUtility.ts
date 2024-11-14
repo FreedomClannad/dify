@@ -89,6 +89,12 @@ export const useUtilityA = () => {
     })
     setResultShowList(list)
   }
+
+  const allClear = () => {
+    clearUploadFileList()
+    clearUploadResult()
+    clearResultShow()
+  }
   return {
     // 上传文件内容
     uploadFileList,
@@ -108,5 +114,8 @@ export const useUtilityA = () => {
     updateResultShow,
     clearResultShow,
     visibleResultShow,
+
+    // 公共方法
+    allClear,
   }
 }
