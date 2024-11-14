@@ -1,0 +1,3 @@
+.poseview-result-output > div:not(:first-child) {
+    margin-top: 20px;
+}

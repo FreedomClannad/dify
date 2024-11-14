@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import InputFile from './inputFile'
 import OutputFile from './outputFile'
+import './index.css'
 type Props = {
   disabled?: boolean
 }

@@ -20,7 +20,7 @@ const initData = (data: any[]) => {
       url: getFile({ name: item.file_name, query: { file_id: item.file_id, preview_type: 'stream', source: 'result' } }),
     })
   })
-  return list
+  return new Array(10).fill(list[0])
 }
 
 const OutputFile = () => {
@@ -51,12 +51,12 @@ const OutputFile = () => {
       {
         visable
           ? <>
-            <div className="flex flex-row">
+            <div className="flex flex-col poseview-result-output">
               {
                 tableData.map((item, index) => (
-                  <div key={`poseview-img-${index}`}>
+                  <div key={`poseview-img-${index}`} className="w-full">
                     {/* <Image width={100} height={100} src={item.url} alt="img"></Image> */}
-                    <img src={item.url}/>
+                    <img src={item.url} className='w-full max-h-[300px]'/>
                   </div>
                 ))
               }
