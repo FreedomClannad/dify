@@ -34,7 +34,7 @@ const VerticalTitleCard = ({ title, rootClass, headerClass, contentClass, toolti
 
           </Tooltip>
         </div>
-        <div className="flex">
+        <div className="flex w-[20px]">
           {onExample && <div onClick={onExample}>Example</div>}
           {right && <div className="flex justify-center items-center">{right}</div>}
         </div>
