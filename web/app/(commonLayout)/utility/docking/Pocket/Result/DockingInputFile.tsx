@@ -106,14 +106,11 @@ const PocketInputFile = () => {
               }
               {
                 pocketLigandResultInputFileList.map((item, index) => {
-                  return <div key={`ligand-${index}`} className="flex items-center justify-between">
-                    <CardLine {...item} name="ligand to dock"/>
-                    {pocketLigandFilesIds && (
-                      <div className="text-gray-500 cursor-pointer" onClick={handleLigandClick}>
-                        <IconSVG name='Preview2D'></IconSVG>
-                      </div>
-                    )}
-                  </div>
+                  return <CardLine key={`ligand-${index}`} {...item} name="ligand to dock" icon={pocketLigandFilesIds && (
+                    <div className="text-gray-500 cursor-pointer" onClick={handleLigandClick}>
+                      <IconSVG name='Preview2D'></IconSVG>
+                    </div>
+                  )}/>
                 })
               }
             </>
