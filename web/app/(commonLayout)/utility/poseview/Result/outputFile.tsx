@@ -21,7 +21,7 @@ const initData = (data: any[]) => {
       url: getFile({ name: item.file_name, query: { file_id: item.file_id, preview_type: 'stream', source: 'result' } }),
     })
   })
-  return new Array(10).fill(list[0])
+  return list
 }
 
 const OutputFile = () => {
