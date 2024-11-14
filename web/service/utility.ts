@@ -1,6 +1,6 @@
 import { get, post } from './base'
 import type { HistoryFile, HistoryTask, UtilityResult } from '@/types/utility'
-import type { Collection } from '@/app/components/tools/types'
+import type { Collection } from '@/app/components/utility/types'
 
 // 这里是历史记录部分
 type HistoryFileInfo = {

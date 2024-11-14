@@ -16,7 +16,6 @@ import { useTabSearchParams } from '@/hooks/use-tab-searchparams'
 import cn from '@/utils/classnames'
 import TabSliderNew from '@/app/components/base/tab-slider-new'
 import SearchInput from '@/app/components/base/search-input'
-import { fetchCollectionList } from '@/service/tools'
 import HistoryButton from '@/app/components/utility/labels/history-button'
 import { fetchUtilityCollectionList } from '@/service/utility'
 
@@ -56,15 +55,9 @@ const UtilityList = () => {
     })
   }, [activeTab, tagFilterValue, keywords, collectionList])
   const getProviderList = async () => {
-    const list = await fetchCollectionList()
-    console.log(list)
-    list.forEach((item) => {
-      if (item.author === 'Richards Tu')
-        console.log(item)
-    })
+    // const list = await fetchCollectionList()
     // setCollectionList([...list])
     const n_list = await fetchUtilityCollectionList()
-    console.log(n_list)
     setCollectionList([...n_list])
   }
   useEffect(() => {
