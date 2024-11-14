@@ -72,7 +72,7 @@ const Container = () => {
     return <>
       <MolstarContext.Provider value={{ ...molstartHooks }}>
         <PoseviewContext.Provider value={{ ...receptorHooks, ...ligandHooks }}>
-          <OutputContext.Provider value={{ ...utilityResultHooks }}>
+          <OutputContext.Provider value={{ ...utilityResultHooks, isShowHeader: false }}>
             <PoseviewResult disabled={false} />
           </OutputContext.Provider>
         </PoseviewContext.Provider>

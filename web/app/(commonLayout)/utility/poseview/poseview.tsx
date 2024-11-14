@@ -134,7 +134,7 @@ const Poseview = () => {
       <MolstarContext.Provider value={{ ...molstartHooks }}>
         <PoseviewContext.Provider value={{ ...receptorHooks, ...ligandHooks }}>
           <PoseviewInput disabled={inputDisabled} onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading}/>
-          <OutputContext.Provider value={{ ...utilityResultHooks }}>
+          <OutputContext.Provider value={{ ...utilityResultHooks, isShowHeader: true }}>
             <PoseviewResult disabled={resultDisabled} />
           </OutputContext.Provider>
         </PoseviewContext.Provider>

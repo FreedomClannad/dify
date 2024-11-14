@@ -15,7 +15,7 @@ import SearchInput from '@/app/components/base/search-input'
 import { Tag03 } from '@/app/components/base/icons/src/vender/line/financeAndECommerce'
 import Checkbox from '@/app/components/base/checkbox'
 import type { Label } from '@/app/components/tools/labels/constant'
-import { fetchLabelList } from '@/service/tools'
+import { fetchUtilityLabelList } from '@/service/utility'
 import I18n from '@/context/i18n'
 import { getLanguage } from '@/i18n/language'
 
@@ -61,7 +61,7 @@ const LabelSelector: FC<LabelSelectorProps> = ({
   }
 
   useMount(() => {
-    fetchLabelList().then((res) => {
+    fetchUtilityLabelList().then((res) => {
       setLabelList(res)
     })
   })

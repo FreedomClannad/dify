@@ -43,13 +43,16 @@ export const PoseviewContext = createContext<InputContextType>({
   visibleReceptorResultShow(id: string, visible: boolean): void {},
 })
 
-type OutputContextType = Omit<useUtilityResultType, 'resultAllClear'>
+type OutputContextType = Omit<useUtilityResultType, 'resultAllClear'> & {
+  isShowHeader: boolean
+}
 
 export const OutputContext = createContext<OutputContextType>({
   resultData: '',
   resultTaskId: '',
   setResultData(value: ((prevState: string) => string) | string): void {},
   setResultTaskId(value: ((prevState: string) => string) | string): void {},
+  isShowHeader: false,
 })
 
 type FormContextType = {

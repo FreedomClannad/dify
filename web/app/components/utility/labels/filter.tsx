@@ -16,7 +16,7 @@ import { Tag01, Tag03 } from '@/app/components/base/icons/src/vender/line/financ
 import { Check } from '@/app/components/base/icons/src/vender/line/general'
 import { XCircle } from '@/app/components/base/icons/src/vender/solid/general'
 import type { Label } from '@/app/components/tools/labels/constant'
-import { fetchLabelList } from '@/service/tools'
+import { fetchUtilityLabelList } from '@/service/utility'
 import I18n from '@/context/i18n'
 import { getLanguage } from '@/i18n/language'
 
@@ -62,7 +62,7 @@ const LabelFilter: FC<LabelFilterProps> = ({
   }
 
   useMount(() => {
-    fetchLabelList().then((res) => {
+    fetchUtilityLabelList().then((res) => {
       setLabelList(res)
     })
   })

@@ -6,6 +6,7 @@ import style from './style.module.css'
 import Tooltip from '@/app/components/base/tooltip'
 type props = {
   title: string
+  rootClass?: string
   headerClass?: string
   contentClass?: string
   tooltip?: string | ReactNode
@@ -13,12 +14,12 @@ type props = {
   onExample?: () => void
   right?: ReactNode
 }
-const VerticalTitleCard = ({ title, headerClass, contentClass, tooltip, children, onExample, right }: props) => {
+const VerticalTitleCard = ({ title, rootClass, headerClass, contentClass, tooltip, children, onExample, right }: props) => {
   const tooltipDisabled = useMemo(() => {
     return !tooltip
   }, [tooltip])
   return <>
-    <div>
+    <div className={rootClass}>
       <div className={cn('flex justify-between', headerClass)}>
         <div className={cn(style.title, 'flex relative after:bg-primary-1001 pl-3')}>
           <span>{title}</span>

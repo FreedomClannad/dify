@@ -8,7 +8,7 @@ import { Apps02 } from '@/app/components/base/icons/src/vender/line/others'
 import I18n from '@/context/i18n'
 import { getLanguage } from '@/i18n/language'
 import { useStore as useLabelStore } from '@/app/components/tools/labels/store'
-import { fetchLabelList } from '@/service/tools'
+import { fetchUtilityLabelList } from '@/service/utility'
 
 type Props = {
   value: string
@@ -43,7 +43,7 @@ const Category = ({
   const setLabelList = useLabelStore(s => s.setLabelList)
 
   useMount(() => {
-    fetchLabelList().then((res) => {
+    fetchUtilityLabelList().then((res) => {
       setLabelList(res)
     })
   })

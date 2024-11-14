@@ -5,6 +5,7 @@ import { getFile } from '@/service/commonURL'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import DownloadTooltip from '@/app/components/download-tooltip'
 import { downloadPoseviewFile } from '@/service/uility/download'
+import cn from '@/utils/classnames'
 
 type TableType = {
   id: string
@@ -25,7 +26,7 @@ const initData = (data: any[]) => {
 
 const OutputFile = () => {
   const [tableData, setTableData] = useState<TableType[]>([])
-  const { resultData, resultTaskId } = useContext(OutputContext)
+  const { resultData, resultTaskId, isShowHeader } = useContext(OutputContext)
   useEffect(() => {
     try {
       const data = JSON.parse(resultData)
@@ -46,10 +47,11 @@ const OutputFile = () => {
   }
   return (
     <VerticalTitleCard title="Displayed Results"
+      rootClass="mt-4 w-full flex-1"
       headerClass="px-5"
       right={<DownloadTooltip onClick={handleDownload}/>}
     >
-      <div className="poseview-result-output-body overflow-y-auto">
+      <div id="outputfile1" className={cn(' overflow-y-auto', isShowHeader ? 'poseview-result-output-body' : 'poseview-result-output-body-no-header')} style={{ maxHeight: '' }}>
         {
           visable
             ? <>

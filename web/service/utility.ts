@@ -1,6 +1,7 @@
 import { get, post } from './base'
 import type { HistoryFile, HistoryTask, UtilityResult } from '@/types/utility'
 import type { Collection } from '@/app/components/utility/types'
+import type { Label } from '@/app/components/utility/labels/constant'
 
 // 这里是历史记录部分
 type HistoryFileInfo = {
@@ -64,6 +65,10 @@ export const getPocketHistory = (data: HistoryTask) => {
 
 export const fetchUtilityCollectionList = () => {
   return get<Collection[]>('/sciminer/tools')
+}
+
+export const fetchUtilityLabelList = () => {
+  return get<Label[]>('/sciminer/util-labels')
 }
 
 export const getHistoryDetailData = <T>(data: HistoryTask) => {
