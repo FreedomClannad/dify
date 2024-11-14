@@ -4,7 +4,7 @@ import { OutputContext } from '../context'
 import { getFile } from '@/service/commonURL'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import DownloadTooltip from '@/app/components/download-tooltip'
-import { downloadUtilityFile } from '@/service/utility'
+import { downloadPoseviewFile } from '@/service/uility/download'
 
 type TableType = {
   id: string
@@ -40,7 +40,7 @@ const OutputFile = () => {
     return tableData.length > 0
   }, [tableData])
   const handleDownload = async () => {
-    const data = await downloadUtilityFile(resultTaskId, 'all')
+    const data = await downloadPoseviewFile(resultTaskId)
     if (data)
       saveAs(data, `${resultTaskId}.zip`)
   }

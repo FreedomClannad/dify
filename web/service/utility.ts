@@ -79,16 +79,3 @@ export const getFileRenderList = (id: string) => {
 export const submitPoesviewTask = (data: any) => {
   return post<UtilityResult>('/poseview/task', { body: data })
 }
-
-// 下载文件
-export const downloadUtilityFile = (task_id: string, range: string) => {
-  return get<Blob>('/molecular-docking/download', {
-    headers: new Headers({
-      'Content-Type': 'application/octet-stream',
-    }),
-    params: {
-      task_id,
-      range,
-    },
-  })
-}
