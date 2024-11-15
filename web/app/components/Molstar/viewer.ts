@@ -46,9 +46,16 @@ import type { PluginLayoutControlsDisplay } from 'molstar/lib/mol-plugin/layout'
 import { PluginSpec } from 'molstar/lib/mol-plugin/spec'
 import type { PluginState } from 'molstar/lib/mol-plugin/state'
 import type { State, StateObjectSelector } from 'molstar/lib/mol-state'
-import { StateObject, StateObjectRef } from 'molstar/lib/mol-state'
+import { StateObject, StateObjectRef, StateTransformer } from 'molstar/lib/mol-state'
 import { Task } from 'molstar/lib/mol-task'
 import { Asset } from 'molstar/lib/mol-util/assets'
+
+import { ColorNames } from 'molstar/lib/mol-util/color/names'
+import { Mesh } from 'molstar/lib/mol-geo/geometry/mesh/mesh'
+import { getBoxMesh } from 'molstar/lib/mol-plugin-state/transforms/shape'
+import { Shape } from 'molstar/lib/mol-model/shape'
+import type { Box3D } from 'molstar/lib/mol-math/geometry'
+import { ShapeRepresentation } from 'molstar/lib/mol-repr/shape/representation'
 
 import { Color } from 'molstar/lib/mol-util/color'
 import 'molstar/lib/mol-util/polyfill'
@@ -246,6 +253,45 @@ const MergeStructures = PluginStateTransform.BuiltIn({
     })
   },
 })
+
+// 绘制3D框
+const Draw3DBox = PluginStateTransform.BuiltIn({
+  name: 'draw-box-3d',
+  display: 'Bounding Box',
+  from: PluginStateObject.Molecule.Structure,
+  to: PluginStateObject.Shape.Representation3D,
+  params: {
+    radius: PD.Numeric(0.05, { min: 0.01, max: 4, step: 0.01 }, { isEssential: true }),
+    color: PD.Color(ColorNames.red, { isEssential: true }),
+    ...Mesh.Params,
+  },
+})({
+  canAutoUpdate() {
+    return true
+  },
+  apply({ a, params }, plugin: PluginContext) {
+    return Task.create('Bounding Box', async (ctx) => {
+      const repr = ShapeRepresentation((_, data: { box: Box3D; radius: number; color: Color }, __, shape) => {
+        const mesh = getBoxMesh(data.box, data.radius, shape?.geometry)
+        return Shape.create('Bouding Box', data, mesh, () => data.color, () => 1, () => 'Bounding Box')
+      }, Mesh.Utils)
+      await repr.createOrUpdate(params, { box: a.structure.boundary.box, radius: params.radius, color: params.color }).runInContext(ctx)
+      console.log('stru', a)
+      return new PluginStateObject.Shape.Representation3D({ repr, sourceData: a.structure }, { label: 'Bounding Box' })
+    })
+  },
+  update({ a, b, oldParams, newParams }, plugin: PluginContext) {
+    return Task.create('Bounding Box', async (ctx) => {
+      await b.data.repr.createOrUpdate(newParams, { box: a.structure.boundary.box, radius: newParams.radius, color: newParams.color }).runInContext(ctx)
+      b.data.sourceData = a.structure
+      return StateTransformer.UpdateResult.Updated
+    })
+  },
+})
+
+export { Draw3DBox }
+
+type Draw3DBoxType = typeof Draw3DBox
 
 export class Viewer {
   constructor(public plugin: PluginUIContext) {
@@ -814,6 +860,7 @@ export class Viewer {
     this.plugin.dispose()
   }
 
+  // 合并结构体
   async loadStructuresFromUrlsAndMerge() {
     // console.log('aaaa', this.plugin.state.data.selectQ(q => q.ofTransformer(StateTransforms.Model.ModelFromTrajectory)))
     // console.log('ffff', this.plugin.state.data.selectQ(q => q.rootsOfType(PluginStateObject.Molecule.Structure)))
@@ -855,6 +902,17 @@ export class Viewer {
     this.plugin.behaviors.canvas3d.initialized.subscribe(async (v) => {
       await this.plugin.builders.structure.representation.applyPreset(structureProperties || structure, StructurePreset)
     })
+  }
+
+  async Draw3DBox() {
+    const structure = this.plugin.managers.structure.focus.current?.loci
+    const params = {
+      radius: PD.Numeric(0.05, { min: 0.01, max: 4, step: 0.01 }, { isEssential: true }),
+      color: PD.Color(ColorNames.red, { isEssential: true }),
+      ...Mesh.Params,
+    }
+    const data = this.plugin.state.data.build().toRoot().apply(Draw3DBox, { structure }, { params })
+    console.log('data', data)
   }
 }
 

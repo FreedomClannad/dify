@@ -23,6 +23,7 @@ export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
   loadStructuresFromUrlsAndMerge: () => void
+  DrawBox: () => void
   setStructureVisibility: (index: number, visible: boolean) => void
   getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string; label: string } | null | undefined>
   clear: () => void
@@ -49,7 +50,10 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       return undefined
     }
   }
-
+  const DrawBox = () => {
+    if (molstart && molstart.current)
+      molstart.current.Draw3DBox()
+  }
   useEffect(() => {
     Viewer.create(id, {
       layoutIsExpanded: false,
@@ -57,8 +61,8 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       layoutShowRemoteState: false,
       layoutShowSequence: true,
       layoutShowLog: false,
-      layoutShowLeftPanel: false,
-      layoutShowRightPanel: false,
+      layoutShowLeftPanel: true,
+      layoutShowRightPanel: true,
 
       viewportShowExpand: false,
       viewportShowSelectionMode: false,
@@ -83,6 +87,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     setTimeout(async () => {
       const center = await getCenter()
       onFocusCenter?.(center as { x: number; y: number; z: number; num: string; chain: string;label: string })
+      DrawBox()
     }, 500)
   }
   useEffect(() => {
