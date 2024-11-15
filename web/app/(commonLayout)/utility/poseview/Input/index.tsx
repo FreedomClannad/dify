@@ -24,7 +24,7 @@ const PoseviewInput = ({ disabled, onSubmit, onReset, submitLoading = false }: P
   const { register, handleSubmit, getValues, setValue, formState: { errors }, reset } = useForm<PoseviewFormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      task_name: 'Poseview - 1',
+      task_name: 'Poseview demo',
       receptor_file_id: '',
       ligand_file_ids: '',
     },

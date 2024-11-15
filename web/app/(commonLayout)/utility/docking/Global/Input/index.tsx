@@ -52,7 +52,7 @@ const GlobalInput = ({ isDisabled = false, onSubmit, onReset, submitLoading = fa
   const { register, handleSubmit, getValues, setValue, formState: { errors }, reset } = useForm<GlobalInputFormValues>({
     resolver: zodResolver(GlobalInputFormSchema),
     defaultValues: {
-      task_name: 'Global Docking',
+      task_name: 'Global docking demo',
       receptor_value: '',
       fasta_file_id: '',
       ligand_value: '',

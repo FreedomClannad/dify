@@ -32,44 +32,48 @@ const Receptor = () => {
   }
   const UploadContent = () => {
     return <>
-      <UploadCard uploadURL="/global-docking/files/upload?source=fasta" accept={accept} fileList={globalReceptorUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
-        const n_list = list.map((item) => {
-          if (item.fileID === fileItem.fileID) {
-            const files = item.file
-            if (Array.isArray(files) && progress === 100) {
-              files.map((file) => {
-                const { id, mime_type, extension, name } = file
-                setValue('fasta_file_id', file.id)
-                addGlobalReceptorUploadResult({ id, mime_type, extension, name, fileID: fileItem.fileID })
-                return file
-              })
+      <UploadCard
+        description="Select or drag and drop receptor file here"
+        uploadURL="/global-docking/files/upload?source=fasta"
+        accept={accept} fileList={globalReceptorUploadFileList}
+        onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+          const n_list = list.map((item) => {
+            if (item.fileID === fileItem.fileID) {
+              const files = item.file
+              if (Array.isArray(files) && progress === 100) {
+                files.map((file) => {
+                  const { id, mime_type, extension, name } = file
+                  setValue('fasta_file_id', file.id)
+                  addGlobalReceptorUploadResult({ id, mime_type, extension, name, fileID: fileItem.fileID })
+                  return file
+                })
+              }
+              return {
+                ...item,
+                progress,
+              }
             }
-            return {
-              ...item,
-              progress,
-            }
-          }
-          return item
-        })
-        setGlobalReceptorUploadFileList(n_list)
-      }} prepareFileList={(files) => {
-        setGlobalReceptorUploadFileList(files)
-        if (files.length === 0) {
-          setValue('fasta_file_id', '')
-          clearGlobalReceptorUploadResultList()
-        }
-      }}
-      onUploadError={(file) => {
-        const newList = globalReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
-        setGlobalReceptorUploadFileList(newList)
-        const files = file.file
-        if (Array.isArray(files)) {
-          files.map((file) => {
-            deleteGlobalReceptorUploadResult(file.id)
-            return file
+            return item
           })
-        }
-      }}
+          setGlobalReceptorUploadFileList(n_list)
+        }} prepareFileList={(files) => {
+          setGlobalReceptorUploadFileList(files)
+          if (files.length === 0) {
+            setValue('fasta_file_id', '')
+            clearGlobalReceptorUploadResultList()
+          }
+        }}
+        onUploadError={(file) => {
+          const newList = globalReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
+          setGlobalReceptorUploadFileList(newList)
+          const files = file.file
+          if (Array.isArray(files)) {
+            files.map((file) => {
+              deleteGlobalReceptorUploadResult(file.id)
+              return file
+            })
+          }
+        }}
       />
     </>
   }

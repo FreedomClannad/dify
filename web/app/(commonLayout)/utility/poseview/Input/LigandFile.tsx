@@ -65,7 +65,7 @@ const LigandFile = () => {
   return <>
     <VerticalTitleCard
       title="Ligand file"
-      tooltip="上传配体文件，当配体为一个时允许上传SDF，PDB和MOL格式，当配体为多个时（≤2000）只允许上传SDF格式。格式：SDF、Mol、PDB。"
+      tooltip="小分子结构文件: SDF 格式。支持多小分子输入，但小分子必须位于蛋白结合口袋中，且与蛋白有潜在相互作用。"
       right={ligandUploadFileList.length > 0 ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleOpenPreview}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
     >
       <div>
