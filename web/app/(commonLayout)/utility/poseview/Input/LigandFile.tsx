@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
 import type { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory'
-import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { v4 as uuid4 } from 'uuid'
 import { formats } from './commin'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
@@ -11,6 +10,7 @@ import ModalImage from '@/app/components/ALM/ModalImage'
 import type { SVGPreview } from '@/types/utility'
 import { getLigandFileRenderList } from '@/service/docking'
 import Tooltip from '@/app/components/base/tooltip'
+import IconSVG from '@/app/components/ALM/IconSVG'
 const LigandFile = () => {
   const {
     ligandUploadFileList,
@@ -66,7 +66,7 @@ const LigandFile = () => {
     <VerticalTitleCard
       title="Ligand file"
       tooltip="小分子结构文件: SDF 格式。支持多小分子输入，但小分子必须位于蛋白结合口袋中，且与蛋白有潜在相互作用。"
-      right={ligandUploadFileList.length > 0 ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleOpenPreview}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
+      right={ligandUploadFileList.length > 0 ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="text-gray-500 cursor-pointer" onClick={handleOpenPreview}><IconSVG name='Preview2D'></IconSVG></div></Tooltip> : null}
     >
       <div>
         <UploadCard uploadURL="/poseview/files/upload?source=ligand" accept=".pdb, .sdf, .mol, mol2" fileList={ligandUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
