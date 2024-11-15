@@ -65,7 +65,7 @@ const InputFile = () => {
         {
           isShow
             ? <>
-              <div className="w-full flex justify-center items-center rounded h-[100px] leading-[40px] shadow-md">
+              <div className="w-full flex justify-center items-center rounded h-[100px] leading-[40px]">
                 <span>No data</span>
               </div>
             </>

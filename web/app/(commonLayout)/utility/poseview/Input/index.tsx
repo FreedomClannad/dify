@@ -15,12 +15,12 @@ const FormSchema = z.object({
 })
 export type PoseviewFormValues = z.infer<typeof FormSchema>
 type Props = {
-  disabled?: boolean
+  display?: boolean
   onSubmit: (data: PoseviewFormValues) => void
   onReset: () => void
   submitLoading?: boolean
 }
-const PoseviewInput = ({ disabled, onSubmit, onReset, submitLoading = false }: Props) => {
+const PoseviewInput = ({ display, onSubmit, onReset, submitLoading = false }: Props) => {
   const { register, handleSubmit, getValues, setValue, formState: { errors }, reset } = useForm<PoseviewFormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -32,7 +32,7 @@ const PoseviewInput = ({ disabled, onSubmit, onReset, submitLoading = false }: P
   // eslint-disable-next-line react/jsx-key
   const contentList: ReactNode[] = [<JobTitle/>, <ReceptorFile/>, <LigandFile/>]
   return <>
-    <div className="px-5 flex flex-col items-center justify-between h-full pb-3" style={{ display: disabled ? 'none' : 'flex' }}>
+    <div className="px-5 flex flex-col items-center justify-between h-full pb-3" style={{ display: display ? 'flex' : 'none' }}>
       <form className="h-full flex justify-between flex-col w-full" onSubmit={handleSubmit((data) => {
         onSubmit(data)
       })}>

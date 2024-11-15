@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useContext as useContextSelector } from 'use-context-selector'
 import type { PoseviewFormValues } from './Input'
 import PoseviewInput from './Input'
 import PoseviewResult from './Result'
 import { MolstarContext, OutputContext, PoseviewContext } from './context'
+import InputOutputRowLayout from '@/app/components/layout/input-output-row-layout'
 import useMolstar from '@/app/hooks/useMolstar'
-import InputResultRowLayout from '@/app/components/layout/input-result-row-layout'
 import { LayoutModeEnum } from '@/types/components'
 import useReceptor from '@/app/(commonLayout)/utility/poseview/hooks/useReceptor'
 import useLigand from '@/app/(commonLayout)/utility/poseview/hooks/useLigand'
@@ -17,28 +17,30 @@ import { UtilityTaskState } from '@/types/utility'
 import { ToastContext } from '@/app/components/base/toast'
 import { UtilityPubSub } from '@/pubsub'
 import useUtilityResult from '@/app/hooks/useUtilityResult'
+import { useInputOutputRowLayoutHooks } from '@/app/components/layout/input-output-row-layout/hooks'
 const Molstar = dynamic(() => import('@/app/components/Molstar').then(m => m.default), {
   ssr: false,
 })
 const Poseview = () => {
   const { notify } = useContextSelector(ToastContext)
-  const [mode, setMode] = useState<LayoutModeEnum>(LayoutModeEnum.input)
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
 
-  const [outputDisplay, setOutputDisplay] = useState<boolean>(false)
-
-  const inputDisabled = useMemo(() => {
-    return !(LayoutModeEnum.input === mode)
-  }, [mode])
-  const resultDisabled = useMemo(() => {
-    return !(LayoutModeEnum.result === mode)
-  }, [mode])
+  // 自定义hooks区域区域
+  const {
+    layoutMode,
+    setLayoutMode,
+    isDisplayInput,
+    isDisplayOutput,
+    outputDisabled,
+    setOutputDisabled,
+  } = useInputOutputRowLayoutHooks()
 
   const receptorHooks = useReceptor()
   const { getReceptorUploadResult, addReceptorResultShow, receptorAllClear } = receptorHooks
 
   const ligandHooks = useLigand()
   const { getLigandUploadResult, addLigandResultShow, updateLigandFilesIds, ligandAllClear } = ligandHooks
+
   const molstartHooks = useMolstar()
   const { MolstarRef, getStructure, clear } = molstartHooks
 
@@ -48,6 +50,7 @@ const Poseview = () => {
   // 提交的缓存数据
   const { addSubmitMemory, getSubmitMemory, clearSubmitMemory } = useMemory()
 
+  // websocket接收数据的处理
   const dataCollating = (poseview: UtilityWebSockingData) => {
     try {
       const { id, data } = poseview
@@ -56,7 +59,7 @@ const Poseview = () => {
         const { status, result } = data
         if (status === UtilityTaskState.SUCCESS) {
           setResultData(result)
-          setOutputDisplay(true)
+          setOutputDisabled(false)
           const resId = data.id
           if (resId)
             setResultTaskId(resId)
@@ -88,7 +91,7 @@ const Poseview = () => {
           }
 
           if (result)
-            setMode(LayoutModeEnum.result)
+            setLayoutMode(LayoutModeEnum.output)
         }
         else if (status === UtilityTaskState.FAILURE) {
           setSubmitLoading(false)
@@ -130,16 +133,16 @@ const Poseview = () => {
     clearSubmitMemory()
     resultAllClear()
     setSubmitLoading(false)
-    setOutputDisplay(false)
+    setOutputDisabled(true)
   }
 
   const left = () => {
     return <>
       <MolstarContext.Provider value={{ ...molstartHooks }}>
         <PoseviewContext.Provider value={{ ...receptorHooks, ...ligandHooks }}>
-          <PoseviewInput disabled={inputDisabled} onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading}/>
+          <PoseviewInput display={isDisplayInput} onSubmit={handleSubmit} onReset={handleReset} submitLoading={submitLoading}/>
           <OutputContext.Provider value={{ ...utilityResultHooks, isShowHeader: true }}>
-            <PoseviewResult disabled={resultDisabled} />
+            <PoseviewResult display={isDisplayOutput} />
           </OutputContext.Provider>
         </PoseviewContext.Provider>
       </MolstarContext.Provider>
@@ -157,12 +160,12 @@ const Poseview = () => {
     }
   }, [])
   return <>
-    <InputResultRowLayout
-      mode={mode}
+    <InputOutputRowLayout
+      mode={layoutMode}
       onModeChange={(mode: LayoutModeEnum) => {
-        setMode(mode)
+        setLayoutMode(mode)
       }}
-      outputDisplay={outputDisplay}
+      outputDisabled={outputDisabled}
       left={left()}
       right={right()}
     />
