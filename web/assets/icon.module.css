@@ -1,0 +1,49 @@
+/*
+ * @Author: alvahao wanghao@alphama.com.cn
+ * @Date: 2024-11-13 09:04:10
+ * @LastEditors: alvahao wanghao@alphama.com.cn
+ * @LastEditTime: 2024-11-13 16:22:34
+ * @FilePath: \web\assets\icon.css
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+.EyeLine {
+    background-image: url('./icons/EyeLine-01.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+
+.EyeOffLine {
+background-image: url('./icons/EyeOffLine-02.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
+
+.Preview2D {
+background-image: url('./icons/2D-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
+
+.DocumentIcon {
+background-image: url('./icons/document-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
+
+.DownloadIcon {
+background-image: url('./icons/download-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
+
+/* .TmpIcon {
+background-image: url('./icons/3D.svg');
+background-position: center;
+background-repeat: no-repeat;
+} */
+.SeqIcon {
+background-image: url('./icons/seq-01.svg');
+background-position: center;
+background-repeat: no-repeat;
+}

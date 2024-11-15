@@ -2,7 +2,7 @@ import { memo } from 'react'
 import DOMPurify from 'dompurify'
 import styles from './index.module.css'
 import AmModal from '@/app/components/base/am-modal'
-import type { SVGPreview } from '@/types/docking'
+import type { SVGPreview } from '@/types/utility'
 import cn from '@/utils/classnames'
 const SanitizedHtml = ({ htmlString }: { htmlString: string }) => {
   const sanitizedHtml = DOMPurify.sanitize(htmlString)

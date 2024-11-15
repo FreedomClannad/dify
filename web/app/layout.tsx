@@ -7,7 +7,7 @@ import { getLocaleOnServer } from '@/i18n/server'
 import './styles/globals.css'
 import './styles/markdown.scss'
 import { Providers } from '@/app/providers'
-
+import './../assets/icon.css'
 export const metadata = {
   title: 'Dify',
 }

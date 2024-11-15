@@ -6,11 +6,11 @@ import { LayoutModeEnum } from '@/types/components'
 type Props = {
   mode: LayoutModeEnum
   onModeChange: (mode: LayoutModeEnum) => void
-  outputDisplay: boolean
+  outputDisabled: boolean
   left?: ReactNode
   right?: ReactNode
 }
-const InputResultRowLayout = ({ mode, onModeChange, outputDisplay, left, right }: Props) => {
+const InputOutputRowLayout = ({ mode, onModeChange, outputDisabled, left, right }: Props) => {
   useEffect(() => {
 
   }, [mode])
@@ -27,10 +27,10 @@ const InputResultRowLayout = ({ mode, onModeChange, outputDisplay, left, right }
               <span>Input</span>
             </div>
             <div
-              className={cn(mode === LayoutModeEnum.result && style.mode, 'ml-10 h-[44px] flex items-center justify-center cursor-not-allowed text-gray-1003 relative px-4 after:bg-primary-1001', outputDisplay && 'cursor-pointer text-gray-950')}
+              className={cn(mode === LayoutModeEnum.output && style.mode, 'ml-10 h-[44px] flex items-center justify-center cursor-not-allowed text-gray-1003 relative px-4 after:bg-primary-1001', !outputDisabled && 'cursor-pointer text-gray-950')}
               onClick={() => {
-                if (outputDisplay)
-                  onModeChange(LayoutModeEnum.result)
+                if (!outputDisabled)
+                  onModeChange(LayoutModeEnum.output)
               }}>
               <span>Output</span>
             </div>
@@ -45,4 +45,4 @@ const InputResultRowLayout = ({ mode, onModeChange, outputDisplay, left, right }
 
   </>)
 }
-export default InputResultRowLayout
+export default InputOutputRowLayout

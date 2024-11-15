@@ -20,43 +20,47 @@ const ReceptorFile = () => {
   return <>
     <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
       <div>
-        <UploadCard uploadURL="/molecular-docking/files/upload" accept={accept} fileList={pocketReceptorUploadFileList} onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
-          const n_list = list.map((item) => {
-            if (item.fileID === fileItem.fileID) {
-              const file = item.file
-              const { id, mime_type, extension, name } = file
+        <UploadCard
+          description="Select or drag and drop receptor file here"
+          uploadURL="/molecular-docking/files/upload"
+          accept={accept} fileList={pocketReceptorUploadFileList}
+          onFileUpdate={(fileItem: FileItem, progress: number, list: FileItem[]) => {
+            const n_list = list.map((item) => {
+              if (item.fileID === fileItem.fileID) {
+                const file = item.file
+                const { id, mime_type, extension, name } = file
 
-              if (id && mime_type) {
-                setValue('pdb_file_id', id)
-                const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
-                loadStructureFromUrl(getDockingFileURL({ id, mime_type }), format)
-                addPocketReceptorUploadResultFile({ id, mime_type, extension: format, name, fileID: id })
-                addStructure({ id, visible: true })
+                if (id && mime_type) {
+                  setValue('pdb_file_id', id)
+                  const format = (formats[extension as keyof typeof formats] || 'mmcif') as BuiltInTrajectoryFormat
+                  loadStructureFromUrl(getDockingFileURL({ id, mime_type }), format)
+                  addPocketReceptorUploadResultFile({ id, mime_type, extension: format, name, fileID: id })
+                  addStructure({ id, visible: true })
                 // TODO 屏蔽向后端请求中心点坐标
                 // getCenterPosition(id).then((res) => {
                 //   const { center_x, center_y, center_z, residue_number, chain } = res
                 //   setCenterPosition({ x: center_x, y: center_y, z: center_z, num: residue_number.toString(), chain })
                 // })
+                }
+                return {
+                  ...item,
+                  progress,
+                }
               }
-              return {
-                ...item,
-                progress,
-              }
-            }
-            return item
-          })
-          setPocketReceptorUploadFileList(n_list)
-        }} prepareFileList={(files) => {
-          setPocketReceptorUploadFileList(files)
-          if (files.length === 0)
-            setValue('pdb_file_id', '')
-        }}
-        onUploadError={(file) => {
-          const n_list = pocketReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
-          setPocketReceptorUploadFileList(n_list)
-          const { id } = file.file
-          id && deletePocketReceptorUploadResultFile(id)
-        }}
+              return item
+            })
+            setPocketReceptorUploadFileList(n_list)
+          }} prepareFileList={(files) => {
+            setPocketReceptorUploadFileList(files)
+            if (files.length === 0)
+              setValue('pdb_file_id', '')
+          }}
+          onUploadError={(file) => {
+            const n_list = pocketReceptorUploadFileList.filter(item => item.fileID !== file.fileID)
+            setPocketReceptorUploadFileList(n_list)
+            const { id } = file.file
+            id && deletePocketReceptorUploadResultFile(id)
+          }}
         />
       </div>
       {errors.pdb_file_id && <div className="mt-1"><span className='text-red-500 '>{errors.pdb_file_id.message}</span></div>}

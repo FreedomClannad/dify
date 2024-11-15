@@ -1,14 +1,13 @@
 import { Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
-import { DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import { saveAs } from 'file-saver'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getUUID } from '@/utils'
 import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalOutputContext'
-import Tooltip from '@/app/components/base/tooltip'
 import { downloadGlobalFile } from '@/service/docking'
+import DownloadTooltip from '@/app/components/download-tooltip'
 
 export type TableType = {
   id: string
@@ -78,7 +77,7 @@ const GlobalOutputFile = () => {
     setTable(n_list)
   }
 
-  const handleDownloadClick = async () => {
+  const handleDownload = async () => {
     if (selected.size > 0) {
       const selectedItems = table.filter(item => selected.has(item.id))
       const selectedData = selectedItems.map(item => item.mode).join(',')
@@ -127,13 +126,7 @@ const GlobalOutputFile = () => {
   return (
     <VerticalTitleCard
       title="Displayed Results"
-      right={
-        <Tooltip popupContent="Download">
-          <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}>
-            <DocumentArrowDownIcon />
-          </div>
-        </Tooltip>
-      }
+      right={<DownloadTooltip onClick={handleDownload}/>}
     >
       {table.length === 0
         ? (

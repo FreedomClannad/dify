@@ -59,9 +59,11 @@ export const useUtilityA = () => {
   }
 
   // 更新数据
-  const uploadResultShow = (res: UtilityResultShow) => {
+  const updateResultShow = (res: UtilityResultShow) => {
     setResultShowList((prev) => {
+      console.log(prev)
       const index = prev.findIndex(item => item.id === res.id)
+      console.log(index)
       if (index !== -1)
         prev[index] = { ...prev[index], ...res }
       return [...prev]
@@ -87,6 +89,12 @@ export const useUtilityA = () => {
     })
     setResultShowList(list)
   }
+
+  const allClear = () => {
+    clearUploadFileList()
+    clearUploadResult()
+    clearResultShow()
+  }
   return {
     // 上传文件内容
     uploadFileList,
@@ -103,8 +111,11 @@ export const useUtilityA = () => {
     resultShowList,
     setResultShowList,
     addResultShow,
-    uploadResultShow,
+    updateResultShow,
     clearResultShow,
     visibleResultShow,
+
+    // 公共方法
+    allClear,
   }
 }

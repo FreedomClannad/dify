@@ -1,6 +1,6 @@
 import { DockingPubSub } from '@/pubsub'
 
-export const GlobalWebsocket = (obj: any) => {
+export const GlobalData = (obj: any) => {
   let id = ''
   if ('id' in obj)
     id = obj.id

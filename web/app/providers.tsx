@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { NextUIProvider } from '@nextui-org/system'
 import { useEffect } from 'react'
-import WebSocketHook from '@/app/websocket/WebSocketHook'
+import WebSocketHook from '@/websocket/WebSocketHook'
 
 export type ProvidersProps = {
   children: React.ReactNode

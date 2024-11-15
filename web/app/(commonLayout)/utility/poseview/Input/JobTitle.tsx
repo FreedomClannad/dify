@@ -8,7 +8,7 @@ const JobTitle = () => {
     <input
       {...register('task_name')}
       className='h-8 px-3 text-sm font-normal rounded grow border-gray-550 border-solid border-2 w-full'
-      placeholder="<Molecular Docking - 1>"/>
+      placeholder="<Poseview demo>"/>
     {errors.task_name && <span className='text-red-500'>{errors.task_name.message}</span>}
   </VerticalTitleCard>
 }

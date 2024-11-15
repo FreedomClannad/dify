@@ -1,6 +1,7 @@
 import { get, post } from './base'
-import type { HistoryFile, HistoryTask } from '@/types/utility'
-import type { Collection } from '@/app/components/tools/types'
+import type { HistoryFile, HistoryTask, UtilityResult } from '@/types/utility'
+import type { Collection } from '@/app/components/utility/types'
+import type { Label } from '@/app/components/utility/labels/constant'
 
 // 这里是历史记录部分
 type HistoryFileInfo = {
@@ -15,6 +16,12 @@ type HistoryFileInfo = {
 
 export const getFileInfo = (params: HistoryFile) => {
   return get<HistoryFileInfo>('/history_task/file', { params })
+}
+
+export const getFileInfoFunction = (params: HistoryFile, callback: (res: HistoryFileInfo) => void) => {
+  getFileInfo(params).then((res) => {
+    callback(res)
+  })
 }
 
 type GlobalHistoryResult = {
@@ -60,4 +67,20 @@ export const fetchUtilityCollectionList = () => {
   return get<Collection[]>('/sciminer/tools')
 }
 
+export const fetchUtilityLabelList = () => {
+  return get<Label[]>('/sciminer/util-labels')
+}
+
+export const getHistoryDetailData = <T>(data: HistoryTask) => {
+  return post<T>('/history_task/detail', { body: data })
+}
+
+// 获取文件渲染图片
+export const getFileRenderList = (id: string) => {
+  return get<string[]>(`/molecular-docking/files/rendering?file_id=${id}`)
+}
+
 // 这里是poseview的内容
+export const submitPoesviewTask = (data: any) => {
+  return post<UtilityResult>('/poseview/task', { body: data })
+}

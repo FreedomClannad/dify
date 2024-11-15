@@ -1,15 +1,14 @@
 import { useContext, useState } from 'react'
-import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { v4 as uuid4 } from 'uuid'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalOutputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import CardLine from '@/app/(commonLayout)/utility/docking/components/CardLine'
-import Tooltip from '@/app/components/base/tooltip'
-import ModalImage from '@/app/(commonLayout)/utility/docking/components/ModalImage'
-import ModalText from '@/app/(commonLayout)/utility/docking/components/ModalText'
-import type { SVGPreview } from '@/types/docking'
+import ModalImage from '@/app/components/ALM/ModalImage'
+import ModalText from '@/app/components/ALM/ModalText'
+import type { SVGPreview } from '@/types/utility'
 import { getGlobalReceptorFileContent, getLigandFileRenderList } from '@/service/docking'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 const GlobalInputFile = () => {
   const {
@@ -106,7 +105,11 @@ const GlobalInputFile = () => {
                   return <CardLine
                     key={`receptro-${index}`}
                     {...item}
-                    icon={globalReceptorFilesIds ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleReceptorClick}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
+                    name = 'protein sequence'
+                    icon={globalReceptorFilesIds
+                      ? <div className="w-4 h-4 text-gray-500 cursor-pointer"
+                        onClick={handleReceptorClick}><IconSVG name='SeqIcon'></IconSVG></div>
+                      : null}
                   />
                 })
               }
@@ -115,7 +118,8 @@ const GlobalInputFile = () => {
                   return <CardLine
                     key={`ligand-${index}`}
                     {...item}
-                    icon={globalLigandFilesIds ? <Tooltip popupContent="Ligand的上传的内容显示"> <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleLigandClick}><DocumentMagnifyingGlassIcon /></div></Tooltip> : null}
+                    name="ligand to dock"
+                    icon={globalLigandFilesIds ? <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleLigandClick}><IconSVG name='Preview2D'></IconSVG></div> : null}
                   />
                 })
               }

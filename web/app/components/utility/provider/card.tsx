@@ -10,7 +10,7 @@ import { Tag01 } from '@/app/components/base/icons/src/vender/line/financeAndECo
 import I18n from '@/context/i18n'
 import { getLanguage } from '@/i18n/language'
 import { useStore as useLabelStore } from '@/app/components/tools/labels/store'
-import { fetchLabelList } from '@/service/tools'
+import { fetchUtilityLabelList } from '@/service/utility'
 
 type Props = {
   active: boolean
@@ -39,7 +39,7 @@ const ProviderCard = ({
   const setLabelList = useLabelStore(s => s.setLabelList)
 
   useMount(() => {
-    fetchLabelList().then((res) => {
+    fetchUtilityLabelList().then((res) => {
       setLabelList(res)
     })
   })

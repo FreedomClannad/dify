@@ -1,14 +1,13 @@
 import { Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
-import { DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import { saveAs } from 'file-saver'
-import Tooltip from '@/app/components/base/tooltip'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
 import { getUUID } from '@/utils'
 import { downloadPocketFile } from '@/service/docking'
+import DownloadTooltip from '@/app/components/download-tooltip'
 
 export type TableType = {
   id: string
@@ -32,15 +31,6 @@ const initTable = (data: any[]): TableType[] => {
   // }))
   const list: TableType[] = []
   data.forEach((item, index) => {
-    list.push({
-      id: getUUID(),
-      mode: item.mode,
-      mol: item.mol,
-      score: item['CNN pose score'],
-      affinity: item['affinity(kcal/mol)'],
-      cnnAffinity: item['CNN affinity'],
-      visible: index === 0,
-    })
     list.push({
       id: getUUID(),
       mode: item.mode,
@@ -94,7 +84,7 @@ const DockingOutputFile = () => {
     setTable(updatedTable)
   }
 
-  const handleDownloadClick = async () => {
+  const handleDownload = async () => {
     if (selected.size > 0) {
       const selectedItems = table.filter(item => selected.has(item.id))
       const selectedData = selectedItems.map(item => item.mode).join(',')
@@ -148,13 +138,7 @@ const DockingOutputFile = () => {
   return (
     <VerticalTitleCard
       title="Displayed Results"
-      right={
-        <Tooltip popupContent="Download">
-          <div className="w-4 h-4 text-gray-500 cursor-pointer" onClick={handleDownloadClick}>
-            <DocumentArrowDownIcon />
-          </div>
-        </Tooltip>
-      }
+      right={<DownloadTooltip onClick={handleDownload}/>}
     >
       {table.length === 0
         ? (

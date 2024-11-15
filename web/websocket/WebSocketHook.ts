@@ -1,7 +1,6 @@
 import { useWebSocket } from 'ahooks'
 import { useEffect } from 'react'
-import { PocketWebsocket } from '@/app/websocket/pocketWebsocket'
-import { GlobalWebsocket } from '@/app/websocket/globalWebsocket'
+import { handleWebsocketData } from '@/websocket/data'
 
 class WebSocketShakeHands {
   private timeout = 10000 // 5秒一次心跳
@@ -79,10 +78,7 @@ const WebSocketHook = () => {
       try {
         const n_obj = JSON.parse(data)
         console.log('JSON:', n_obj)
-        if ('molecular_docking' in n_obj)
-          PocketWebsocket(n_obj.molecular_docking)
-        if ('global_docking' in n_obj)
-          GlobalWebsocket(n_obj.global_docking)
+        handleWebsocketData(n_obj)
       }
       catch (e) {
         console.log(e)
