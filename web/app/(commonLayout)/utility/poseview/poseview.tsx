@@ -25,6 +25,8 @@ const Poseview = () => {
   const [mode, setMode] = useState<LayoutModeEnum>(LayoutModeEnum.input)
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
 
+  const [outputDisplay, setOutputDisplay] = useState<boolean>(false)
+
   const inputDisabled = useMemo(() => {
     return !(LayoutModeEnum.input === mode)
   }, [mode])
@@ -54,6 +56,7 @@ const Poseview = () => {
         const { status, result } = data
         if (status === UtilityTaskState.SUCCESS) {
           setResultData(result)
+          setOutputDisplay(true)
           const resId = data.id
           if (resId)
             setResultTaskId(resId)
@@ -127,6 +130,7 @@ const Poseview = () => {
     clearSubmitMemory()
     resultAllClear()
     setSubmitLoading(false)
+    setOutputDisplay(false)
   }
 
   const left = () => {
@@ -158,7 +162,7 @@ const Poseview = () => {
       onModeChange={(mode: LayoutModeEnum) => {
         setMode(mode)
       }}
-      outputDisplay={true}
+      outputDisplay={outputDisplay}
       left={left()}
       right={right()}
     />
