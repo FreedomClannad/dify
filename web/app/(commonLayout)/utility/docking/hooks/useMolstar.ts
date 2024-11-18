@@ -36,7 +36,7 @@ const useMolstar = () => {
 
   // 添加分子/蛋白质
   const addStructure = (dockingMolstar: DockingMolstar) => {
-    setDockingMolstarList([...dockingMolstarList, dockingMolstar])
+    setDockingMolstarList([...dockingMolstarListRef.current, dockingMolstar])
   }
 
   // 根据id获取数据
@@ -71,9 +71,12 @@ const useMolstar = () => {
   // 设置分子/蛋白质显隐
   const setStructureVisibility = ({ dockingMolstar, addCallback }: { dockingMolstar: DockingMolstar; addCallback?: () => void }) => {
     if (MolstarRef.current) {
-      const index = dockingMolstarList.findIndex(
+      const index = dockingMolstarListRef.current.findIndex(
         item => item.id === dockingMolstar.id,
       )
+      console.log(index)
+      console.log(dockingMolstar)
+      console.log(dockingMolstarListRef.current)
       if (index === -1) {
         addStructure(dockingMolstar)
         addCallback?.()
