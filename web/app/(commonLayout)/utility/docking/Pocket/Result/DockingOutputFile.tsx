@@ -48,7 +48,7 @@ const DockingOutputFile = () => {
   const [table, setTable] = useState<TableType[]>([])
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const { resultData, resultID } = useContext(ResultContext)
-  const { addStructure, loadStructureFromData, setStructureVisibility } = useContext(MolstarContext)
+  const { addStructure, loadStructureFromData, setStructureVisibility, loadStructuresFromUrlsAndMerge } = useContext(MolstarContext)
 
   useEffect(() => {
     try {
@@ -75,6 +75,7 @@ const DockingOutputFile = () => {
           dockingMolstar: { id: item.id, visible },
           addCallback: () => {
             loadStructureFromData(item.mol, 'mol')
+            // loadStructuresFromUrlsAndMerge()
           },
         })
         return { ...item, visible }

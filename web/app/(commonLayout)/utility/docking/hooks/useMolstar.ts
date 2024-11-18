@@ -131,6 +131,13 @@ const useMolstar = () => {
     }
   }
 
+  const loadStructuresFromUrlsAndMerge = () => {
+    if (MolstarRef.current) {
+      console.log('加载多个结构并合并')
+      MolstarRef.current.loadStructuresFromUrlsAndMerge()
+    }
+  }
+
   useEffect(() => {
     if (MolstarRef.current && isMolstarMounted) {
       console.log('渲染使用缓存')
@@ -148,6 +155,7 @@ const useMolstar = () => {
     setStructureVisibility,
     clear,
     setIsMolstarMounted,
+    loadStructuresFromUrlsAndMerge,
   }
 }
 

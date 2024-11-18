@@ -47,6 +47,7 @@ const Container = () => {
     loadStructureFromUrl,
     loadStructureFromData,
     setStructureVisibility,
+    loadStructuresFromUrlsAndMerge,
     clear,
   } = useMolstar()
 
@@ -581,7 +582,7 @@ const Container = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <MolstarContext.Provider value={{ addStructure, dockingMolstarList, loadStructureFromUrl, loadStructureFromData, setStructureVisibility }}>
+          <MolstarContext.Provider value={{ addStructure, dockingMolstarList, loadStructureFromUrl, loadStructureFromData, setStructureVisibility, loadStructuresFromUrlsAndMerge }}>
             {Content()}
           </MolstarContext.Provider>
         </div>

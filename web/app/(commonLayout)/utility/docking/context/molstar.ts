@@ -8,6 +8,7 @@ type MolstarContextType = {
   loadStructureFromUrl: (url: string, formats: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
   setStructureVisibility: ({ dockingMolstar, addCallback }: { dockingMolstar: DockingMolstar; addCallback?: () => void }) => void
+  loadStructuresFromUrlsAndMerge: () => void
 }
 
 export const MolstarContext = createContext<MolstarContextType>({
@@ -16,4 +17,5 @@ export const MolstarContext = createContext<MolstarContextType>({
   loadStructureFromUrl: (url: string, formats: BuiltInTrajectoryFormat) => {},
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => {},
   setStructureVisibility: ({ dockingMolstar, addCallback }: { dockingMolstar: DockingMolstar; addCallback?: () => void }) => {},
+  loadStructuresFromUrlsAndMerge: () => {},
 })
