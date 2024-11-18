@@ -43,7 +43,7 @@ const OutputFile = () => {
   const handleDownload = async () => {
     const data = await downloadPoseviewFile(resultTaskId)
     if (data)
-      saveAs(data, `${resultTaskId}.zip`)
+      saveAs(data, `SciMiner_2DInteraction_${resultTaskId}.zip`)
   }
   return (
     <VerticalTitleCard title="Displayed Results"

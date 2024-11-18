@@ -75,7 +75,9 @@ const DockingOutputFile = () => {
           dockingMolstar: { id: item.id, visible },
           addCallback: () => {
             loadStructureFromData(item.mol, 'mol')
-            // loadStructuresFromUrlsAndMerge()
+            setTimeout(() => {
+              loadStructuresFromUrlsAndMerge()
+            }, 500)
           },
         })
         return { ...item, visible }
