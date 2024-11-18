@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import cn from 'classnames'
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import style from './style.module.css'
 import Tooltip from '@/app/components/base/tooltip'
+import IconSVG from '@/app/components/ALM/IconSVG'
 type props = {
   title: string
   rootClass?: string
@@ -26,10 +26,11 @@ const VerticalTitleCard = ({ title, rootClass, headerClass, contentClass, toolti
           <Tooltip popupContent={tooltip} disabled={tooltipDisabled}>
             {tooltipDisabled
               ? <></>
-              : <div className="flex mt-1 ml-2">
-                <div className='w-4 h-4 text-gray-500'>
-                  <QuestionMarkCircleIcon/>
-                </div>
+              : <div className="flex" style={{ alignItems: 'center', marginLeft: '10px' }}>
+                {/* <div className='w-4 h-4 text-gray-500'> */}
+                {/* <QuestionMarkCircleIcon/> */}
+                <IconSVG name='AlmPromptIcon' />
+                {/* </div> */}
               </div>}
 
           </Tooltip>
