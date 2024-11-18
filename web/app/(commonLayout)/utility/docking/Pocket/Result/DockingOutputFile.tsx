@@ -75,7 +75,9 @@ const DockingOutputFile = () => {
           dockingMolstar: { id: item.id, visible },
           addCallback: () => {
             loadStructureFromData(item.mol, 'mol')
-            // loadStructuresFromUrlsAndMerge()
+            setTimeout(() => {
+              loadStructuresFromUrlsAndMerge()
+            }, 500)
           },
         })
         return { ...item, visible }
@@ -91,12 +93,12 @@ const DockingOutputFile = () => {
       const selectedData = selectedItems.map(item => item.mode).join(',')
       const data = await downloadPocketFile(resultID, selectedData)
       if (data)
-        saveAs(data, `${resultID}_selected.zip`)
+        saveAs(data, `SciMiner_PocketDocking_${resultID}.zip`)
     }
     else {
       const data = await downloadPocketFile(resultID, 'all')
       if (data)
-        saveAs(data, `${resultID}.zip`)
+        saveAs(data, `SciMiner_PocketDocking_${resultID}.zip`)
     }
   }
 

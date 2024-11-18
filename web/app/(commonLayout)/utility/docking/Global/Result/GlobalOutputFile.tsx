@@ -83,12 +83,12 @@ const GlobalOutputFile = () => {
       const selectedData = selectedItems.map(item => item.mode).join(',')
       const data = await downloadGlobalFile(resultID, selectedData)
       if (data)
-        saveAs(data, `${resultID}_selected.zip`)
+        saveAs(data, `SciMiner_GlobalDocking_${resultID}.zip`)
     }
     else {
       const data = await downloadGlobalFile(resultID, 'all')
       if (data)
-        saveAs(data, `${resultID}.zip`)
+        saveAs(data, `SciMiner_GlobalDocking_${resultID}.zip`)
     }
   }
 
