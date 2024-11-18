@@ -52,10 +52,6 @@ import { Asset } from 'molstar/lib/mol-util/assets'
 
 import { ColorNames } from 'molstar/lib/mol-util/color/names'
 import { Mesh } from 'molstar/lib/mol-geo/geometry/mesh/mesh'
-import { getBoxMesh } from 'molstar/lib/mol-plugin-state/transforms/shape'
-import { Shape } from 'molstar/lib/mol-model/shape'
-import type { Box3D } from 'molstar/lib/mol-math/geometry'
-import { ShapeRepresentation } from 'molstar/lib/mol-repr/shape/representation'
 
 import { Color } from 'molstar/lib/mol-util/color'
 import 'molstar/lib/mol-util/polyfill'
@@ -253,45 +249,6 @@ const MergeStructures = PluginStateTransform.BuiltIn({
     })
   },
 })
-
-// // 绘制3D框
-// const Draw3DBox = PluginStateTransform.BuiltIn({
-//   name: 'draw-box-3d',
-//   display: 'Bounding Box',
-//   from: PluginStateObject.Molecule.Structure,
-//   to: PluginStateObject.Shape.Representation3D,
-//   params: {
-//     radius: PD.Numeric(0.05, { min: 0.01, max: 4, step: 0.01 }, { isEssential: true }),
-//     color: PD.Color(ColorNames.red, { isEssential: true }),
-//     ...Mesh.Params,
-//   },
-// })({
-//   canAutoUpdate() {
-//     return true
-//   },
-//   apply({ a, params }, plugin: PluginContext) {
-//     return Task.create('Bounding Box', async (ctx) => {
-//       const repr = ShapeRepresentation((_, data: { box: Box3D; radius: number; color: Color }, __, shape) => {
-//         const mesh = getBoxMesh(data.box, data.radius, shape?.geometry)
-//         return Shape.create('Bouding Box', data, mesh, () => data.color, () => 1, () => 'Bounding Box')
-//       }, Mesh.Utils)
-//       await repr.createOrUpdate(params, { box: a.data.boundary.box, radius: params.radius, color: params.color }).runInContext(ctx)
-//       console.log('stru', a)
-//       return new PluginStateObject.Shape.Representation3D({ repr, sourceData: a.data }, { label: 'Bounding Box' })
-//     })
-//   },
-//   update({ a, b, oldParams, newParams }, plugin: PluginContext) {
-//     return Task.create('Bounding Box', async (ctx) => {
-//       await b.data.repr.createOrUpdate(newParams, { box: a.data.boundary.box, radius: newParams.radius, color: newParams.color }).runInContext(ctx)
-//       b.data.sourceData = a.data
-//       return StateTransformer.UpdateResult.Updated
-//     })
-//   },
-// })
-
-// export { Draw3DBox }
-
-// type Draw3DBoxType = typeof Draw3DBox
 
 export class Viewer {
   constructor(public plugin: PluginUIContext) {
@@ -906,7 +863,8 @@ export class Viewer {
 
   async Draw3DBox() {
     console.log('ccc')
-    const structure = this.plugin.managers.structure.focus.current?.loci.structure
+    const stru = this.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
+    const structure = stru?.cell.obj
     if (!structure) {
       console.error('No structure found.')
       return
@@ -918,20 +876,11 @@ export class Viewer {
       ...Mesh.Params,
     }
     console.log('sssss', params)
-    const repr = ShapeRepresentation((_, data: { box: Box3D; radius: number; color: Color }, __, shape) => {
-      const mesh = getBoxMesh(data.box, data.radius, shape?.geometry)
-      return Shape.create('Bouding Box', data, mesh, () => data.color, () => 1, () => 'Bounding Box')
-    }, Mesh.Utils)
-
-    const box = structure.boundary?.box
-    if (!box) {
-      console.error('No bounding box found.')
-      return
-    }
-
-    repr.createOrUpdate(params, { box: structure.boundary.box, radius: params.radius, color: params.color })
-    console.log('repr', repr)
-    return new PluginStateObject.Shape.Representation3D({ repr, sourceData: structure }, { label: 'Bounding Box' })
+    const focusTarget = this.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
+    const parentRef = focusTarget?.cell.transform.ref
+    const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure }, { params })
+    await this.plugin.state.data.updateTree(data).run()
+    // return data
   }
 }
 

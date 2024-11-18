@@ -53,6 +53,10 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
   const DrawBox = async () => {
     console.log('aaa')
     if (molstart && molstart.current) {
+      // const stru = molstart.current.plugin.managers.structure.focus.current?.loci.structure
+      // const stru = molstart.current.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
+      // const fouce_data = stru?.cell.obj
+      // console.log('type', stru)
       const drawbox = await molstart.current?.Draw3DBox()
       console.log('www', drawbox)
       return drawbox
