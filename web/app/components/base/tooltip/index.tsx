@@ -17,6 +17,7 @@ export type TooltipProps = {
   offset?: OffsetOptions
   needsDelay?: boolean
   asChild?: boolean
+  maxWidth?: number
 }
 
 const Tooltip: FC<TooltipProps> = ({
@@ -30,6 +31,7 @@ const Tooltip: FC<TooltipProps> = ({
   offset,
   asChild = true,
   needsDelay = false,
+  maxWidth = 400, // 设置提示框的最大宽度
 }) => {
   const [open, setOpen] = useState(false)
   const [isHoverPopup, {
@@ -99,6 +101,9 @@ const Tooltip: FC<TooltipProps> = ({
             'relative px-3 py-2 text-xs font-normal text-gray-700 bg-white rounded-md shadow-lg break-words',
             popupClassName,
           )}
+          style={{
+            maxWidth: `${maxWidth}px`, // 限制最大宽度
+          }}
           onMouseEnter={() => triggerMethod === 'hover' && setHoverPopup()}
           onMouseLeave={() => triggerMethod === 'hover' && handleLeave(false)}
         >

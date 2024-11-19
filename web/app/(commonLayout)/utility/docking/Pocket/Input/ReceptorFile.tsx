@@ -18,7 +18,7 @@ const ReceptorFile = () => {
   const { setValue, errors } = useContext(FormContext)
   const accept = Object.keys(formats).map(key => `.${key}`).join(',')
   return <>
-    <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB">
+    <VerticalTitleCard title="Receptor file" tooltip="蛋白结构文件：pdb格式。蛋白被设置为刚性。">
       <div>
         <UploadCard
           description="Select or drag and drop receptor file here"

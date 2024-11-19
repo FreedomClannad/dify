@@ -29,7 +29,7 @@ const VerticalTitleCard = ({ title, rootClass, headerClass, contentClass, toolti
               : <div className="flex" style={{ alignItems: 'center', marginLeft: '10px' }}>
                 {/* <div className='w-4 h-4 text-gray-500'> */}
                 {/* <QuestionMarkCircleIcon/> */}
-                <IconSVG name='AlmPromptIcon' />
+                <IconSVG name='AlmPromptIcon' style={{ width: '1rem', height: '1rem' }} />
                 {/* </div> */}
               </div>}
 

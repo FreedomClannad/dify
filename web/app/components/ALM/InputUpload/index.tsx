@@ -82,6 +82,7 @@ const InputUpload = ({ value, setValue, accept, placeholder }: Props) => {
   }, [handleDrop])
   return <div ref={dropRef}>
     <Textarea
+      style={{ fontSize: '14px', backgroundColor: '#f4f4f5' }}
       value={value}
       placeholder={placeholder}
       onValueChange={setValue}

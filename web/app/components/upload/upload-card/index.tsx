@@ -207,11 +207,11 @@ const UploadCard = memo(({ accept, fileList, prepareFileList, onFileUpdate, mult
         onClick={selectHandle}>
         {!firstFile
           ? <>
-            <div className="flex flex-1 items-center justify-center px-3 ">
+            <div className="flex flex-1 items-center justify-center px-3 " style={{ backgroundColor: '#f4f4f5' }}>
               <div className='w-4 h-4  text-xs'>
                 <CloudArrowUpIcon/>
               </div>
-              <span className="ml-3 text-xs">{description}</span>
+              <span className="ml-3 text-xs" style={{ fontSize: '14px' }}>{description}</span>
             </div>
           </>
           : <>
