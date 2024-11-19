@@ -1,6 +1,5 @@
 import { Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import { saveAs } from 'file-saver'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { ResultContext } from '@/app/(commonLayout)/utility/docking/Pocket/context/PocketOutputContext'
@@ -8,6 +7,7 @@ import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/mol
 import { getUUID } from '@/utils'
 import { downloadPocketFile } from '@/service/docking'
 import DownloadTooltip from '@/app/components/download-tooltip'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 export type TableType = {
   id: string
@@ -184,7 +184,8 @@ const DockingOutputFile = () => {
                   <TableCell>{item.cnnAffinity.toFixed(2)}</TableCell>
                   <TableCell className="docking-table-visibility docking-table-visibility-row docking-table-visibility-first">
                     <div className="cursor-pointer text-xs flex items-center justify-center" onClick={() => handleVisible(item)}>
-                      {item.visible ? <RiEyeLine className="w-4 h-4" /> : <RiEyeOffLine className="w-4 h-4" />}
+                      {/* {item.visible ? <RiEyeLine className="w-4 h-4" /> : <RiEyeOffLine className="w-4 h-4" />} */}
+                      {item.visible ? <IconSVG name='EyeLine' /> : <IconSVG name='EyeOffLine' />}
                     </div>
                   </TableCell>
                 </TableRow>

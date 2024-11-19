@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import cn from 'classnames'
 /*
  * @Author: alvahao wanghao@alphama.com.cn
  * @Date: 2024-11-13 09:14:11
@@ -9,6 +10,6 @@ import type { CSSProperties } from 'react'
  */
 type Props = { name: string; className?: string; style?: CSSProperties }
 const IconSVG = ({ name, className = '', style }: Props) => {
-  return <div className={` w-4 h-4 ${name} ${className}`} style={style}> </div>
+  return <div className={cn('w-5 h-5', name, className)} style={style}> </div>
 }
 export default IconSVG
