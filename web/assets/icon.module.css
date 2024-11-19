@@ -7,32 +7,32 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 .EyeLine {
-    background-image: url('./icons/EyeLine-01.svg');
+    background-image: url('./icons/alm-eye-line.svg');
     background-position: center;
     background-repeat: no-repeat;
   }
 
 
 .EyeOffLine {
-background-image: url('./icons/EyeOffLine-02.svg');
+background-image: url('./icons/alm-eye-offline.svg');
 background-position: center;
 background-repeat: no-repeat;
 }
 
 .Preview2D {
-background-image: url('./icons/2D-01.svg');
+background-image: url('./icons/alm-2d.svg');
 background-position: center;
 background-repeat: no-repeat;
 }
 
 .DocumentIcon {
-background-image: url('./icons/document-01.svg');
+background-image: url('./icons/alm-document.svg');
 background-position: center;
 background-repeat: no-repeat;
 }
 
 .DownloadIcon {
-background-image: url('./icons/download-01.svg');
+background-image: url('./icons/alm-download.svg');
 background-position: center;
 background-repeat: no-repeat;
 }
@@ -43,7 +43,91 @@ background-position: center;
 background-repeat: no-repeat;
 } */
 .SeqIcon {
-background-image: url('./icons/seq-01.svg');
+background-image: url('./icons/alm-seq.svg');
 background-position: center;
 background-repeat: no-repeat;
+}
+
+/*工作流图标*/
+.AlmStudioIcon {
+background-image: url('icons/alm-studio.svg');
+background-position: center;
+background-repeat: no-repeat;
+}
+
+/*3D图标*/
+.Alm3DIcon {
+    background-image: url('./icons/alm-3d.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*创建空白or新文件图标*/
+.AlmNewFileIcon {
+    background-image: url('./icons/alm-new-file.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*创建新模板图标*/
+.AlmNewTemplateIcon {
+    background-image: url('./icons/alm-new-template.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*全部图标*/
+.AlmAllIcon {
+    background-image: url('icons/alm-search-all.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*读取文本内容图标*/
+.AlmReadTextIcon {
+    background-image: url('icons/alm-read-text.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*文档图标*/
+.AlmDocumentIcon {
+    background-image: url('icons/alm-document.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*下载图标*/
+.AlmDownloadIcon {
+    background-image: url('icons/alm-download.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*预览图标*/
+.AlmPreviewIcon {
+    background-image: url('icons/alm-preview.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*提示图标*/
+.AlmPromptIcon {
+    background-image: url('icons/alm-prompt.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*载入图标灰色*/
+.AlmEnterIcon {
+    background-image: url('icons/alm-enter.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*载入图标白色*/
+.AlmEnterWhiteIcon {
+    background-image: url('icons/alm-enter-white.svg');
+    background-position: center;
+    background-repeat: no-repeat;
 }

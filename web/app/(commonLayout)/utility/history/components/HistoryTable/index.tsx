@@ -1,4 +1,3 @@
-import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useCallback, useMemo } from 'react'
 import { HistoryTableColumns } from '@/app/(commonLayout)/utility/history/table'
@@ -6,6 +5,7 @@ import type { UtilityHistory, UtilityHistoryKey } from '@/types/utility'
 import { UtilityHistoryState } from '@/types/utility'
 import cn from '@/utils/classnames'
 import './index.css'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 const pageSizeOptions = [10, 20, 50, 100]
 
@@ -58,7 +58,8 @@ const HistoryTable = ({ total, data, page, pageSize, onPageChange, onPageSize }:
       case 'action': {
         if (typeof cellValue === 'function') {
           return <>
-            <Chip radius="sm" color="primary" className="cursor-pointer" isDisabled={!(utilityHistory.state === UtilityHistoryState.SUCCESS)} onClick={() => { cellValue(utilityHistory) }} startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><ArrowLeftOnRectangleIcon /></div>}>
+            {/* <Chip radius="sm" color="primary" className="cursor-pointer" isDisabled={!(utilityHistory.state === UtilityHistoryState.SUCCESS)} onClick={() => { cellValue(utilityHistory) }} startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><ArrowLeftOnRectangleIcon /></div>}> */}
+            <Chip radius="sm" color="primary" className="cursor-pointer" isDisabled={!(utilityHistory.state === UtilityHistoryState.SUCCESS)} onClick={() => { cellValue(utilityHistory) }} startContent={<div className="ml-2 w-4 h-4 cursor-pointer"><IconSVG name='AlmEnterWhiteIcon'/></div>}>
               <div className="flex items-center">
                 <span>Enter</span>
               </div>

@@ -50,9 +50,18 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       return undefined
     }
   }
-  const DrawBox = () => {
-    if (molstart && molstart.current)
-      molstart.current.Draw3DBox()
+  const DrawBox = async () => {
+    console.log('aaa')
+    if (molstart && molstart.current) {
+      // const stru = molstart.current.plugin.managers.structure.focus.current?.loci.structure
+      // const stru = molstart.current.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
+      // const fouce_data = stru?.cell.obj
+      // console.log('type', stru)
+      const drawbox = await molstart.current?.Draw3DBox()
+      console.log('www', drawbox)
+      return drawbox
+    }
+    return null
   }
   useEffect(() => {
     Viewer.create(id, {
@@ -84,6 +93,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     })
   }, [])
   const focusClicked = async () => {
+    console.log('bbb')
     setTimeout(async () => {
       const center = await getCenter()
       onFocusCenter?.(center as { x: number; y: number; z: number; num: string; chain: string;label: string })

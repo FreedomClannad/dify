@@ -1,6 +1,5 @@
 import { Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { RiEyeLine, RiEyeOffLine } from '@remixicon/react'
 import { saveAs } from 'file-saver'
 import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import { MolstarContext } from '@/app/(commonLayout)/utility/docking/context/molstar'
@@ -8,6 +7,7 @@ import { getUUID } from '@/utils'
 import { GlobalResultContext } from '@/app/(commonLayout)/utility/docking/Global/context/GlobalOutputContext'
 import { downloadGlobalFile } from '@/service/docking'
 import DownloadTooltip from '@/app/components/download-tooltip'
+import IconSVG from '@/app/components/ALM/IconSVG'
 
 export type TableType = {
   id: string
@@ -83,12 +83,12 @@ const GlobalOutputFile = () => {
       const selectedData = selectedItems.map(item => item.mode).join(',')
       const data = await downloadGlobalFile(resultID, selectedData)
       if (data)
-        saveAs(data, `${resultID}_selected.zip`)
+        saveAs(data, `SciMiner_GlobalDocking_${resultID}.zip`)
     }
     else {
       const data = await downloadGlobalFile(resultID, 'all')
       if (data)
-        saveAs(data, `${resultID}.zip`)
+        saveAs(data, `SciMiner_GlobalDocking_${resultID}.zip`)
     }
   }
 
@@ -168,7 +168,8 @@ const GlobalOutputFile = () => {
                       className="cursor-pointer text-xs flex items-center"
                       onClick={() => handleVisible(item)}
                     >
-                      {item.visible ? <RiEyeLine className="w-4 h-4" /> : <RiEyeOffLine className="w-4 h-4" />}
+                      {/* {item.visible ? <RiEyeLine className="w-4 h-4" /> : <RiEyeOffLine className="w-4 h-4" />} */}
+                      {item.visible ? <IconSVG name='EyeLine' /> : <IconSVG name='EyeOffLine' />}
                     </div>
                   </TableCell>
                 </TableRow>

@@ -38,7 +38,7 @@ const useMolstar = () => {
 
   // 添加分子/蛋白质
   const addStructure = (molstar: UtilityMolstar) => {
-    setMolstarList([...molstarList, molstar])
+    setMolstarList([...molstarListRef.current, molstar])
   }
 
   // 根据id获取数据

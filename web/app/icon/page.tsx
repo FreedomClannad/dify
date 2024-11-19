@@ -29,21 +29,36 @@ const Icon = () => {
     <div className="flex flex-wrap p-5 gap-5">
       {iconList.map((iconObj, index) => {
         return <>
-          <div key={index} className="w-[120px] h-[120px] flex flex-col justify-center items-center cursor-pointer" onDoubleClick={() => {
-            CopyClipboard(iconObj.label).then(() => {
-              notify({ type: 'success', message: '复制成功' })
-            }).catch(() => {
-              notify({ type: 'error', message: '复制失败' })
-            })
-          }}>
-            <div className="flex justify-center items-center border rounded-md border-solid border-gray-550 w-[100px] h-[80px]">
-              <IconSVG name={iconObj.icon}/>
+          <div key={index} className="w-[120px] h-[120px] flex flex-col justify-center items-center cursor-pointer"
+            onDoubleClick={() => {
+              CopyClipboard(iconObj.label).then(() => {
+                notify({ type: 'success', message: '复制成功' })
+              }).catch(() => {
+                notify({ type: 'error', message: '复制失败' })
+              })
+            }}>
+            <div
+              className="flex justify-center items-center border rounded-md border-solid border-gray-550 w-[100px] h-[80px]">
+              <IconSVG name={styles[iconObj.icon]}/>
             </div>
             <span className="mt-2">{iconObj.label}</span>
           </div>
         </>
       })}
     </div>
+
+    <div className="flex flex-wrap p-5 gap-5">
+      {iconList.map((iconObj, index) => {
+        return <>
+          <div key={index} className=" flex flex-col justify-center items-center cursor-pointer">
+            <div>
+              <IconSVG name={styles[iconObj.icon]}/>
+            </div>
+          </div>
+        </>
+      })}
+    </div>
+
   </>
 }
 
