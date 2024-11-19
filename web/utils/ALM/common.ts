@@ -18,3 +18,13 @@ export function CopyClipboard(text: string) {
     }
   })
 }
+
+/**
+ * 将SVG字符串转为Base64数据格式
+ */
+export function svgToBase64(svg: string) {
+// 将 SVG 字符串转为 Base64 编码
+  const base64Data = btoa(unescape(encodeURIComponent(svg)))
+  // 生成 data URI 格式
+  return `data:image/svg+xml;base64,${base64Data}`
+}

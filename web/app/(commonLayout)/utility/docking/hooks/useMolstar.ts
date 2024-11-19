@@ -74,9 +74,6 @@ const useMolstar = () => {
       const index = dockingMolstarListRef.current.findIndex(
         item => item.id === dockingMolstar.id,
       )
-      console.log(index)
-      console.log(dockingMolstar)
-      console.log(dockingMolstarListRef.current)
       if (index === -1) {
         addStructure(dockingMolstar)
         addCallback?.()

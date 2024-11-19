@@ -6,6 +6,7 @@ import VerticalTitleCard from '@/app/components/card/vertical-title-card'
 import DownloadTooltip from '@/app/components/download-tooltip'
 import { downloadPoseviewFile } from '@/service/uility/download'
 import cn from '@/utils/classnames'
+import Image from '@/app/components/ALM/Image'
 
 type TableType = {
   id: string
@@ -59,8 +60,7 @@ const OutputFile = () => {
                 {
                   tableData.map((item, index) => (
                     <div key={`poseview-img-${index}`} className="w-full px-5">
-                      {/* <Image width={100} height={100} src={item.url} alt="img"></Image> */}
-                      <img src={item.url} className='w-full max-h-[300px] rounded border-gray-550 border-solid border-1'/>
+                      <Image src={item.url} placement rootClassName="w-full max-h-[300px] rounded border-gray-550 border-solid border-1"/>
                     </div>
                   ))
                 }
