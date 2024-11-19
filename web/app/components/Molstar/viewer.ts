@@ -861,26 +861,68 @@ export class Viewer {
     })
   }
 
-  async Draw3DBox() {
-    console.log('ccc')
-    const stru = this.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
-    const structure = stru?.cell.obj
+  async Draw3DBox(isshow: boolean, x?: number, y?: number, z?: number, col?: string) {
+    if (isshow === false)
+      return
+    const focusTarget = this.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
+    const structure = focusTarget?.cell.obj
     if (!structure) {
       console.error('No structure found.')
       return
     }
-    console.log('stttt', structure)
+    const hexToDecimalWithPrefix = (hex: string): number => {
+      return parseInt(hex.startsWith('0x') ? hex : `${hex}`, 16)
+    }
+    // console.log('aaaaa', hexToDecimalWithPrefix(col))
+    const color = Color(hexToDecimalWithPrefix(col))
+    console.log('color', PD.Color(color, { isEssential: true }))
     const params = {
       radius: PD.Numeric(0.05, { min: 0.01, max: 4, step: 0.01 }, { isEssential: true }),
-      color: PD.Color(ColorNames.red, { isEssential: true }),
+      color: PD.Color(ColorNames.yellow, { isEssential: true }),
       ...Mesh.Params,
     }
-    console.log('sssss', params)
-    const focusTarget = this.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
+    console.log('color', PD.Color(ColorNames.yellow, { isEssential: true }))
+
+    console.log('end', params)
     const parentRef = focusTarget?.cell.transform.ref
-    const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure }, { params })
-    await this.plugin.state.data.updateTree(data).run()
-    // return data
+
+    const boundingBoxes = this.plugin.state.data.selectQ(q => q.ofTransformer(StateTransforms.Representation.StructureBoundingBox3D))
+    // console.log('boundingBoxes', boundingBoxes)
+    const builder = this.plugin.state.data.build()
+    for (const box of boundingBoxes)
+      builder.delete(box.transform.ref)
+
+    // 更新状态树以清空 Bounding Box
+    await this.plugin.state.data.updateTree(builder).run()
+
+    const center = structure.data.boundary.sphere.center
+    if (x && y && z) {
+      console.log('fffffff', structure)
+      structure.data.boundary.box = {
+        min: [center[0] - (x / 2), center[1] - (y / 2), center[2] - (z / 2)],
+        max: [center[0] + (x / 2), center[1] + (y / 2), center[2] + (z / 2)],
+      }
+      const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure }, { ...params })
+      await this.plugin.state.data.updateTree(data).run()
+    }
+    else {
+      const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure }, { ...params })
+      await this.plugin.state.data.updateTree(data).run()
+    }
+  }
+
+  async removeligend() {
+    const state = this.plugin.state.data
+
+    // 查询所有带有 "Ligand" 标签的组件
+    const ligands = state.selectQ(q => q.ofType(PluginStateObject.Molecule.Structure).filter(cell => cell.obj?.label?.toLowerCase().includes('ligand')))
+    console.log('ligands', ligands)
+    const builder = this.plugin.state.data.build()
+    for (const ligand of ligands)
+      builder.delete(ligand.transform.ref)
+
+    // 更新状态树以清空 Bounding Box
+    await this.plugin.state.data.updateTree(builder).run()
   }
 }
 

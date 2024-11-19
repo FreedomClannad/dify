@@ -30,12 +30,17 @@ const Demo = () => {
     if (MolstarCompRef.current)
       MolstarCompRef.current.loadStructuresFromUrlsAndMerge()
   }
+  const DeleteLigand = () => {
+    if (MolstarCompRef.current)
+      MolstarCompRef.current.delete_liagnd()
+  }
   return <div>
     <div className="flex">
       <button onClick={handleClick} className="bg-stone-200">Render</button>
       <button onClick={TestButton} className="ml-3 bg-stone-200">test</button>
       <button onClick={handleDeleteData} className="ml-3 bg-stone-200">获取删除后的数据</button>
       <button onClick={MergeStructure} className="ml-3 bg-stone-200">合并结构</button>
+      <button onClick={DeleteLigand} className="ml-3 bg-stone-200">删除ligand</button>
 
       <Switch isSelected={IonicIsShown} aria-label="Ionic" onValueChange={(value) => {
         if (MolstarCompRef.current)
