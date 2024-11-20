@@ -78,7 +78,7 @@ const Receptor = () => {
     </>
   }
   return <>
-    <VerticalTitleCard title="Receptor file" tooltip="受体蛋白结构文件，PDB格式。受体蛋白被设置为刚性。格式：PDB" >
+    <VerticalTitleCard title="Receptor file" tooltip="序列文件：sequence/.fasta/.txt" >
       <div>
         <div>
           <RadioGroup value={mode} onValueChange={(value) => {

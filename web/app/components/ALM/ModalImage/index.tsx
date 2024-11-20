@@ -23,9 +23,9 @@ const SanitizedHtml = ({ htmlString }: { htmlString: string }) => {
     <div className="relative">
       <div className={cn(styles.card, 'w-[180px] h-[180px] border-solid rounded flex justify-center items-center')}
         dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div>
-      <div className=" z-1 absolute cursor-pointer h-[18px] flex justify-center items-center" style={{ top: 4, right: 4 }}
+      <div className=" z-1 absolute cursor-pointer h-[18px] flex justify-center items-center" style={{ top: 8, right: 8 }}
         onClick={handleZoomInOut}>
-        <ZoomInOutlined style={{ fontSize: 18, lineHeight: '18px', color: '#333' }}/>
+        <ZoomInOutlined style={{ fontSize: 18, lineHeight: '18px', color: '#999' }}/>
       </div>
       <BaseImage className="hidden"
         preview={{
@@ -52,7 +52,7 @@ const ModalImage = ({ data, isShow, title, onClose, loading }: Props) => {
   return (
     <div>
       <AmModal isShow={isShow} title={title} onClose={onClose} contentHeight="500px" loading={loading}>
-        <div className="grid grid-cols-4 gap-5 row-span-1 px-8 mb-5">{
+        <div className="grid grid-cols-4 gap-5 row-span-1 px-6 mb-5">{
           data.map(item => (
             <SanitizedHtml key={item.id} htmlString={item.svg}/>
           ))

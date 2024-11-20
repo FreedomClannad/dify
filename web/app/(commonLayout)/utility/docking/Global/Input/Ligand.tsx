@@ -81,7 +81,7 @@ const Ligand = () => {
     </>
   }
   return <>
-    <VerticalTitleCard title="Ligand file" tooltip="上传配体文件，当配体为一个时允许上传SDF，PDB和MOL格式，当配体为多个时（≤2000）只允许上传SDF格式。格式：SDF、Mol、PDB。" >
+    <VerticalTitleCard title="Ligand file" tooltip="小分子结构文件：smiles/.txt/.smi" >
       <div>
         <div>
           <RadioGroup value={mode} onValueChange={(value) => {

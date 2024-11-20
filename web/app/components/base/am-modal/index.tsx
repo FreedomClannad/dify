@@ -27,9 +27,9 @@ const AmModal = ({ isShow, title, onClose, children, footer, contentHeight = 200
     >
       {/* Heading */}
       <div className="shrink-0 flex flex-col h-full bg-white rounded-t-xl relative">
-        <div className="shrink-0 pl-8 pr-6 pt-6 pb-3 bg-white text-xl rounded-t-xl leading-[30px] font-semibold text-gray-900 z-10"><span>{title}</span></div>
-        <div className='absolute right-6 top-6 p-2 cursor-pointer z-20' onClick={onClose}>
-          <RiCloseLine className='w-4 h-4 text-gray-500'/>
+        <div className="shrink-0 pl-6 pr-6 pt-3 pb-3 bg-white text-xl rounded-t-xl leading-[30px] font-semibold text-gray-900 z-10"><span style={{ fontSize: '16px' }}>{title}</span></div>
+        <div className='absolute right-4 top-2 p-2 cursor-pointer z-20' onClick={onClose}>
+          <RiCloseLine className='w-6 h-6 text-gray-500'/>
         </div>
       </div>
       <div className="overflow-y-auto" style={{ height: contentHeightMemo, minHeight: '400px' }}>

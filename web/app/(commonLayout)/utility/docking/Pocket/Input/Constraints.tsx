@@ -92,17 +92,17 @@ const Constraints = () => {
             <div className="flex flex-1">
               <span>x:</span>
               <input type="number" disabled={radioDisabled} {...register('center_x')}
-                className="constraints-input w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+                className="constraints-input px-3 w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>y:</span>
               <input type="number" disabled={radioDisabled} {...register('center_y')}
-                className="constraints-input w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+                className="constraints-input px-3 w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>z:</span>
               <input type="number" disabled={radioDisabled} {...register('center_z')}
-                className="constraints-input w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+                className="constraints-input px-3 w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
           </div>
         </div>
@@ -124,17 +124,17 @@ const Constraints = () => {
             <div className="flex flex-1">
               <span>x:</span>
               <input type="number" {...register('size_x')}
-                className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+                className="w-full px-3 ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>y:</span>
               <input type="number" {...register('size_y')}
-                className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+                className="w-full px-3 ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
             <div className="flex flex-1">
               <span>z:</span>
               <input type="number" {...register('size_z')}
-                className="w-full ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
+                className="w-full px-3 ml-1 text-sm font-normal rounded grow border-gray-550 border-solid border-2"></input>
             </div>
           </div>
           <div>
