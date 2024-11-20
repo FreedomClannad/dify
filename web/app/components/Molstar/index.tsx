@@ -12,6 +12,8 @@ import InteractionBox from '@/app/components/Molstar/components/interaction'
 import type { interactions, interactionsKeys } from '@/types/docking'
 import { InteractionsEnum } from '@/types/docking'
 import { initOptions } from '@/app/components/Molstar/function'
+// import { color } from 'framer-motion'
+// import bulkEdit from '../workflow/nodes/http/components/key-value/bulk-edit'
 
 type Props = {
   id?: string
@@ -23,6 +25,7 @@ export type MolstarHandle = {
   loadStructureFromUrl: (url: string, formate: BuiltInTrajectoryFormat) => void
   loadStructureFromData: (data: string | number[], format: BuiltInTrajectoryFormat) => void
   loadStructuresFromUrlsAndMerge: () => void
+  delete_liagnd: () => void
   DrawBox: () => void
   setStructureVisibility: (index: number, visible: boolean) => void
   getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string; label: string } | null | undefined>
@@ -57,7 +60,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       // const stru = molstart.current.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
       // const fouce_data = stru?.cell.obj
       // console.log('type', stru)
-      const drawbox = await molstart.current?.Draw3DBox()
+      const drawbox = await molstart.current?.Draw3DBox(true, 2, 4, 6, '0xffff00')
       console.log('www', drawbox)
       return drawbox
     }
@@ -115,6 +118,12 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     // if (ViewerStart) {
     //     ViewerStart.loadStructureFromUrl(url, formate);
     // }
+  }
+
+  // 删除ligand
+  const delete_liagnd = () => {
+    if (molstart && molstart.current)
+      molstart.current.removeligend()
   }
   // 加载合并模型
   const loadStructuresFromUrlsAndMerge = () => {
@@ -271,6 +280,7 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       loadStructureFromUrl,
       loadStructuresFromUrlsAndMerge,
       loadStructureFromData,
+      delete_liagnd,
       setStructureVisibility,
       getCenter,
       clear,
