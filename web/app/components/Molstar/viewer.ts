@@ -50,9 +50,6 @@ import { StateObject, StateObjectRef } from 'molstar/lib/mol-state'
 import { Task } from 'molstar/lib/mol-task'
 import { Asset } from 'molstar/lib/mol-util/assets'
 
-import { ColorNames } from 'molstar/lib/mol-util/color/names'
-import { Mesh } from 'molstar/lib/mol-geo/geometry/mesh/mesh'
-
 import { Color } from 'molstar/lib/mol-util/color'
 import 'molstar/lib/mol-util/polyfill'
 import { ObjectKeys } from 'molstar/lib/mol-util/type-helpers'
@@ -826,14 +823,28 @@ export class Viewer {
     // console.log('iiii', this.plugin.state.data.selectQ(q => q.ofType(PluginStateObject.Molecule.Structure)))
     // 获取根节点
     const rootStructCells = this.plugin.state.data.selectQ(q => q.rootsOfType(PluginStateObject.Molecule.Structure))
-    if (
-      rootStructCells[rootStructCells.length - 1].sourceRef === '-=root=-'
-      && rootStructCells[rootStructCells.length - 1].obj?.label === 'Merged Structure'
-    ) return null
+    // 如果多次合并，每次合并清空前一次合并结果
+    const mergedData = Array.from(this.plugin.state.data.cells).find(([key, value]) => {
+      return value.obj?.label === 'Merged Structure'
+    })?.[1]
+
+    // 2. 如果找到了合并数据，进行删除
+    if (mergedData) {
+      // 3. 创建构建器实例
+      const builder = this.plugin.state.data.build()
+
+      // 使用构建器删除合并的数据
+      builder.delete(mergedData.transform.ref)
+
+      // 4. 更新状态树，清空合并数据
+      await this.plugin.state.data.updateTree(builder).run()
+    }
+
+    //   if (
+    //   rootStructCells[rootStructCells.length - 1].sourceRef === '-=root=-'
+    //   && rootStructCells[rootStructCells.length - 1].obj?.label === 'Merged Structure'
+    // ) return null
     let structures: { ref: string }[] = []
-    // const models = this.plugin.state.data.selectQ(q => q.ofTransformer(StateTransforms.Model.ModelFromTrajectory))
-    // for (let index = 0; index < models.length; index++)
-    //   structures.push({ ref: models[index].sourceRef })
     const structCells = this.plugin.state.data.selectQ(q => q.ofType(PluginStateObject.Molecule.Structure))
     // const astructures = rootStructCells.map(cell => cell.obj?.data).filter(struct => !!struct) as Structure[]
     console.log('hihi', structCells)
@@ -847,12 +858,28 @@ export class Viewer {
       ) as { ref: string }[]
     console.log('structures', structures)
 
+    const hierarchyManager = this.plugin.managers.structure.hierarchy
+
+    structures.forEach((struct) => {
+      // 查找当前 refs 中与 structures 的 ref 匹配的引用
+      const ref = Array.from(hierarchyManager.current.refs).find(
+        ([key, value]) => key === struct.ref,
+      )?.[1]
+
+      if (ref)
+        hierarchyManager.toggleVisibility([ref], 'hide')
+      else
+        console.warn(`Reference not found for ref: ${struct.ref}`)
+    })
+    console.log('data', this.plugin.state.data)
+
     // remove current structures from hierarchy as they will be merged
     // TODO only works with using loadStructuresFromUrlsAndMerge once
     //      need some more API metho to work with the hierarchy
     this.plugin.managers.structure.hierarchy.updateCurrent(this.plugin.managers.structure.hierarchy.current.structures, 'remove')
 
     const dependsOn = structures.map(({ ref }) => ref)
+
     const data = this.plugin.state.data.build().toRoot().apply(MergeStructures, { structures }, { dependsOn })
     const structure = await data.commit()
     const structureProperties = await this.plugin.builders.structure.insertStructureProperties(structure)
@@ -861,7 +888,53 @@ export class Viewer {
     })
   }
 
-  async Draw3DBox(isshow: boolean, x?: number, y?: number, z?: number, col?: string) {
+  // 控制合并后的ligand和polymer的显隐
+  async mergestructureligandshoworhide(name: string, isshow: boolean) {
+    // 将 cells 转换为数组
+    const cellsArray = Array.from(this.plugin.state.data.cells.entries())
+    console.log('cell', cellsArray)
+
+    // 找到最后一个 `Merged Structure` 的索引
+    const lastMergedIndex = cellsArray
+      .map(([ref, cell]) => cell.obj?.label)
+      .lastIndexOf('Merged Structure')
+
+    // 如果找不到 `Merged Structure`，直接返回
+    if (lastMergedIndex === -1) {
+      console.log('No Merged Structure found.')
+      return
+    }
+
+    // 找到最近的 `Ligand` 和 `Polymer` 的 ref
+    if (name === 'ligand') {
+      const nearestLigand = cellsArray.slice(lastMergedIndex + 1).find(([ref, cell]) => cell.obj?.label === 'Ligand')?.[0]
+      console.log('Nearest Ligand Ref:', nearestLigand)
+      const ref = Array.from(this.plugin.managers.structure.hierarchy.current.refs).find(
+        ([key, value]) => key === nearestLigand,
+      )?.[1]
+      if (isshow === true)
+        this.plugin.managers.structure.hierarchy.toggleVisibility([ref], 'show')
+
+      else
+        this.plugin.managers.structure.hierarchy.toggleVisibility([ref], 'hide')
+    }
+
+    if (name === 'polymer') {
+      const nearestPolymer = cellsArray.slice(lastMergedIndex + 1).find(([ref, cell]) => cell.obj?.label === 'Polymer')?.[0]
+      // 输出结果
+      console.log('Nearest Polymer Ref:', nearestPolymer)
+      const ref = Array.from(this.plugin.managers.structure.hierarchy.current.refs).find(
+        ([key, value]) => key === nearestPolymer,
+      )?.[1]
+      if (isshow === true)
+        this.plugin.managers.structure.hierarchy.toggleVisibility([ref], 'show')
+
+      else
+        this.plugin.managers.structure.hierarchy.toggleVisibility([ref], 'hide')
+    }
+  }
+
+  async Draw3DBox(isshow: boolean) {
     if (isshow === false)
       return
     const focusTarget = this.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
@@ -870,20 +943,14 @@ export class Viewer {
       console.error('No structure found.')
       return
     }
-    const hexToDecimalWithPrefix = (hex: string): number => {
-      return parseInt(hex.startsWith('0x') ? hex : `${hex}`, 16)
-    }
-    // console.log('aaaaa', hexToDecimalWithPrefix(col))
-    const color = Color(hexToDecimalWithPrefix(col))
-    console.log('color', PD.Color(color, { isEssential: true }))
-    const params = {
-      radius: PD.Numeric(0.05, { min: 0.01, max: 4, step: 0.01 }, { isEssential: true }),
-      color: PD.Color(ColorNames.yellow, { isEssential: true }),
-      ...Mesh.Params,
-    }
-    console.log('color', PD.Color(ColorNames.yellow, { isEssential: true }))
+    // const hexToDecimalWithPrefix = (hex: string): number => {
+    //   return parseInt(hex.startsWith('0x') ? hex : `0x${hex}`, 16)
+    // }
+    // // console.log('aaaaa', hexToDecimalWithPrefix(col))
+    // const color = Color(hexToDecimalWithPrefix(col))
+    // console.log('color', PD.Color(color, { isEssential: true }))
 
-    console.log('end', params)
+    console.log('focusTarget', focusTarget)
     const parentRef = focusTarget?.cell.transform.ref
 
     const boundingBoxes = this.plugin.state.data.selectQ(q => q.ofTransformer(StateTransforms.Representation.StructureBoundingBox3D))
@@ -895,18 +962,50 @@ export class Viewer {
     // 更新状态树以清空 Bounding Box
     await this.plugin.state.data.updateTree(builder).run()
 
+    const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure })
+    await this.plugin.state.data.updateTree(data).run()
+  }
+
+  async updataBox(x?: number, y?: number, z?: number, col?: number) {
+    const focusTarget = this.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
+    const structure = focusTarget?.cell.obj
+    const boundbox = this.plugin.state.data.selectQ(q => q.ofTransformer(StateTransforms.Representation.StructureBoundingBox3D))
+    const boxdata = boundbox[0].obj
+    const oldparams = boundbox[0].params?.values
+    // console.log('hh', boundbox)
+    const parentRef = focusTarget?.cell.transform.ref
+    if (!structure) {
+      console.error('No structure found.')
+      return
+    }
     const center = structure.data.boundary.sphere.center
+
+    if (col) {
+      const params = oldparams
+      params.color = Color(col)
+      console.log('params', params)
+      if (x && y && z) {
+        console.log('fffffff', structure)
+        structure.data.boundary.box = {
+          min: [center[0] - (x / 2), center[1] - (y / 2), center[2] - (z / 2)],
+          max: [center[0] + (x / 2), center[1] + (y / 2), center[2] + (z / 2)],
+        }
+        const data = this.plugin.state.data.build().to(parentRef).update(StateTransforms.Representation.StructureBoundingBox3D, { structure, boxdata, oldparams, params })
+        await this.plugin.state.data.updateTree(data).run()
+      }
+      console.log('aaaaaaaaaaa', structure)
+      console.log('bbbbbbbbbbb', boxdata)
+      const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure, params })
+      await this.plugin.state.data.updateTree(data).run()
+    }
+
     if (x && y && z) {
       console.log('fffffff', structure)
       structure.data.boundary.box = {
         min: [center[0] - (x / 2), center[1] - (y / 2), center[2] - (z / 2)],
         max: [center[0] + (x / 2), center[1] + (y / 2), center[2] + (z / 2)],
       }
-      const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure }, { ...params })
-      await this.plugin.state.data.updateTree(data).run()
-    }
-    else {
-      const data = this.plugin.state.data.build().to(parentRef).apply(StateTransforms.Representation.StructureBoundingBox3D, { structure }, { ...params })
+      const data = this.plugin.state.data.build().to(parentRef).update(StateTransforms.Representation.StructureBoundingBox3D, { structure, boxdata, oldparams, oldparams })
       await this.plugin.state.data.updateTree(data).run()
     }
   }

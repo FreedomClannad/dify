@@ -27,6 +27,8 @@ export type MolstarHandle = {
   loadStructuresFromUrlsAndMerge: () => void
   delete_liagnd: () => void
   DrawBox: () => void
+  updatebox: () => void
+  mergeshoworhide: () => void
   setStructureVisibility: (index: number, visible: boolean) => void
   getCenter: () => Promise<{ x: number; y: number; z: number; num: string; chain: string; label: string } | null | undefined>
   clear: () => void
@@ -60,11 +62,18 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       // const stru = molstart.current.plugin.managers.structure.hierarchy.current.structures[0].components.find(s => s.cell.obj?.label === '[Focus] Target')
       // const fouce_data = stru?.cell.obj
       // console.log('type', stru)
-      const drawbox = await molstart.current?.Draw3DBox(true, 2, 4, 6, '0xffff00')
+      const drawbox = await molstart.current?.Draw3DBox(true)
       console.log('www', drawbox)
       return drawbox
     }
     return null
+  }
+
+  const updatebox = async () => {
+    if (molstart && molstart.current) {
+      const updatabox = await molstart.current?.updataBox(undefined, undefined, undefined, 0xFFFF00)
+      return updatabox
+    }
   }
   useEffect(() => {
     Viewer.create(id, {
@@ -118,6 +127,11 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
     // if (ViewerStart) {
     //     ViewerStart.loadStructureFromUrl(url, formate);
     // }
+  }
+
+  const mergeshoworhide = async () => {
+    if (molstart && molstart.current)
+      molstart.current.mergestructureligandshoworhide('ligand', false)
   }
 
   // 删除ligand
@@ -280,7 +294,9 @@ const MolstarComp = forwardRef<MolstarHandle, Props>(({ id = getShortId(), onFoc
       loadStructureFromUrl,
       loadStructuresFromUrlsAndMerge,
       loadStructureFromData,
+      mergeshoworhide,
       delete_liagnd,
+      updatebox,
       setStructureVisibility,
       getCenter,
       clear,
